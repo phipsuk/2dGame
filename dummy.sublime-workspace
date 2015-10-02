@@ -1,0 +1,861 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"po",
+				"position"
+			],
+			[
+				"bo",
+				"body"
+			],
+			[
+				"va",
+				"var"
+			],
+			[
+				"blue",
+				"blueTeamScoreCount"
+			],
+			[
+				"or",
+				"originalPosition"
+			],
+			[
+				"cap",
+				"captureInProgress"
+			],
+			[
+				"Red",
+				"RedFlag"
+			],
+			[
+				"has",
+				"hasFlag"
+			],
+			[
+				"pla",
+				"player"
+			],
+			[
+				"body",
+				"bodyShape"
+			],
+			[
+				"Bo",
+				"Box"
+			],
+			[
+				"playes",
+				"players"
+			],
+			[
+				"physics",
+				"physicsBody"
+			],
+			[
+				"plae",
+				"players"
+			],
+			[
+				"client",
+				"clientID"
+			],
+			[
+				"lats",
+				"lastID"
+			],
+			[
+				"cli",
+				"clientInfo"
+			],
+			[
+				"Dat",
+				"Data"
+			],
+			[
+				"last",
+				"lastID"
+			],
+			[
+				"height",
+				"height	.height()"
+			],
+			[
+				"onkey",
+				"onKeyUp (fn)"
+			],
+			[
+				"key",
+				"keyCode"
+			],
+			[
+				"html5",
+				"html5	HTML5 Boilerplate 5.2.0"
+			],
+			[
+				"get",
+				"get	.get()"
+			],
+			[
+				"app",
+				"app (?)"
+			],
+			[
+				"font",
+				"font-weight"
+			],
+			[
+				"playlist",
+				"playlistid"
+			],
+			[
+				"over",
+				"overflow"
+			],
+			[
+				"padd",
+				"padding-right"
+			],
+			[
+				"video",
+				"videoSnippet"
+			],
+			[
+				"back",
+				"background-color"
+			],
+			[
+				"playlisti",
+				"playlistItem"
+			],
+			[
+				"play",
+				"playVideoClosure"
+			],
+			[
+				"padding",
+				"padding-right"
+			],
+			[
+				"req",
+				"requestVideoPlaylist"
+			],
+			[
+				"pus",
+				"pushable_devices"
+			],
+			[
+				"a",
+				"append"
+			],
+			[
+				"device",
+				"devicelist"
+			],
+			[
+				"html",
+				"html	html"
+			],
+			[
+				"Con",
+				"controls"
+			],
+			[
+				"build",
+				"build-web"
+			],
+			[
+				"des",
+				"dest (?)"
+			],
+			[
+				"sublime",
+				"sublime_plugin"
+			],
+			[
+				"thr",
+				"threads"
+			],
+			[
+				"b",
+				"build-web"
+			],
+			[
+				"bul",
+				"build-bin"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "index.js",
+			"settings":
+			{
+				"buffer_size": 4621,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "html/index.html",
+			"settings":
+			{
+				"buffer_size": 11113,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/Users/aaron.polley/AppData/Roaming/Sublime Text 3/Packages/User/GitSavvy.sublime-settings",
+			"settings":
+			{
+				"buffer_size": 107,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "gulpfile.js",
+			"settings":
+			{
+				"buffer_size": 206,
+				"line_ending": "Windows"
+			}
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 400.0,
+		"last_filter": "git",
+		"selected_items":
+		[
+			[
+				"git",
+				"git: init"
+			],
+			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
+				"remo",
+				"Package Control: Remove Package"
+			],
+			[
+				"multi",
+				"MultiEditUtils: Strip Selection"
+			],
+			[
+				"regex",
+				"Select By Regex"
+			],
+			[
+				"json",
+				"Set Syntax: JSON"
+			],
+			[
+				"babel",
+				"Set Syntax: JavaScript (Babel)"
+			],
+			[
+				"jav",
+				"Set Syntax: JavaScript Next"
+			],
+			[
+				"mu",
+				"MultiEditUtils: Multi FindAll"
+			],
+			[
+				"instal",
+				"Package Control: Install Package"
+			],
+			[
+				"set syntax css",
+				"Set Syntax: CSS"
+			],
+			[
+				"c#",
+				"Set Syntax: C#"
+			],
+			[
+				"insta",
+				"Package Control: Install Package"
+			],
+			[
+				"remove",
+				"Package Control: Remove Package"
+			],
+			[
+				"push",
+				"Pushbullet: Push to device"
+			],
+			[
+				"todon",
+				"Set Syntax: ToDone"
+			],
+			[
+				"ever",
+				"Evernote: List recent notes"
+			],
+			[
+				"rmeove",
+				"Package Control: Remove Package"
+			],
+			[
+				"remov",
+				"Package Control: Remove Package"
+			],
+			[
+				"pandoc",
+				"Pandoc"
+			],
+			[
+				"html",
+				"Snippet: html5boilerplate"
+			],
+			[
+				"Snippet: ",
+				"Snippet: htmlboiler"
+			],
+			[
+				"lint",
+				"SublimeLinter: Toggle Linter"
+			],
+			[
+				"tabs",
+				"Indentation: Convert to Tabs"
+			],
+			[
+				"inst",
+				"Package Control: Install Package"
+			],
+			[
+				"compa",
+				"Sublimerge: Custom Comparison..."
+			],
+			[
+				"merge",
+				"Sublimerge: Compare to Revision..."
+			],
+			[
+				"upgarde",
+				"Package Control: Upgrade Package"
+			],
+			[
+				"remocve",
+				"Package Control: Remove Package"
+			],
+			[
+				"package",
+				"Package Control: List Packages"
+			],
+			[
+				"upgra",
+				"Package Control: Upgrade Package"
+			],
+			[
+				"update",
+				"Evernote: Update Evernote Note"
+			],
+			[
+				"evernote",
+				"Evernote: List recent notes"
+			]
+		],
+		"width": 424.0
+	},
+	"console":
+	{
+		"height": 126.0,
+		"history":
+		[
+			"tern",
+			"view.run_command(\"pushbullet_send_note_to_device\")",
+			"view.run_command(\"pushbullet_send_note\")",
+			"view.run_command(\"list_recent_ontime_tasks\")",
+			"h",
+			"view.run_command(\"list_recent_ontime_tasks\")",
+			"view.erase_status(\"prefixr\")",
+			"view.run_command(\"list_recent_ontime_tasks\")",
+			"window.run_command(\"list_recent_ontime_tasks\")",
+			"view.run_command(\"list_recent_ontime_tasks\")",
+			"view.run_command(\"write_recent_ontime_tasks\")",
+			"view.run_command(\"write_recent_ontime_tasks\", {'text': \"thing\"})",
+			"view.run_command(\"write_recent_ontime_tasks\")",
+			"view.run_command(\"list_recent_ontime_tasks\")",
+			"view.run_command(\"example\")",
+			"view.run_command(\"Example\")",
+			"view.run_command(\"ListRecentOntimeTasks\")",
+			"view.run_command(\"GetRecentOntimeTasks\")",
+			"view.run_command(\"ListRecentOntimeTasks\")",
+			"window.find_open_file(\"ting\").insert(edit, 0, \"dfff\")",
+			"window.find_open_file(\"ting\")",
+			"window.open_file(\"ting\")",
+			"window.new_file()",
+			"import urllib.request,os,hashlib; h = 'eb2297e1a458f27d836c04bb0cbaf282' + 'd0e7a3098092775ccb37ca9d6b2e4b7d'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://packagecontrol.io/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by)"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/C/Users/aaron.polley/Documents/dummy"
+	],
+	"file_history":
+	[
+		"/C/Users/aaron.polley/AppData/Roaming/Sublime Text 3/Packages/GitSavvy/GitSavvy.sublime-settings",
+		"/C/Users/aaron.polley/AppData/Roaming/Sublime Text 3/Packages/User/GitSavvy.sublime-settings",
+		"/C/Users/aaron.polley/AppData/Roaming/Sublime Text 3/Packages/tern_for_sublime/Tern.sublime-settings",
+		"/C/Users/aaron.polley/Documents/dummy/package.json",
+		"/C/Users/aaron.polley/AppData/Roaming/Sublime Text 3/Packages/User/Preferences.sublime-settings",
+		"/S/SVN/19/Web/render/Scripts/Controls/Lookup.js",
+		"/S/SVN/19/Source/UnionSquare.Workflow.Web/Website/App_Code/Controls/DelegateButton.cs",
+		"/C/Users/aaron.polley/AppData/Roaming/Sublime Text 3/Packages/User/JavaScript (Babel).sublime-settings",
+		"/C/Users/aaron.polley/AppData/Roaming/Sublime Text 3/Packages/User/HTML.sublime-settings",
+		"/C/Users/aaron.polley/AppData/Roaming/Sublime Text 3/Packages/User/JSON.sublime-settings",
+		"/C/Users/aaron.polley/AppData/Roaming/Sublime Text 3/Packages/User/Tern.sublime-settings",
+		"/C/Users/aaron.polley/AppData/Roaming/Sublime Text 3/Packages/User/Babel.sublime-settings",
+		"/C/Users/aaron.polley/AppData/Roaming/Sublime Text 3/Packages/Babel/Babel.sublime-settings",
+		"/S/SVN/19/Service/UnionSquare.Workflow.BackgroundTasks.exe.config",
+		"/S/SVN/19/Service/UnionSquare.Workflow.BackgroundTasksConsole.exe.config",
+		"/C/Users/aaron.polley/Desktop/bb8a1b1c-be8d-407f-8ee6-b30e79da3317(2).thpb",
+		"/C/Users/aaron.polley/Documents/dummy/.tern-project",
+		"/C/Users/aaron.polley/Documents/dummy/gulpfile.js",
+		"/C/Users/aaron.polley/Downloads/TemplateBackgroundService/TemplateBackgroundService/Service.cs",
+		"/S/SVN/19/Web/App_Code/Controls/Tile.cs",
+		"/S/SVN/19/Source/UnionSquare.Workflow.Web/Website/css/ui.less",
+		"//dev-qahermod/C$/Program Files (x86)/Union Square Software Ltd/Union Square Workflow Runtime - Copy/Web/ControlTemplates.html",
+		"/S/SVN/18/Web/App_Code/Controls/YouTubePlaylistControl.cs",
+		"/C/Users/aaron.polley/Documents/youtube control/Patch for frame control new UI/App_Code/Controls/YouTubePlayerControl.cs",
+		"/S/SVN/18/Web/render/Scripts/Controls/YouTubePlayer.js",
+		"/S/SVN/18/Web/service.ashx",
+		"/C/Users/aaron.polley/Downloads/unionsquare.waldeckconsulting.com-1439804226036.log",
+		"/S/SVN/2015/Web/DMS/Main.aspx",
+		"/S/SVN/19/Source/ExportToSQL/bin/Debug/ExportToSQL.exe.config",
+		"/S/SVN/18/Web/css/ui.less",
+		"/S/SVN/18/Web/render/Scripts/Controls/youtubeplaylist.js",
+		"/S/SVN/18/Web/lz.css",
+		"/S/SVN/18/Web/lzside.css",
+		"/S/SVN/19/Source/ExportToSQL/bin/Release/ExportToSQL.exe.config",
+		"/S/SVN/2015/Web/managedJS/workspace/DLM/dlm.js",
+		"/S/SVN/2015/Web/managedJS/workspace/workflow/workflow.js",
+		"/C/Users/aaron.polley/Documents/Tasks.todo",
+		"/C/Users/aaron.polley/Documents/youtube control/Patch for frame control new UI/Template/Mjolnir Skin.thpb",
+		"/S/SVN/18/Web/render/html.aspx",
+		"/S/SVN/18/Web/App_Code/Render.cs",
+		"/S/SVN/18/Web/App_Code/Controls/ImageControl.cs",
+		"/S/SVN/18/Web/web.config",
+		"/S/SVN/18/Source/ExportToSQL/bin/Release/ExportToSQL.exe.config",
+		"/S/SVN/2015/Web/redirections.config",
+		"/S/SVN/2015/Web/Help/View_Help_Content.asp",
+		"/S/SVN/2015/Web/Help/Get_Help_XML.asp",
+		"/S/results.csv",
+		"/S/SVN/18/Service/UnionSquare.DataEngine.ServiceConsole.exe.config",
+		"/S/test.html",
+		"/S/SVN/18_clean/Web/Workspace/Service/GenericProcessor.ashx",
+		"/S/SVN/18_clean/Web/service.ashx",
+		"/C/Users/aaron.polley/AppData/Roaming/Sublime Text 3/Packages/User/Pushbullet.sublime-settings",
+		"/C/Users/aaron.polley/AppData/Roaming/Sublime Text 3/Packages/Pushbullet/Settings/Pushb.sublime-settings",
+		"/C/Users/aaron.polley/AppData/Local/Temp/Temp1_Patch for frame control new UI.zip/Patch for frame control new UI/Web/render/scripts/Controls/YouTubePlayer.js",
+		"/S/SVN/18/Service/autoimport.thpb",
+		"/S/SVN/18/gulpfile.js",
+		"/C/Users/aaron.polley/Desktop/System.thpb",
+		"/C/Users/aaron.polley/Desktop/view video.thpb",
+		"/S/SVN/18/Web/viewmodels/multiImageCapture.js",
+		"/S/SVN/18/Web/render/Scripts/test.html",
+		"//unius-02/c$/Program Files (x86)/Union Square Software Ltd/Union Square Workflow Runtime/Web/viewmodels/viewlink.js",
+		"/S/SVN/2015/Workflow/Assemblies/UnionSquare.Workflow.Enterprise/UnionSquare.Workflow.Enterprise/Utility.cs",
+		"/S/SVN/2015/Workflow/Assemblies/UnionSquare.Workflow.Enterprise/UnionSquare.Workflow.Enterprise/EntityProcessor.cs",
+		"/C/Users/aaron.polley/AppData/Roaming/Sublime Text 3/Packages/User/Pushbullet.py",
+		"//unipc-dev-lf/c$/SVN/2015/Web/web.config",
+		"/S/SVN/18/Service/logs/DataTableTransationLog.txt",
+		"/C/Users/aaron.polley/AppData/Roaming/Sublime Text 3/Packages/User/GetRecentOntimeTasks.py",
+		"/S/SVN/18/backupaddcontract.thpb",
+		"/S/SVN/18/Web/viewmodels/viewactionlink.js",
+		"/C/Users/aaron.polley/AppData/Roaming/Sublime Text 3/Packages/SublimeLinter/sublimelinter.py",
+		"/C/Users/aaron.polley/AppData/Roaming/Sublime Text 3/Packages/User/Pushb.sublime-settings",
+		"/C/Users/aaron.polley/Desktop/Hemod Log - Narrowed Down 2.txt",
+		"/C/Users/aaron.polley/Desktop/DataTableTransationLog.txt",
+		"/C/babun/.babun/cygwin/home/aaron.polley/.zcompdump-Unil-Dev-AP-5.0.6",
+		"/C/babun/.babun/cygwin/home/aaron.polley/.zcompdump",
+		"/S/SVN/18/t.thpb",
+		"/S/SVN/18/Service/UnionSquare.Workflow.BackgroundTasksConsole.exe.config",
+		"/S/SVN/18/Service/DataTableTransationLog.txt",
+		"/S/SVN/18/backup of DLM consultancy task.thpb",
+		"/S/SVN/18/lp.thpb",
+		"/S/SVN/18/th.thpb",
+		"/S/SVN/18/Source/UnionSquare.Workflow.Web/Website/render/Scripts/ControlManager.js",
+		"/C/Users/aaron.polley/Documents/youtube control/ViewVideoExport-NewYouTubeControl.thpb",
+		"/C/Users/aaron.polley/AppData/Local/Microsoft/Windows/INetCache/Content.Outlook/J3SAZ7VP/Hogsthorpe - Minimum.txt",
+		"/S/SVN/18/Web/render/Scripts/Controls/Dropdown.js",
+		"/S/SVN/18/Source/UnionSquare.Workflow.Web/Website/render/Scripts/Controls/Dropdown.js",
+		"/C/Users/aaron.polley/AppData/Local/Temp/thControls.css-rev4386.svn001.tmp.css",
+		"/C/Users/aaron.polley/AppData/Roaming/Sublime Text 3/Packages/Default/Preferences.sublime-settings",
+		"/C/Users/aaron.polley/AppData/Roaming/Sublime Text 3/Packages/User/settingsMenu.sublime-menu",
+		"//unipc-dev-lf/c$/SVN/18/Service/UnionSquare.DataEngine.Service.exe.config",
+		"/C/Users/aaron.polley/Documents/Fiddler2/Scripts/CustomRules.js",
+		"/C/Users/aaron.polley/AppData/Roaming/Sublime Text 3/Packages/Pushb/Settings/Pushb.sublime-settings",
+		"//unipc-dev-lf/c$/SVN/18/Web/web.config",
+		"//unisql-03/c$/Program Files (x86)/Union Square Software Ltd/Union Square Workflow Runtime/Service/UnionSquare.DataEngine.Service.exe.config",
+		"/S/SVN/18/Web/render/Scripts/ControlManager.js",
+		"/S/SVN/18/Web/render/Scripts/ControlManager.js.map",
+		"/S/SVN/18/Web/render/Scripts/json3.min.js.map",
+		"/S/SVN/18/Source/UnionSquare.Workflow.Web/Website/render/Scripts/test.html",
+		"/S/SVN/18/Web/render/Scripts/DOCTYPE HTML.sublime-snippet",
+		"/S/SVN/18/Source/UnionSquare.Workflow.Web/Website/render/Scripts/ControlManagercpld.js",
+		"/C/Users/aaron.polley/AppData/Roaming/Sublime Text 3/Packages/User/html5boilerplate.sublime-snippet",
+		"/C/Users/AARON~1.POL/AppData/Local/Temp/7zO65CF.tmp/boilerplate.sublime-snippet",
+		"/C/Users/AARON~1.POL/AppData/Local/Temp/7zO27F9.tmp/boilerplate.sublime-snippet",
+		"/S/SVN/18/buildweb.bat",
+		"/S/SVN/18/package.json",
+		"/S/SVN/18/Web/render/Scripts/.eslintrc",
+		"//qa7-win2008/c$/Program Files (x86)/Union Square Software Ltd/Union Square Workflow Runtime/Web/Scripts/observableProvider.js",
+		"/S/SVN/18/Web/render/Scripts/.eslintignore",
+		"/S/SVN/18/Source/UnionSquare.Workflow.Web/Website/render/Scripts/Controls/TabControl.js",
+		"/S/SVN/18/Web/render/Scripts/Functions/Query.js",
+		"/S/SVN/18/Web/Global.asax",
+		"/S/SVN/18/build-n-run.bat",
+		"/S/SVN/18/build web only.bat",
+		"/C/Users/aaron.polley/AppData/Local/Microsoft/Windows/INetCache/RawFile.htm",
+		"/C/Users/aaron.polley/AppData/Roaming/Sublime Text 3/Packages/Sublimerge Pro/Sublimerge.sublime-settings",
+		"/S/SVN/18/build.bat",
+		"/S/SVN/18/run.bat",
+		"/S/SVN/18/setup.bat",
+		"/S/SVN/18/eslint.json",
+		"/C/Users/aaron.polley/AppData/Roaming/npm/eslint.cmd",
+		"/C/Users/aaron.polley/AppData/Roaming/Sublime Text 3/Packages/tern_for_sublime/node_modules/tern/.tern-project",
+		"/C/Users/aaron.polley/AppData/Roaming/npm/gulp.cmd",
+		"/S/SVN/18/Web/render/Scripts/Functions/String.js",
+		"/S/SVN/18/Web/render/Scripts/Functions/UI.js",
+		"/S/SVN/18/Web/render/Scripts/Functions/len.js",
+		"/C/Users/aaron.polley/AppData/Roaming/Sublime Text 3/Packages/tern_for_sublime/node_modules/tern/bin/tern",
+		"/S/SVN/18/Source/UnionSquare.Workflow.Runtime/UnionSquare.Workflow.Runtime/UnionSquare.Workflow.Runtime.csproj",
+		"/S/SVN/18/Source/UnionSquare.Workflow.Web/Website/blank.htm"
+	],
+	"find":
+	{
+		"height": 38.0
+	},
+	"find_in_files":
+	{
+		"height": 90.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"\\",
+			"JSON.parse(",
+			"ClientObj.UP",
+			"ClientObj",
+			"ClientObj.RIGHT",
+			"ClientObj.LEFT",
+			"this",
+			".*(?<![;{}])$",
+			"this",
+			"0x0000FF",
+			"Blue",
+			"blue",
+			"clientId",
+			"wallShape",
+			"wallBody",
+			"groundBody",
+			"this.physicsBody.position[1]",
+			"0.1",
+			"graphics.position.x = JSON.parse(serverUpdate[i].Data).position",
+			"tile in",
+			"'",
+			"worksp",
+			"imgDiscard",
+			"help",
+			"workflow",
+			"approval",
+			"DownloadFile",
+			"splitpanel",
+			"elem",
+			"$('#video-container')",
+			"play",
+			"2ef19b6d-700a-4183-9c6c-33b09de1ba1d",
+			"devicelist",
+			"headerpanel",
+			"57f8e00f-fc33-4d58-a48d-bd3959426bfc",
+			"settings",
+			"data =",
+			"|#",
+			"#",
+			"set",
+			"recipients",
+			"ee9f7f0e-2d84-41c3-b07b-5fb0dd5bf485",
+			"5988c4dc-e36a-4b8b-9dd5-1f000a1ccfc9",
+			"2a30dd03-c2e6-4e9e-92de-9ad1740db747",
+			"workspace",
+			"7b69b599-ba70-4991-b021-627b55178f14",
+			"36962cc8-6f25-4804-b0f5-2ba139875e4b",
+			"query",
+			"id",
+			"elem",
+			"Elem",
+			"elem",
+			"prms",
+			"Defined",
+			"are",
+			"Questions",
+			"Defined",
+			"urllib2",
+			"752eaa00-1782-4f91-84be-4b31e20aa822",
+			"gg",
+			"B1A4272E-AC5F-4C53-843C-A0CB8E3915CC",
+			"website",
+			"release",
+			"igno",
+			"exec",
+			"n\":",
+			"o\":"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": true,
+		"replace_history":
+		[
+			"''"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 3,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "index.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 4621,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3024,
+								3024
+							]
+						],
+						"settings":
+						{
+							"git_savvy.file_path": "C:\\Users\\aaron.polley\\Documents\\dummy\\index.js",
+							"syntax": "Packages/Babel/JavaScript (Babel).tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 1140.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "html/index.html",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 11113,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								9335,
+								9335
+							]
+						],
+						"settings":
+						{
+							"git_savvy.file_path": "C:\\Users\\aaron.polley\\Documents\\dummy\\html\\index.html",
+							"syntax": "Packages/HTML/HTML.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 4347.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "/C/Users/aaron.polley/AppData/Roaming/Sublime Text 3/Packages/User/GitSavvy.sublime-settings",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 107,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								37,
+								37
+							]
+						],
+						"settings":
+						{
+							"git_savvy.file_path": "C:\\Users\\aaron.polley\\AppData\\Roaming\\Sublime Text 3\\Packages\\User\\GitSavvy.sublime-settings",
+							"syntax": "Packages/JavaScript/JSON.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "gulpfile.js",
+					"semi_transient": true,
+					"settings":
+					{
+						"buffer_size": 206,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								206,
+								206
+							]
+						],
+						"settings":
+						{
+							"git_savvy.file_path": "C:\\Users\\aaron.polley\\Documents\\dummy\\gulpfile.js",
+							"syntax": "Packages/Theme - Afterglow/Prefs/Langs/Gulpfile JS.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 23.0
+	},
+	"input":
+	{
+		"height": 31.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": false,
+	"output.GitSavvy":
+	{
+		"height": 98.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "dummy.sublime-project",
+	"replace":
+	{
+		"height": 42.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 400.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"",
+				"\"CHILD\": function( match )"
+			]
+		],
+		"width": 1049.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 288.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
