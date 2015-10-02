@@ -14,7 +14,6 @@
         <link rel="stylesheet" href="css/main.css">
         <script src="js/vendor/modernizr-2.8.3.min.js"></script>
         <script src="/js/pixi.js"></script>
-        <script src="/js/physics.js"></script>
         <script src="/socket.io/socket.io.js"></script>
 		<script>
 			var ClientID = 0;
@@ -37,20 +36,11 @@
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
         <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.3.min.js"><\/script>')</script>
-        <script src="js/plugins.js"></script>
-        <script src="js/main.js"></script>
         <script type="text/javascript" charset="utf-8" async defer>
 
         	function onConnected(){
 	        	var FORWARD = 1.57079633;
 	        	var BACKWARD = -FORWARD; 
-
-	        	var world = new p2.World({
-					gravity:[0, -100]
-				});
-
-	            world.setGlobalStiffness(1e8);
-	            world.setGlobalRelaxation(10);
 
 	        	var players = {};
 	        	var renderer = PIXI.autoDetectRenderer(800, 600,{backgroundColor : 0x1099bb});
@@ -81,21 +71,8 @@
 				graphics.drawRect(0, 590, 10, 10);
 				graphics.endFill();
 
-				var playerBody = new p2.Body({
-					mass:1,
-					position: [50, 50]
-				});
-
-				var playerShape = new p2.Box({
-					width:10,
-					height:10
-				});
-
-				playerBody.addShape(playerShape);
-
 				var player = {
 					ID:ClientID,
-					physicsBody: playerBody,
 					graphics:graphics,
 					pressed: {},
 					LEFT:37,
@@ -117,71 +94,8 @@
 					},
 					update: function(){
 
-						if(this.isDown(this.LEFT) && this.physicsBody.position[0] > 0) this.physicsBody.velocity[0] = -100;
-						if(this.isDown(this.RIGHT) &&  this.physicsBody.position[0] < 790) this.physicsBody.velocity[0] = 100;
-						if(this.isDown(this.UP) && this.physicsBody.position[1] < 590){ 
-							if(this.JUMPING === false && this.physicsBody.velocity[1] < 200){
-								this.JUMPING = true;
-								this.JUMPCOUNT++;
-								this.physicsBody.velocity[1] = 100;
-							}
-						}else if(Math.round(this.physicsBody.velocity[1]) === 0){
-							this.JUMPING = false;
-							this.JUMPCOUNT = 0;
-						}
-						if(this.isDown(this.DOWN) && this.physicsBody.position[1] > 0) this.physicsBody.velocity[1] = -500;
-
-						if(!this.isDown(this.LEFT) && !this.isDown(this.RIGHT)){
-							this.physicsBody.velocity[0] = 0;
-						}
-
-						this.graphics.position.x = this.physicsBody.position[0];
-						this.graphics.position.y = -this.physicsBody.position[1];
-
-						if(this.hasFlag){
-							if(this.team == "Blue"){
-								RedFlag.setPosition(this.graphics.position.x, this.graphics.position.y + 570);
-							}else{
-								BlueFlag.setPosition(this.graphics.position.x, this.graphics.position.y + 570);
-							}
-						}
 					}
 				};
-
-				world.addBody(playerBody);
-				
-				// Create an infinite ground plane.
-				var groundBody = new p2.Body({
-					mass: 0, // Setting mass to 0 makes the body static
-					position: [0,0]
-				});
-
-				var groundShape = new p2.Plane();
-				groundBody.addShape(groundShape);
-				world.addBody(groundBody);
-				var wallBody = new p2.Body({
-					mass: 0, // Setting mass to 0 makes the body static
-					position: [-5,0],
-					angle:4.71238898
-				});
-				var wallShape = new p2.Plane();
-				wallBody.addShape(wallShape);
-				world.addBody(wallBody);
-				var wallBody = new p2.Body({
-					mass: 0, // Setting mass to 0 makes the body static
-					position: [800,0],
-					angle:1.57079633
-				});
-				var wallShape = new p2.Plane();
-				wallBody.addShape(wallShape);
-				var ceilingBody = new p2.Body({
-					mass: 0, // Setting mass to 0 makes the body static
-					position: [0,600],
-					angle:3.14159265
-				});
-				var ceilingShape = new p2.Plane();
-				ceilingBody.addShape(ceilingShape);
-				world.addBody(ceilingBody);
 
 				stage.addChild(graphics);
 
@@ -189,44 +103,7 @@
 				var BlueFlag = Flag(0x0000FF, 780, 570);
 
 				stage.addChild(RedFlag.graphics);
-				world.addBody(RedFlag.physicsBody);
 				stage.addChild(BlueFlag.graphics);
-				world.addBody(BlueFlag.physicsBody);
-
-				world.on("beginContact", function(event){
-					if(player.physicsBody == event.bodyA || player.physicsBody == event.bodyB){
-							//Red Flag
-							if(RedFlag.physicsBody == event.bodyA || RedFlag.physicsBody == event.bodyB){
-								if(player.team == "Blue"){
-									player.hasFlag = true;
-									RedFlag.captureInProgress = true;
-								}else{
-									if(player.hasFlag){
-										//Flag Captured
-										redTeamScoreCount++;
-										redTeamScore.text = "Red: " + redTeamScoreCount;
-										BlueFlag.reset();
-										player.hasFlag = false;
-									}
-								}
-							}
-							//Blue Flag
-							if(BlueFlag.physicsBody == event.bodyA || BlueFlag.physicsBody == event.bodyB){
-								if(player.team == "Blue"){
-									if(player.hasFlag){
-										//Flag Captured
-										blueTeamScoreCount++;
-										blueTeamScore.text = "Blue: " + blueTeamScoreCount;
-										RedFlag.reset();
-										player.hasFlag = false;
-									}
-								}else{
-									player.hasFlag = true;
-									BlueFlag.captureInProgress = true;
-								}
-							}
-					}
-				});
 
 				socket.on("update", function(serverUpdate){
 					for (var i = serverUpdate.length - 1; i >= 0; i--) {
@@ -235,8 +112,8 @@
 							player.graphics.position.y = -serverUpdate[i].Data.position.y;
 						}else{
 							if(players[serverUpdate[i].ID]){
-								players[serverUpdate[i].ID].physicsBody.position[0] = serverUpdate[i].Data.position.x;
-								players[serverUpdate[i].ID].physicsBody.position[1] = -serverUpdate[i].Data.position.y;
+								players[serverUpdate[i].ID].graphics.x = serverUpdate[i].Data.position.x;
+								players[serverUpdate[i].ID].graphics.y = -serverUpdate[i].Data.position.y;
 								if(serverUpdate[i].Data.hasFlag){
 									if(players[serverUpdate[i].ID].team == "Blue"){
 										RedFlag.setPosition(players[serverUpdate[i].ID].graphics.position.x, players[serverUpdate[i].ID].graphics.position.y + 570);
@@ -257,30 +134,14 @@
 								graphics.position.x = serverUpdate[i].Data.position.x;
 								graphics.position.y = serverUpdate[i].Data.position.y;
 
-								var playerBody = new p2.Body({
-									mass:1,
-									position: [serverUpdate[i].Data.position.x, serverUpdate[i].Data.position.y]
-								});
-
-								var playerShape = new p2.Box({
-									width:10,
-									height:10
-								});
-
-								playerBody.addShape(playerShape);
-
 								players[serverUpdate[i].ID] = {
 									ID:serverUpdate[i].ID,
 									graphics:graphics,
-									physicsBody: playerBody,
 									team: serverUpdate[i].Team,
 									update:function(){
-										this.graphics.position.x = this.physicsBody.position[0];
-										this.graphics.position.y = this.physicsBody.position[1];
 									}
 								};
 
-								world.addBody(players[serverUpdate[i].ID].physicsBody);
 								stage.addChild(graphics);
 							}
 						}
@@ -307,13 +168,9 @@
 
 					socket.emit("update", update);
 
-					//player.update();
 					for (var item in players) {
 						players[item].update();
 					};
-
-					//world.step(1/60);
-
 
 				    // render the root container
 				    renderer.render(stage);
@@ -331,21 +188,8 @@
 					graphics.position.x = x;
 					graphics.position.y = y;
 
-					var body = new p2.Body({
-									mass:0,
-									position: [x,0]
-								});
-					var bodyShape = new p2.Box({
-									width:15,
-									height:40,
-									sensor:true
-								});
-
-					body.addShape(bodyShape);
-
 					return {
 						graphics:graphics,
-						physicsBody:body,
 						originalPosition:{x:x, y:y},
 						captureInProgress: false,
 						setPosition: function(x, y){
