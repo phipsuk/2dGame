@@ -162,30 +162,40 @@ var createFlagBody = function(x,y){
 	return body;
 }
 
-var RedFlag = createFlagBody(10,0);
-var BlueFlag = createFlagBody(780,0);
+var RedFlag = {
+	body: createFlagBody(10,0),
+	isHome: true
+};
+var BlueFlag = {
+	body: createFlagBody(780,0),
+	isHome: true
+};
 
 world.on("beginContact",function(evt){
 	var shapeA = evt.shapeA;
 	var shapeB = evt.shapeB;
 	var player = findPlayer(clients, shapeB.body)
 	console.log("contact: " + shapeA.sensor + " ShapeB: " + (player ? player.Team : ""));
-    if(shapeA.body == RedFlag || shapeB.body == RedFlag){
-    	if(player && player.Team == "Blue"){
+    if(shapeA.body == RedFlag.body || shapeB.body == RedFlag.body){
+    	if(player && player.Team == "Blue" && RedFlag.isHome){
     		player.hasFlag = true;
+    		RedFlag.isHome = false;
     	}else if(player){
     		if(player.hasFlag){
     			player.hasFlag = false;
+    			BlueFlag.isHome = true;
     			gameScore.red++;
     			notifyFlagCapture("Red");
     		}
     	}
-    }else if(shapeA.body == BlueFlag || shapeB.body == BlueFlag){
-    	if(player && player.Team == "Red"){
+    }else if(shapeA.body == BlueFlag.body || shapeB.body == BlueFlag.body){
+    	if(player && player.Team == "Red" && BlueFlag.isHome){
     		player.hasFlag = true;
+    		BlueFlag.isHome = false;
     	}else if(player){
     		if(player.hasFlag){
     			player.hasFlag = false;
+    			RedFlag.isHome = true;
     			gameScore.blue++;
     			notifyFlagCapture("Blue");
     		}
