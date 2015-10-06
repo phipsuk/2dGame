@@ -192,7 +192,10 @@
 	"buffers":
 	[
 		{
+			"contents": "var express = require('express');\nvar p2 = require('p2');\nvar app = express();\n\nvar TICKRATE = 60;\n\nvar tickLengthMs = 1000 / TICKRATE;\n\nvar previousTick = Date.now()\nvar actualTicks = 0;\n\nvar clients = [];\n\nvar lastID = 0;\n\nvar teamRed = false;\n\nvar directions = {\n	LEFT:37,\n	RIGHT:39,\n	UP:38,\n	DOWN:40\n};\n\napp.get('/', function (req, res) {\n	res.sendFile(__dirname + \"/html/index.html\");\n});\n\napp.get('/js/pixi.js', function(req,res){\n	res.sendFile(__dirname + \"/js/pixi.min.js\");\n});\n\napp.get('/js/physics.js', function(req,res){\n	res.sendFile(__dirname + \"/node_modules/p2/build/p2.min.js\");\n});\n\nvar server = app.listen(3000, function () {\n	var host = server.address().address;\n	var port = server.address().port;\n	console.log('Example app listening at http://%s:%s', host, port);\n});\n\nvar io = require('socket.io')(server);\n\nio.on('connection', function(socket){\n	socket.emit(\"connectionInfo\", {ID:lastID, Team: teamRed ? \"Red\" : \"Blue\"});\n	var ClientObj = {\n		skt: socket,\n		ID: lastID,\n		Team: teamRed ? \"Red\" : \"Blue\",\n		Data: {position:{x:0,y:0}},\n		pressed: {},\n		physicsBody: createPlayerBody(0, 0),\n		isDown: function(keyCode){\n			return this.pressed[keyCode];\n		}\n	};\n	teamRed = !teamRed;\n	lastID++;\n	clients.push(ClientObj);\n	socket.on(\"update\", function(update){\n		ClientObj.pressed = update.pressed;\n		if(ClientObj.isDown(directions.LEFT) && ClientObj.physicsBody.position[0] > 0) ClientObj.physicsBody.velocity[0] = -100;\n		if(ClientObj.isDown(directions.RIGHT) &&  ClientObj.physicsBody.position[0] < 790) ClientObj.physicsBody.velocity[0] = 100;\n		if(ClientObj.isDown(directions.UP) && ClientObj.physicsBody.position[1] < 590) ClientObj.physicsBody.velocity[1] = 100;\n		if(ClientObj.isDown(directions.DOWN) && ClientObj.physicsBody.position[1] > 0) ClientObj.physicsBody.velocity[1] = -500;\n\n		if(!ClientObj.isDown(directions.LEFT) && !ClientObj.isDown(directions.RIGHT)){\n			ClientObj.physicsBody.velocity[0] = 0;\n		}\n	});\n	socket.on('disconnect', function(event) {\n		console.log(\"User Disconnected\");\n		clients = clients.filter(function(index) {\n			return index.skt !== socket;\n		});\n		notifyDisconnect(ClientObj.ID);\n	});\n});\n\n//Define Server Physics\nvar world = new p2.World({\n	gravity:[0, -100]\n});\n\nworld.setGlobalStiffness(1e8);\nworld.setGlobalRelaxation(10);\n\n// Create an infinite ground plane.\nvar groundBody = new p2.Body({\n	mass: 0, // Setting mass to 0 makes the body static\n	position: [0,0]\n});\n\nvar groundShape = new p2.Plane();\ngroundBody.addShape(groundShape);\nworld.addBody(groundBody);\nvar wallBody = new p2.Body({\n	mass: 0, // Setting mass to 0 makes the body static\n	position: [-5,0],\n	angle:4.71238898\n});\nvar wallShape = new p2.Plane();\nwallBody.addShape(wallShape);\nworld.addBody(wallBody);\nvar wallBody = new p2.Body({\n	mass: 0, // Setting mass to 0 makes the body static\n	position: [800,0],\n	angle:1.57079633\n});\nvar wallShape = new p2.Plane();\nwallBody.addShape(wallShape);\nvar ceilingBody = new p2.Body({\n	mass: 0, // Setting mass to 0 makes the body static\n	position: [0,600],\n	angle:3.14159265\n});\nvar ceilingShape = new p2.Plane();\nceilingBody.addShape(ceilingShape);\nworld.addBody(ceilingBody);\n\n\nvar gameLoop = function(){\n	var now = Date.now() \n\n	actualTicks++\n	if (previousTick + tickLengthMs <= now) {\n		var delta = (now - previousTick) / 1000;\n		previousTick = now;\n\n		world.step(delta);\n		update(delta);\n\n		actualTicks = 0\n	}\n\n	if (Date.now() - previousTick < tickLengthMs - 16) {\n		setTimeout(gameLoop, 1)\n	} else {\n		setImmediate(gameLoop)\n	}\n}\n\nvar update = function(delta){\n	for (var i = clients.length - 1; i >= 0; i--) {\n		clients[i].skt.emit(\"update\", updateInfo());\n	};\n}\n\nvar updateInfo = function(){\n	var clientInfo = [];\n	for (var i = clients.length - 1; i >= 0; i--) {\n		clientInfo.push({\n			ID:clients[i].ID,\n			Team: clients[i].Team,\n			Data: {position:{x:clients[i].physicsBody.position[0],y:clients[i].physicsBody.position[1]}}\n		});\n	};\n	return clientInfo;\n}\n\nvar notifyDisconnect = function(clientID){\n	for (var i = clients.length - 1; i >= 0; i--) {\n		clients[i].skt.emit(\"clientDisconnected\", clientID);\n	};	\n}\n\nvar createPlayerBody = function(x,y){\n	var playerBody = new p2.Body({\n		mass:1,\n		position: [50, 50]\n	});\n\n	var playerShape = new p2.Box({\n		width:10,\n		height:10\n	});\n\n	playerBody.addShape(playerShape);\n	world.addBody(playerBody);\n\n	return playerBody;\n}\n\nvar createFlagBody = function(colour,x,y){\n	var body = new p2.Body({\n					mass:0,\n					position: [x,0]\n				});\n	var bodyShape = new p2.Box({\n					width:15,\n					height:40,\n					sensor:true\n				});\n\n	body.addShape(bodyShape);\n	world.addBody(body);\n\n	return body;\n}\n\ngameLoop();",
 			"file": "index.js",
+			"file_size": 4822,
+			"file_write_time": 130882653655931277,
 			"settings":
 			{
 				"buffer_size": 4621,
@@ -203,23 +206,15 @@
 			"file": "html/index.html",
 			"settings":
 			{
-				"buffer_size": 11113,
+				"buffer_size": 6365,
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "/C/Users/aaron.polley/AppData/Roaming/Sublime Text 3/Packages/User/GitSavvy.sublime-settings",
+			"file": ".gitignore",
 			"settings":
 			{
-				"buffer_size": 107,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "gulpfile.js",
-			"settings":
-			{
-				"buffer_size": 206,
+				"buffer_size": 13,
 				"line_ending": "Windows"
 			}
 		}
@@ -231,17 +226,57 @@
 	"build_varint": "",
 	"command_palette":
 	{
-		"height": 400.0,
-		"last_filter": "git",
+		"height": 222.0,
+		"last_filter": "install",
 		"selected_items":
 		[
 			[
-				"git",
-				"git: init"
-			],
-			[
 				"install",
 				"Package Control: Install Package"
+			],
+			[
+				"log",
+				"git: log"
+			],
+			[
+				" git stage",
+				"git: quick stage"
+			],
+			[
+				"git",
+				"git: status"
+			],
+			[
+				"git br",
+				"git: branch"
+			],
+			[
+				"stage",
+				"git: quick stage current file and commit"
+			],
+			[
+				"comm",
+				"git: commit"
+			],
+			[
+				"git ignore",
+				"git: ignore pattern"
+			],
+			[
+				"git sta",
+				"git: status"
+			],
+			[
+				"git stage",
+				"git: quick stage"
+			],
+			[
+				"gitsav",
+				"GitSavvy: help"
+			],
+			[
+				"git:add",
+				"git: commit including unstaged files"
 			],
 			[
 				"remo",
@@ -416,8 +451,9 @@
 	],
 	"file_history":
 	[
-		"/C/Users/aaron.polley/AppData/Roaming/Sublime Text 3/Packages/GitSavvy/GitSavvy.sublime-settings",
 		"/C/Users/aaron.polley/AppData/Roaming/Sublime Text 3/Packages/User/GitSavvy.sublime-settings",
+		"/C/Users/aaron.polley/Documents/dummy/.gitignore",
+		"/C/Users/aaron.polley/AppData/Roaming/Sublime Text 3/Packages/GitSavvy/GitSavvy.sublime-settings",
 		"/C/Users/aaron.polley/AppData/Roaming/Sublime Text 3/Packages/tern_for_sublime/Tern.sublime-settings",
 		"/C/Users/aaron.polley/Documents/dummy/package.json",
 		"/C/Users/aaron.polley/AppData/Roaming/Sublime Text 3/Packages/User/Preferences.sublime-settings",
@@ -542,8 +578,7 @@
 		"/S/SVN/18/Web/render/Scripts/Functions/UI.js",
 		"/S/SVN/18/Web/render/Scripts/Functions/len.js",
 		"/C/Users/aaron.polley/AppData/Roaming/Sublime Text 3/Packages/tern_for_sublime/node_modules/tern/bin/tern",
-		"/S/SVN/18/Source/UnionSquare.Workflow.Runtime/UnionSquare.Workflow.Runtime/UnionSquare.Workflow.Runtime.csproj",
-		"/S/SVN/18/Source/UnionSquare.Workflow.Web/Website/blank.htm"
+		"/S/SVN/18/Source/UnionSquare.Workflow.Runtime/UnionSquare.Workflow.Runtime/UnionSquare.Workflow.Runtime.csproj"
 	],
 	"find":
 	{
@@ -646,7 +681,7 @@
 	"groups":
 	[
 		{
-			"selected": 3,
+			"selected": 0,
 			"sheets":
 			[
 				{
@@ -662,20 +697,21 @@
 						"selection":
 						[
 							[
-								3024,
-								3024
+								3634,
+								3634
 							]
 						],
 						"settings":
 						{
 							"git_savvy.file_path": "C:\\Users\\aaron.polley\\Documents\\dummy\\index.js",
+							"git_savvy.repo_path": "C:/Users/aaron.polley/Documents/dummy",
 							"syntax": "Packages/Babel/JavaScript (Babel).tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 1140.0,
+						"translation.y": 2130.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 3,
+					"stack_index": 0,
 					"type": "text"
 				},
 				{
@@ -684,24 +720,25 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 11113,
+						"buffer_size": 6365,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								9335,
-								9335
+								5097,
+								5097
 							]
 						],
 						"settings":
 						{
 							"git_savvy.file_path": "C:\\Users\\aaron.polley\\Documents\\dummy\\html\\index.html",
+							"git_savvy.repo_path": "C:/Users/aaron.polley/Documents/dummy",
 							"syntax": "Packages/HTML/HTML.tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 4347.0,
+						"translation.y": 2372.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 2,
@@ -709,60 +746,32 @@
 				},
 				{
 					"buffer": 2,
-					"file": "/C/Users/aaron.polley/AppData/Roaming/Sublime Text 3/Packages/User/GitSavvy.sublime-settings",
-					"semi_transient": false,
+					"file": ".gitignore",
+					"semi_transient": true,
 					"settings":
 					{
-						"buffer_size": 107,
+						"buffer_size": 13,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								37,
-								37
+								0,
+								0
 							]
 						],
 						"settings":
 						{
-							"git_savvy.file_path": "C:\\Users\\aaron.polley\\AppData\\Roaming\\Sublime Text 3\\Packages\\User\\GitSavvy.sublime-settings",
-							"syntax": "Packages/JavaScript/JSON.tmLanguage"
+							"git_savvy.file_path": "C:\\Users\\aaron.polley\\Documents\\dummy\\.gitignore",
+							"git_savvy.repo_path": "C:/Users/aaron.polley/Documents/dummy",
+							"syntax": "Packages/Theme - Afterglow/Prefs/Langs/Git.tmLanguage"
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 1,
-					"type": "text"
-				},
-				{
-					"buffer": 3,
-					"file": "gulpfile.js",
-					"semi_transient": true,
-					"settings":
-					{
-						"buffer_size": 206,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								206,
-								206
-							]
-						],
-						"settings":
-						{
-							"git_savvy.file_path": "C:\\Users\\aaron.polley\\Documents\\dummy\\gulpfile.js",
-							"syntax": "Packages/Theme - Afterglow/Prefs/Langs/Gulpfile JS.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 0,
 					"type": "text"
 				}
 			]

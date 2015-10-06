@@ -49,8 +49,8 @@
 				var blueTeamScoreCount = 0;
 				var redTeamScoreCount = 0;
 
-				var blueTeamScore = new PIXI.Text("Blue: 0", {font:"50px Arial", fill:"blue"});
-				var redTeamScore = new PIXI.Text("Red: 0", {font:"50px Arial", fill:"red"});
+				var blueTeamScore = new PIXI.Text("0", {font:"50px Arial", fill:"blue"});
+				var redTeamScore = new PIXI.Text("0", {font:"50px Arial", fill:"red"});
 
 				blueTeamScore.position.x = 50;
 				redTeamScore.position.x = 500;
@@ -105,11 +105,31 @@
 				stage.addChild(RedFlag.graphics);
 				stage.addChild(BlueFlag.graphics);
 
+				socket.on("flagCaptured", function(team){
+					if(team == "Red"){
+						//Reset Blue Flag
+						BlueFlag.reset();
+					}else{
+						//Reset Red Flag
+						RedFlag.reset();
+					}
+				});
+
 				socket.on("update", function(serverUpdate){
+					var score = serverUpdate[0].Score;
+					blueTeamScore.text = score.blue;
+					redTeamScore.text = score.red;
 					for (var i = serverUpdate.length - 1; i >= 0; i--) {
 						if(serverUpdate[i].ID == ClientID){
 							player.graphics.position.x = serverUpdate[i].Data.position.x;
 							player.graphics.position.y = -serverUpdate[i].Data.position.y;
+							if(serverUpdate[i].Data.hasFlag){
+									if(player.team == "Blue"){
+										RedFlag.setPosition(player.graphics.position.x, player.graphics.position.y + 570);
+									}else{
+										BlueFlag.setPosition(player.graphics.position.x, player.graphics.position.y + 570);
+									}
+								}
 						}else{
 							if(players[serverUpdate[i].ID]){
 								players[serverUpdate[i].ID].graphics.x = serverUpdate[i].Data.position.x;

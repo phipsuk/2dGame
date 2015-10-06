@@ -22,6 +22,16 @@ var directions = {
 	DOWN:40
 };
 
+var PLAYER = Math.pow(2,1);
+var FLAG =  Math.pow(2,2);
+var GROUND = Math.pow(2,3);
+var OTHER = Math.pow(2,4);
+
+var gameScore = {
+	red: 0,
+	blue: 0
+}
+
 app.get('/', function (req, res) {
 	res.sendFile(__dirname + "/html/index.html");
 });
@@ -53,7 +63,8 @@ io.on('connection', function(socket){
 		physicsBody: createPlayerBody(0, 0),
 		isDown: function(keyCode){
 			return this.pressed[keyCode];
-		}
+		},
+		hasFlag: false
 	};
 	teamRed = !teamRed;
 	lastID++;
@@ -71,6 +82,7 @@ io.on('connection', function(socket){
 	});
 	socket.on('disconnect', function(event) {
 		console.log("User Disconnected");
+		world.removeBody(ClientObj.physicsBody);
 		clients = clients.filter(function(index) {
 			return index.skt !== socket;
 		});
@@ -94,6 +106,8 @@ var groundBody = new p2.Body({
 
 var groundShape = new p2.Plane();
 groundBody.addShape(groundShape);
+groundShape.collisionGroup = GROUND;
+groundShape.collisionMask = PLAYER;
 world.addBody(groundBody);
 var wallBody = new p2.Body({
 	mass: 0, // Setting mass to 0 makes the body static
@@ -101,6 +115,8 @@ var wallBody = new p2.Body({
 	angle:4.71238898
 });
 var wallShape = new p2.Plane();
+wallShape.collisionGroup = GROUND;
+wallShape.collisionMask = PLAYER;
 wallBody.addShape(wallShape);
 world.addBody(wallBody);
 var wallBody = new p2.Body({
@@ -109,6 +125,8 @@ var wallBody = new p2.Body({
 	angle:1.57079633
 });
 var wallShape = new p2.Plane();
+wallShape.collisionGroup = GROUND;
+wallShape.collisionMask = PLAYER;
 wallBody.addShape(wallShape);
 var ceilingBody = new p2.Body({
 	mass: 0, // Setting mass to 0 makes the body static
@@ -116,9 +134,70 @@ var ceilingBody = new p2.Body({
 	angle:3.14159265
 });
 var ceilingShape = new p2.Plane();
+ceilingShape.collisionGroup = GROUND;
+ceilingShape.collisionMask = PLAYER;
 ceilingBody.addShape(ceilingShape);
 world.addBody(ceilingBody);
 
+var createFlagBody = function(x,y){
+	var body = new p2.Body({
+					mass:0,
+					position: [x,0]
+				});
+	var bodyShape = new p2.Box({
+					width:15,
+					height:40,
+					sensor:true
+				});
+
+	bodyShape.collisionGroup = FLAG;
+
+	bodyShape.collisionMask = PLAYER;
+
+	body.addShape(bodyShape);
+	world.addBody(body);
+
+	return body;
+}
+
+var RedFlag = createFlagBody(10,0);
+var BlueFlag = createFlagBody(780,0);
+
+world.on("beginContact",function(evt){
+	var shapeA = evt.shapeA;
+	var shapeB = evt.shapeB;
+	var player = findPlayer(clients, shapeB.body)
+	console.log("contact: " + shapeA.sensor + " ShapeB: " + (player ? player.Team : ""));
+    if(shapeA.body == RedFlag || shapeB.body == RedFlag){
+    	if(player && player.Team == "Blue"){
+    		player.hasFlag = true;
+    	}else if(player){
+    		if(player.hasFlag){
+    			player.hasFlag = false;
+    			gameScore.red++;
+    			notifyFlagCapture("Red");
+    		}
+    	}
+    }else if(shapeA.body == BlueFlag || shapeB.body == BlueFlag){
+    	if(player && player.Team == "Red"){
+    		player.hasFlag = true;
+    	}else if(player){
+    		if(player.hasFlag){
+    			player.hasFlag = false;
+    			gameScore.blue++;
+    			notifyFlagCapture("Blue");
+    		}
+    	}
+    }
+});	
+
+function findPlayer(source, physicsObject) {
+  for (var i = 0; i < source.length; i++) {
+    if (source[i].physicsBody === physicsObject) {
+      return source[i];
+    }
+  }
+}
 
 var gameLoop = function(){
 	var now = Date.now() 
@@ -153,15 +232,22 @@ var updateInfo = function(){
 		clientInfo.push({
 			ID:clients[i].ID,
 			Team: clients[i].Team,
-			Data: {position:{x:clients[i].physicsBody.position[0],y:clients[i].physicsBody.position[1]}}
+			Data: {position:{x:clients[i].physicsBody.position[0],y:clients[i].physicsBody.position[1]}, hasFlag: clients[i].hasFlag},
+			Score: gameScore
 		});
 	};
 	return clientInfo;
 }
-
+   
 var notifyDisconnect = function(clientID){
 	for (var i = clients.length - 1; i >= 0; i--) {
 		clients[i].skt.emit("clientDisconnected", clientID);
+	};	
+}
+
+var notifyFlagCapture = function(team){
+	for (var i = clients.length - 1; i >= 0; i--) {
+		clients[i].skt.emit("flagCaptured", team);
 	};	
 }
 
@@ -176,27 +262,15 @@ var createPlayerBody = function(x,y){
 		height:10
 	});
 
+	playerShape.collisionGroup = PLAYER;
+
+	playerShape.collisionMask = PLAYER | FLAG | GROUND | OTHER;
+
 	playerBody.addShape(playerShape);
 	world.addBody(playerBody);
 
 	return playerBody;
 }
 
-var createFlagBody = function(colour,x,y){
-	var body = new p2.Body({
-					mass:0,
-					position: [x,0]
-				});
-	var bodyShape = new p2.Box({
-					width:15,
-					height:40,
-					sensor:true
-				});
-
-	body.addShape(bodyShape);
-	world.addBody(body);
-
-	return body;
-}
 
 gameLoop();
