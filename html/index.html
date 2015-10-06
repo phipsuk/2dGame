@@ -53,11 +53,20 @@
 				var redTeamScore = new PIXI.Text("0", {font:"50px Arial", fill:"red"});
 
 				blueTeamScore.position.x = 50;
-				redTeamScore.position.x = 500;
-
+				redTeamScore.position.x = 700;
 
 				// create the root of the scene graph
 				var stage = new PIXI.Container();
+
+				//Create Grass
+				var texture = PIXI.Texture.fromImage("/images/grass.png");
+				var grass = new PIXI.TilingSprite(texture, 800, 50);
+				grass.tileScale.x = 0.2;
+				grass.tileScale.y = 0.2;
+				grass.position.x = 0;
+				grass.position.y = 570;
+
+				stage.addChild(grass);
 				
 				stage.addChild(blueTeamScore);
 				stage.addChild(redTeamScore);

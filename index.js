@@ -44,6 +44,8 @@ app.get('/js/physics.js', function(req,res){
 	res.sendFile(__dirname + "/node_modules/p2/build/p2.min.js");
 });
 
+app.use('/images', express.static(__dirname + '/images'));
+
 var server = app.listen(3000, function () {
 	var host = server.address().address;
 	var port = server.address().port;
@@ -60,7 +62,7 @@ io.on('connection', function(socket){
 		Team: teamRed ? "Red" : "Blue",
 		Data: {position:{x:0,y:0}},
 		pressed: {},
-		physicsBody: createPlayerBody(0, 0),
+		physicsBody: createPlayerBody(teamRed ? 50 : 750, teamRed ? 50 : 50),
 		isDown: function(keyCode){
 			return this.pressed[keyCode];
 		},
@@ -117,13 +119,13 @@ var wallBody = new p2.Body({
 var wallShape = new p2.Plane();
 wallShape.collisionGroup = GROUND;
 wallShape.collisionMask = PLAYER;
-wallBody.addShape(wallShape);
-world.addBody(wallBody);
 var wallBody = new p2.Body({
 	mass: 0, // Setting mass to 0 makes the body static
 	position: [800,0],
 	angle:1.57079633
 });
+wallBody.addShape(wallShape);
+world.addBody(wallBody);
 var wallShape = new p2.Plane();
 wallShape.collisionGroup = GROUND;
 wallShape.collisionMask = PLAYER;
@@ -254,7 +256,7 @@ var notifyFlagCapture = function(team){
 var createPlayerBody = function(x,y){
 	var playerBody = new p2.Body({
 		mass:1,
-		position: [50, 50]
+		position: [x, y]
 	});
 
 	var playerShape = new p2.Box({
