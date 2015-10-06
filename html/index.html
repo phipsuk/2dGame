@@ -189,6 +189,13 @@
 
 				socket.on("clientDisconnected", function(clientid){
 					stage.removeChild(players[clientid].graphics);
+					if(players[clientid].hasFlag){
+						if(players[clientid].team == "Blue"){
+							BlueFlag.reset();
+						}else{
+							RedFlag.reset();
+						}
+					}
 					delete players[clientid];
 				});
 
