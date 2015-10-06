@@ -180,7 +180,7 @@ world.on("beginContact",function(evt){
     	if(player && player.Team == "Blue" && RedFlag.isHome){
     		player.hasFlag = true;
     		RedFlag.isHome = false;
-    	}else if(player){
+    	}else if(player && RedFlag.isHome){
     		if(player.hasFlag){
     			player.hasFlag = false;
     			BlueFlag.isHome = true;
@@ -192,7 +192,7 @@ world.on("beginContact",function(evt){
     	if(player && player.Team == "Red" && BlueFlag.isHome){
     		player.hasFlag = true;
     		BlueFlag.isHome = false;
-    	}else if(player){
+    	}else if(player && BlueFlag.isHome){
     		if(player.hasFlag){
     			player.hasFlag = false;
     			RedFlag.isHome = true;
