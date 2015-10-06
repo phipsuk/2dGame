@@ -118,8 +118,8 @@
 
 				stage.addChild(graphics);
 
-				var RedFlag = Flag(0xFF0000, 10, 570);
-				var BlueFlag = Flag(0x0000FF, 780, 570);
+				var RedFlag = Flag("Red", 10, 570);
+				var BlueFlag = Flag("Blue", 765, 570);
 
 				stage.addChild(RedFlag.graphics);
 				stage.addChild(BlueFlag.graphics);
@@ -223,28 +223,24 @@
 				}
 
 				function Flag(colour, x, y){
-					var graphics = new PIXI.Graphics();
-					graphics.lineStyle(2, colour, 1);
-					graphics.beginFill(colour);
-					graphics.drawRect(0, 0, 15, 10);
-					graphics.endFill();
-					graphics.moveTo(0, 0);
-					graphics.lineTo(0, 30);
+					var sprite = new PIXI.Sprite.fromImage("/images/flag_" + colour + ".png");
 
-					graphics.position.x = x;
-					graphics.position.y = y;
+					sprite.position.x = x;
+					sprite.position.y = y;
+					sprite.scale.x = 0.1;
+					sprite.scale.y = 0.1;
 
 					return {
-						graphics:graphics,
+						graphics:sprite,
 						originalPosition:{x:x, y:y},
 						captureInProgress: false,
 						setPosition: function(x, y){
-							graphics.position.x = x;
-							graphics.position.y = y;
+							sprite.position.x = x;
+							sprite.position.y = y;
 						},
 						reset: function(){
-							graphics.position.x = this.originalPosition.x;
-							graphics.position.y = this.originalPosition.y;	
+							sprite.position.x = this.originalPosition.x;
+							sprite.position.y = this.originalPosition.y;	
 							this.captureInProgress = false;
 						}
 				};
