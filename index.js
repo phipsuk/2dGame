@@ -72,7 +72,7 @@ io.on('connection', function(socket){
 		pressed: {},
 		mousePressed: {},
 		bullets: [],
-		physicsBody: createPlayerBody(teamRed ? 50 : 750, teamRed ? 50 : 50),
+		physicsBody: createPlayerBody(teamRed ? 50 : 750, 70),
 		isDown: function(keyCode){
 			return this.pressed[keyCode];
 		},
@@ -85,7 +85,7 @@ io.on('connection', function(socket){
 		isHit:false,
 		reset: function(){
 			this.physicsBody.position[0] = this.Team == "Red" ? 50 : 750;
-			this.physicsBody.position[1] = this.Team == "Red" ? 50 : 50;
+			this.physicsBody.position[1] = 70;
 			this.hasFlag = false;
 			this.isHit = false;
 			if(this.Team == "Red"){
@@ -127,7 +127,7 @@ io.on('connection', function(socket){
 					});
 					world.removeBody(bullet.physicsBody);
 					notifyBulletRemoved(bullet.ID);
-				}, 1000);
+				}, 2000);
 			}else if(!ClientObj.isPressed(mouseButtons.LEFT)){
 				ClientObj.bulletFired = false;
 			}
@@ -311,7 +311,7 @@ var updateInfo = function(){
 		clientInfo.push({
 			ID:clients[i].ID,
 			Team: clients[i].Team,
-			Data: {position:{x:clients[i].physicsBody.position[0],y:clients[i].physicsBody.position[1]}, hasFlag: clients[i].hasFlag},
+			Data: {position:{x:clients[i].physicsBody.position[0],y:clients[i].physicsBody.position[1]}, hasFlag: clients[i].hasFlag, rotation:clients[i].physicsBody.angle},
 			Score: gameScore,
 			Bullets: getBulletPositions(clients[i].bullets)
 		});
@@ -332,6 +332,9 @@ var loadLevel = function(name){
 		body.addShape(shape);
 		if(levelEntity.type === "wall"){
 			shape.collisionGroup = OTHER;
+			shape.collisionMask = PLAYER | GROUND | BULLET | OTHER;
+		}else if(levelEntity.type === "floor"){
+			shape.collisionGroup = GROUND;
 			shape.collisionMask = PLAYER | GROUND | BULLET | OTHER;
 		}
 		world.addBody(body);
