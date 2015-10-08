@@ -94,10 +94,11 @@
 					ID:ClientID,
 					graphics:graphics,
 					pressed: {},
-					LEFT:37,
-					RIGHT:39,
-					UP:38,
-					DOWN:40,
+					mousePressed: {},
+					LEFT:65,
+					RIGHT:68,
+					UP:87,
+					DOWN:83,
 					JUMPING:false,
 					JUMPCOUNT:0,
 					team:Team,
@@ -113,6 +114,17 @@
 					},
 					update: function(){
 
+					},
+					onMouseDown: function(event){
+						var angle = Math.atan2(this.graphics.position.y - (event.layerY - 600), this.graphics.position.x - event.layerX);
+						this.mousePressed[event.button] = {
+							x: event.x,
+							y: event.y,
+							angle: angle
+						};
+					},
+					onMouseUp: function(event){
+						delete this.mousePressed[event.button];
 					}
 				};
 
@@ -139,6 +151,7 @@
 					blueTeamScore.text = score.blue;
 					redTeamScore.text = score.red;
 					for (var i = serverUpdate.length - 1; i >= 0; i--) {
+						updateBulletPositions(serverUpdate[i].Bullets);
 						if(serverUpdate[i].ID == ClientID){
 							player.graphics.position.x = serverUpdate[i].Data.position.x;
 							player.graphics.position.y = -serverUpdate[i].Data.position.y;
@@ -187,6 +200,29 @@
 					};		
 				});
 
+				var bulletList = {};
+
+				var updateBulletPositions = function(bullets){
+					if(bullets.length > 0){
+						for (var i = bullets.length - 1; i >= 0; i--) {
+							if(bulletList[bullets[i].id]){
+								bulletList[bullets[i].id].position.x = bullets[i].x;
+								bulletList[bullets[i].id].position.y = -bullets[i].y;	
+							}else{
+								var bulletGraphics = new PIXI.Graphics();
+								bulletGraphics.lineStyle(2, 0x080808, 1);
+								bulletGraphics.beginFill(0x080808);
+								bulletGraphics.drawRect(0, 590, 2, 2);
+								bulletGraphics.endFill();
+								stage.addChild(bulletGraphics);
+								bulletList[bullets[i].id] = bulletGraphics;
+								bulletList[bullets[i].id].position.x = bullets[i].x;
+								bulletList[bullets[i].id].position.y = -bullets[i].y;
+							}
+						};
+					}
+				};
+
 				socket.on("clientDisconnected", function(clientid){
 					stage.removeChild(players[clientid].graphics);
 					if(players[clientid].hasFlag){
@@ -199,6 +235,11 @@
 					delete players[clientid];
 				});
 
+				socket.on("bulletRemoved", function(id){
+					stage.removeChild(bulletList[id]);
+					delete bulletList[id];
+				});
+
 				// start animating
 				animate();
 
@@ -208,6 +249,7 @@
 
 					var update = {
 						pressed: player.pressed,
+						mousePressed: player.mousePressed,
 						position: player.graphics.position,
 						hasFlag: player.hasFlag
 					}
@@ -251,6 +293,12 @@
 			}, false);
 			window.addEventListener('keyup', function(event) {
 				player.onKeyUp(event);
+			}, false);
+			window.addEventListener('mousedown', function(event){
+				player.onMouseDown(event);
+			}, false);
+			window.addEventListener('mouseup', function(event){
+				player.onMouseUp(event);
 			}, false);
 		}
         </script>
