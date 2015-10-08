@@ -1,6 +1,7 @@
 var express = require('express');
 var p2 = require('p2');
 var app = express();
+var fs = require("fs");
 
 var TICKRATE = 60;
 
@@ -80,6 +81,7 @@ io.on('connection', function(socket){
 		},
 		hasFlag: false,
 		bulletFired: false,
+		jumping: false,
 		isHit:false,
 		reset: function(){
 			this.physicsBody.position[0] = this.Team == "Red" ? 50 : 750;
@@ -104,7 +106,10 @@ io.on('connection', function(socket){
 			ClientObj.mousePressed = update.mousePressed;
 			if(ClientObj.isDown(directions.LEFT) && ClientObj.physicsBody.position[0] > 0) ClientObj.physicsBody.velocity[0] = -100;
 			if(ClientObj.isDown(directions.RIGHT) &&  ClientObj.physicsBody.position[0] < 790) ClientObj.physicsBody.velocity[0] = 100;
-			if(ClientObj.isDown(directions.UP) && ClientObj.physicsBody.position[1] < 590) ClientObj.physicsBody.velocity[1] = 100;
+			if(ClientObj.isDown(directions.UP) && ClientObj.physicsBody.position[1] < 590 && !ClientObj.jumping){
+				ClientObj.physicsBody.velocity[1] = 100;
+				ClientObj.jumping = true;
+			}
 			if(ClientObj.isDown(directions.DOWN) && ClientObj.physicsBody.position[1] > 0) ClientObj.physicsBody.velocity[1] = -500;
 
 			if(!ClientObj.isDown(directions.LEFT) && !ClientObj.isDown(directions.RIGHT)){
@@ -221,6 +226,10 @@ var BlueFlag = {
 world.on("beginContact",function(evt){
 	var shapeA = evt.shapeA;
 	var shapeB = evt.shapeB;
+	if((shapeA.collisionGroup == GROUND || shapeB.collisionGroup == GROUND) && (shapeA.collisionGroup == PLAYER || shapeB.collisionGroup == PLAYER)){
+		var player = findPlayer(clients, shapeA.collisionGroup == PLAYER ? shapeA.body :shapeB.body);
+		player.jumping = false;
+	}
 	if((shapeA.collisionGroup == BULLET || shapeB.collisionGroup == BULLET) && (shapeA.collisionGroup == PLAYER || shapeB.collisionGroup == PLAYER)){
 		var player = findPlayer(clients, shapeA.collisionGroup == PLAYER ? shapeA.body :shapeB.body);
 		if(!player.isHit){
@@ -289,8 +298,10 @@ var gameLoop = function(){
 }
 
 var update = function(delta){
+	var levelInfo = levelUpdateInfo();
 	for (var i = clients.length - 1; i >= 0; i--) {
 		clients[i].skt.emit("update", updateInfo());
+		clients[i].skt.emit("levelUpdate", levelInfo);
 	};
 }
 
@@ -306,7 +317,54 @@ var updateInfo = function(){
 		});
 	};
 	return clientInfo;
+};
+
+var loadLevel = function(name){
+	var levelDefinition = JSON.parse(fs.readFileSync(__dirname + "/level/" + name + ".json", 'utf8'));
+	var levelEntities = [];
+	for (var i = levelDefinition.length - 1; i >= 0; i--) {
+		var levelEntity = levelDefinition[i];
+		var body = new p2.Body({
+			mass: levelEntity.mass,
+			position: [levelEntity.position.x,levelEntity.position.y]
+		});
+		var shape = new p2[levelEntity.shape](levelEntity.shapeOptions);
+		body.addShape(shape);
+		if(levelEntity.type === "wall"){
+			shape.collisionGroup = OTHER;
+			shape.collisionMask = PLAYER | GROUND | BULLET | OTHER;
+		}
+		world.addBody(body);
+		levelEntities.push({
+			ID:entityID++,
+			physicsBody: body,
+			type: levelEntity.type,
+			shape: levelEntity.shape,
+			shapeOptions: levelEntity.shapeOptions
+		});
+	};
+	return levelEntities;
 }
+
+var levelEntities = loadLevel("definition");
+
+var levelUpdateInfo = function(){
+	var updateInfo = [];
+	for (var i = levelEntities.length - 1; i >= 0; i--) {
+		var entity = levelEntities[i];
+		updateInfo.push({
+			ID:entity.ID,
+			position:{
+				x:entity.physicsBody.position[0],
+				y:entity.physicsBody.position[1]
+			},
+			type:entity.type,
+			shape: entity.shape,
+			shapeOptions: entity.shapeOptions
+		});
+	};
+	return updateInfo;
+};
 
 var getBulletPositions = function(bullets){
 	var bulletPositions = [];

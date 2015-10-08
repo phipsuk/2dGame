@@ -1,0 +1,41 @@
+[
+	{
+		"type": "wall",
+		"mass": 0,
+		"shape": "Box",
+		"shapeOptions":{
+				"height": 50,
+				"width": 15
+			},
+		"position": {
+			"x": 400,
+			"y": 20
+		}
+	},
+	{
+		"type": "wall",
+		"mass": 0,
+		"shape": "Box",
+		"shapeOptions":{
+				"height": 15,
+				"width": 50
+			},
+		"position": {
+			"x": 400,
+			"y": 40
+		}
+	},
+	{
+		"type": "wall",
+		"mass": 0,
+		"shape": "Box",
+		"shapeOptions":{
+				"height": 15,
+				"width": 50
+			},
+		"position": {
+			"x": 400,
+			"y": 80
+		}
+	}
+]

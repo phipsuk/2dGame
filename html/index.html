@@ -196,6 +196,39 @@
 						}
 					};		
 				});
+				
+				var levelEntities = {};
+
+				socket.on("levelUpdate", function(data){
+					for (var i = data.length - 1; i >= 0; i--) {
+						var entity = data[i];
+						if(levelEntities[entity.ID]){
+							levelEntities[entity.ID].position.x = entity.position.x;
+							levelEntities[entity.ID].position.y = -entity.position.y;
+						}else{
+							if(entity.shape == "Box"){
+								if(entity.type){
+									var entityGraphics = new PIXI.Graphics();
+									entityGraphics.lineStyle(2, 0x080808, 1);
+									entityGraphics.beginFill(0x080808);
+									entityGraphics.drawRect((-entity.shapeOptions.width/2) + 5, (-entity.shapeOptions.height/2) + 595, entity.shapeOptions.width, entity.shapeOptions.height);
+									entityGraphics.endFill();
+									stage.addChild(entityGraphics);
+									levelEntities[entity.ID] = entityGraphics;
+									levelEntities[entity.ID].position.x = entity.position.x;
+									levelEntities[entity.ID].position.y = -entity.position.y;
+								}else{
+									var texture = PIXI.Texture.fromImage("/images/" + entity.type + ".png");
+									var entitySprite = new PIXI.TilingSprite(texture, entity.shapeOptions.width, entity.shapeOptions.height);
+									entitySprite.position.x = entity.position.x;
+									entitySprite.position.y = -entity.position.y;
+									stage.addChild(entitySprite);
+									levelEntities[entity.ID] = entitySprite;
+								}
+							}
+						}
+					};
+				});
 
 				var bulletList = {};
 
