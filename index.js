@@ -18,6 +18,9 @@ var entityID = 0
 
 var teamRed = false;
 
+var redTeamCount = 0;
+var blueTeamCount = 0;
+
 var directions = {
 	LEFT:65,
 	RIGHT:68,
@@ -64,7 +67,17 @@ var server = app.listen(3000, function () {
 var io = require('socket.io')(server);
 
 io.on('connection', function(socket){
+	if(blueTeamCount > redTeamCount){
+		teamRed = true;
+	}else{
+		teamRed = false;
+	}
 	socket.emit("connectionInfo", {ID:lastID, Team: teamRed ? "Red" : "Blue"});
+	if(teamRed){
+		redTeamCount++;
+	}else{
+		blueTeamCount++;
+	}
 	var ClientObj = {
 		skt: socket,
 		ID: lastID,
@@ -82,8 +95,10 @@ io.on('connection', function(socket){
 		},
 		hasFlag: false,
 		bulletFired: false,
+		reloading: false,
 		jumping: false,
 		isHit:false,
+		staticObjectsSent: false,
 		reset: function(){
 			this.physicsBody.position[0] = this.Team == "Red" ? 50 : 750;
 			this.physicsBody.position[1] = 70;
@@ -130,13 +145,24 @@ io.on('connection', function(socket){
 					notifyBulletRemoved(bullet.ID);
 				}, 3000);
 			}else if(!ClientObj.isPressed(mouseButtons.LEFT)){
-				ClientObj.bulletFired = false;
+				if(ClientObj.reloading === false){
+					setTimeout(function(){
+						ClientObj.bulletFired = false;
+						ClientObj.reloading = false;
+					}, 200);
+					ClientObj.reloading = true;
+				}
 			}
 		}
 	});
 	socket.on('disconnect', function(event) {
 		console.log("User Disconnected");
 		world.removeBody(ClientObj.physicsBody);
+		if(ClientObj.Team === "Blue"){
+			blueTeamCount--;
+		}else{
+			redTeamCount--;
+		}
 		clients = clients.filter(function(index) {
 			return index.skt !== socket;
 		});
@@ -235,6 +261,16 @@ world.on("beginContact",function(evt){
 		var player = findPlayer(clients, shapeA.collisionGroup == PLAYER ? shapeA.body :shapeB.body);
 		if(!player.isHit){
 			player.isHit = true;
+			if(player.hasFlag){
+				player.hasFlag = false;
+				if(player.Team == "Red"){
+					BlueFlag.isHome = true;
+					notifyFlagCapture("Red");
+				}else{
+					RedFlag.issssHome = true;
+					notifyFlagCapture("Blue");
+				}
+			}
 			setTimeout(function(){
 				player.reset();
 			}, 5000);
@@ -302,7 +338,8 @@ var update = function(delta){
 	var levelInfo = levelUpdateInfo();
 	for (var i = clients.length - 1; i >= 0; i--) {
 		clients[i].skt.emit("update", updateInfo());
-		clients[i].skt.emit("levelUpdate", levelInfo);
+		if(!clients[i].staticObjectsSent)
+			clients[i].skt.emit("levelUpdate", levelInfo);
 	};
 }
 
@@ -322,7 +359,10 @@ var updateInfo = function(){
 
 var loadLevel = function(name){
 	var levelDefinition = JSON.parse(fs.readFileSync(__dirname + "/level/" + name + ".json", 'utf8'));
-	var levelEntities = [];
+	var levelEntities = {
+		static:[],
+		dynamic:[]
+	};
 	for (var i = levelDefinition.length - 1; i >= 0; i--) {
 		var levelEntity = levelDefinition[i];
 		var body = new p2.Body({
@@ -339,7 +379,7 @@ var loadLevel = function(name){
 			shape.collisionMask = PLAYER | GROUND | BULLET | OTHER;
 		}
 		world.addBody(body);
-		levelEntities.push({
+		levelEntities.static.push({
 			ID:entityID++,
 			physicsBody: body,
 			type: levelEntity.type,
@@ -354,8 +394,8 @@ var levelEntities = loadLevel("definition");
 
 var levelUpdateInfo = function(){
 	var updateInfo = [];
-	for (var i = levelEntities.length - 1; i >= 0; i--) {
-		var entity = levelEntities[i];
+	for (var i = levelEntities.static.length - 1; i >= 0; i--) {
+		var entity = levelEntities.static[i];
 		updateInfo.push({
 			ID:entity.ID,
 			position:{
