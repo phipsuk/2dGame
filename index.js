@@ -22,7 +22,8 @@ var directions = {
 	LEFT:65,
 	RIGHT:68,
 	UP:87,
-	DOWN:83
+	DOWN:83,
+	SPACE:32
 };
 
 var mouseButtons = {
@@ -106,7 +107,7 @@ io.on('connection', function(socket){
 			ClientObj.mousePressed = update.mousePressed;
 			if(ClientObj.isDown(directions.LEFT) && ClientObj.physicsBody.position[0] > 0) ClientObj.physicsBody.velocity[0] = -100;
 			if(ClientObj.isDown(directions.RIGHT) &&  ClientObj.physicsBody.position[0] < 790) ClientObj.physicsBody.velocity[0] = 100;
-			if(ClientObj.isDown(directions.UP) && ClientObj.physicsBody.position[1] < 590 && !ClientObj.jumping){
+			if((ClientObj.isDown(directions.UP) || ClientObj.isDown(directions.SPACE))  && ClientObj.physicsBody.position[1] < 590 && !ClientObj.jumping){
 				ClientObj.physicsBody.velocity[1] = 100;
 				ClientObj.jumping = true;
 			}
