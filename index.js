@@ -119,7 +119,7 @@ io.on('connection', function(socket){
 
 			if(ClientObj.isPressed(mouseButtons.LEFT) && ClientObj.bulletFired === false){
 				var angle = ClientObj.mousePressed[mouseButtons.LEFT].angle;
-				var bullet = createBulletBody(ClientObj.physicsBody.position[0]+-Math.cos(angle) * 10, ClientObj.physicsBody.position[1]+Math.sin(angle) * 10, 500, angle);
+				var bullet = createBulletBody(ClientObj.physicsBody.position[0]+-Math.cos(angle) * 10, ClientObj.physicsBody.position[1]+Math.sin(angle) * 10, 200, angle);
 				ClientObj.bullets.push(bullet);
 				ClientObj.bulletFired = true;
 				setTimeout(function(){
@@ -128,7 +128,7 @@ io.on('connection', function(socket){
 					});
 					world.removeBody(bullet.physicsBody);
 					notifyBulletRemoved(bullet.ID);
-				}, 2000);
+				}, 3000);
 			}else if(!ClientObj.isPressed(mouseButtons.LEFT)){
 				ClientObj.bulletFired = false;
 			}
