@@ -65,6 +65,7 @@ app.get('/js/physics.js', function(req,res){
 });
 
 app.use('/images', express.static(__dirname + '/images'));
+app.use('/js/client', express.static(__dirname + '/js/client'));
 
 var server = app.listen(3000, function () {
 	var host = server.address().address;
