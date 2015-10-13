@@ -255,7 +255,7 @@ var RedFlag = {
 	isHome: true
 };
 var BlueFlag = {
-	body: createFlagBody(780,0),
+	body: createFlagBody(760,0),
 	isHome: true
 };
 
