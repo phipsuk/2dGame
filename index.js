@@ -21,6 +21,14 @@ var teamRed = false;
 var redTeamCount = 0;
 var blueTeamCount = 0;
 
+var ROUND_TIME = 10;
+var ROUND_SCORE = 10;
+
+var round_start_time = new Date();
+var round_end_time = new Date(round_start_time.getTime() + (ROUND_TIME*60*1000));
+
+var roundCount = 0;
+
 var directions = {
 	LEFT:65,
 	RIGHT:68,
@@ -327,6 +335,10 @@ var gameLoop = function(){
 		actualTicks = 0
 	}
 
+	if(gameScore.blue >= ROUND_SCORE || gameScore.red >= ROUND_SCORE || timeExpired()){
+		newRound(ROUND_TIME, ROUND_SCORE);
+	}
+
 	if (Date.now() - previousTick < tickLengthMs - 16) {
 		setTimeout(gameLoop, 1)
 	} else {
@@ -351,6 +363,7 @@ var updateInfo = function(){
 			Team: clients[i].Team,
 			Data: {position:{x:clients[i].physicsBody.position[0],y:clients[i].physicsBody.position[1]}, hasFlag: clients[i].hasFlag, rotation:clients[i].physicsBody.angle},
 			Score: gameScore,
+			TimeRemaining: roundTimeRemaining(),
 			Bullets: getBulletPositions(clients[i].bullets)
 		});
 	};
@@ -435,6 +448,12 @@ var notifyFlagCapture = function(team){
 	};	
 }
 
+var notifyRoundWinner = function(team){
+	for (var i = clients.length - 1; i >= 0; i--) {
+		clients[i].skt.emit("roundComplete", team);
+	};	
+}
+
 var notifyBulletRemoved = function(id){
 	for (var i = clients.length - 1; i >= 0; i--) {
 		clients[i].skt.emit("bulletRemoved", id);
@@ -482,6 +501,44 @@ var createBulletBody = function(x,y,speed, angle){
 		ID:entityID++,
 		physicsBody: body
 	};
+}
+
+var newRound = function(time, score){
+	if(gameScore.blue > gameScore.red){
+		notifyRoundWinner("Blue");
+	}else if(gameScore.red > gameScore.blue){
+		notifyRoundWinner("Red");
+	}else{
+		notifyRoundWinner("Draw");
+	}
+	round_start_time = new Date();
+	round_end_time = new Date(round_start_time.getTime() + ROUND_TIME*60*1000);
+	ROUND_SCORE = score;
+	notifyFlagCapture("Red");
+	notifyFlagCapture("Blue");
+	gameScore.blue = 0;
+	gameScore.red = 0;
+	BlueFlag.isHome = true;
+	RedFlag.isHome = true;
+	for (var i = clients.length - 1; i >= 0; i--) {
+		clients[i].reset();
+	};
+	roundCount++;
+}
+
+var roundTimeRemaining = function(){
+	var t = round_end_time - Date.now();
+	var seconds = Math.floor( (t/1000) % 60 );
+  	var minutes = Math.floor( (t/1000/60) % 60 );
+  	return ('0' + minutes).slice(-2) + " : " + ('0' + seconds).slice(-2);
+}
+
+var timeExpired = function(){
+	var t = round_end_time - Date.now();
+	if(t <= 0){
+		return true;
+	}
+	return false;
 }
 
 

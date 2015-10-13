@@ -56,6 +56,10 @@
 				var blueTeamScore = new PIXI.Text("0", {font:"50px Arial", fill:"blue"});
 				var redTeamScore = new PIXI.Text("0", {font:"50px Arial", fill:"red"});
 
+				var roundTime = new PIXI.Text("-- : --", {font:"50px Arial", fill:"black"});
+
+				roundTime.position.x = 320;
+
 				blueTeamScore.position.x = 50;
 				redTeamScore.position.x = 700;
 
@@ -80,6 +84,7 @@
 				
 				stage.addChild(blueTeamScore);
 				stage.addChild(redTeamScore);
+				stage.addChild(roundTime);
 
 				var graphics = new PIXI.Graphics();
 
@@ -151,6 +156,7 @@
 					var score = serverUpdate[0].Score;
 					blueTeamScore.text = score.blue;
 					redTeamScore.text = score.red;
+					roundTime.text = serverUpdate[0].TimeRemaining;
 					for (var i = serverUpdate.length - 1; i >= 0; i--) {
 						updateBulletPositions(serverUpdate[i].Bullets);
 						if(serverUpdate[i].ID == ClientID){
@@ -200,6 +206,23 @@
 						}
 					};		
 				});
+
+				socket.on("roundComplete", function(data){
+					var winText = new PIXI.Text("", {font:"50px Arial", fill:"black"});
+					winText.position.x = 300;
+					winText.position.y = 200;
+					if(data == "Red"){
+						winText.text = "Red Team Wins!";
+					}else if(data == "Blue"){
+						winText.text = "Blue Team Wins!";
+					}else if(data == "Draw"){
+						winText.text = "You all lose!";
+					}
+					stage.addChild(winText);
+					setTimeout(function(){
+						stage.removeChild(winText);
+					}, 5000);
+				})
 				
 				var levelEntities = {};
 

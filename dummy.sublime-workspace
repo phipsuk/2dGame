@@ -4,6 +4,170 @@
 		"selected_items":
 		[
 			[
+				"team",
+				"teamRed"
+			],
+			[
+				"red",
+				"redTeamCount"
+			],
+			[
+				"blue",
+				"blueTeamCount"
+			],
+			[
+				"stat",
+				"staticObjectsSent"
+			],
+			[
+				"sy",
+				"style	<style>"
+			],
+			[
+				"craete",
+				"createCrossHair"
+			],
+			[
+				"mouse",
+				"mousemove	.mousemove()"
+			],
+			[
+				"data",
+				"Data"
+			],
+			[
+				"con",
+				"container"
+			],
+			[
+				"ent",
+				"entity"
+			],
+			[
+				"enti",
+				"entitySprite"
+			],
+			[
+				"entity",
+				"entitySprite"
+			],
+			[
+				"shape",
+				"shapeOptions"
+			],
+			[
+				"level",
+				"levelEntity"
+			],
+			[
+				"load",
+				"loadLevel"
+			],
+			[
+				"lev",
+				"levelDefinition"
+			],
+			[
+				"upadte",
+				"updateInfo"
+			],
+			[
+				"leve",
+				"levelEntities"
+			],
+			[
+				"a",
+				"addBody"
+			],
+			[
+				"coll",
+				"collisionMask"
+			],
+			[
+				"add",
+				"addShape"
+			],
+			[
+				"is",
+				"isHit"
+			],
+			[
+				"notify",
+				"notifyFlagCapture"
+			],
+			[
+				"rt",
+				"reset"
+			],
+			[
+				"bullet",
+				"bulletList"
+			],
+			[
+				"bullets",
+				"bullets (?)"
+			],
+			[
+				"bulle",
+				"bulletList (obj)"
+			],
+			[
+				"wall",
+				"wallBody (obj)"
+			],
+			[
+				"onmou",
+				"onMouseDown (fn)"
+			],
+			[
+				"fun",
+				"function"
+			],
+			[
+				"col",
+				"collisionMask (num)"
+			],
+			[
+				"client",
+				"ClientObj"
+			],
+			[
+				"ser",
+				"serverUpdate (?)"
+			],
+			[
+				"game",
+				"gameScore (obj)"
+			],
+			[
+				"groun",
+				"groundShape (obj)"
+			],
+			[
+				"ceil",
+				"ceilingShape (obj)"
+			],
+			[
+				"sha",
+				"shapeA"
+			],
+			[
+				"find",
+				"findPlayer (fn)"
+			],
+			[
+				"player",
+				"playerShape (obj)"
+			],
+			[
+				"body",
+				"bodyShape (obj)"
+			],
+			[
+				"create",
+				"createFlagBody"
+			],
+			[
 				"po",
 				"position"
 			],
@@ -14,10 +178,6 @@
 			[
 				"va",
 				"var"
-			],
-			[
-				"blue",
-				"blueTeamScoreCount"
 			],
 			[
 				"or",
@@ -40,10 +200,6 @@
 				"player"
 			],
 			[
-				"body",
-				"bodyShape"
-			],
-			[
 				"Bo",
 				"Box"
 			],
@@ -58,10 +214,6 @@
 			[
 				"plae",
 				"players"
-			],
-			[
-				"client",
-				"clientID"
 			],
 			[
 				"lats",
@@ -148,10 +300,6 @@
 				"pushable_devices"
 			],
 			[
-				"a",
-				"append"
-			],
-			[
 				"device",
 				"devicelist"
 			],
@@ -192,29 +340,45 @@
 	"buffers":
 	[
 		{
-			"contents": "var express = require('express');\nvar p2 = require('p2');\nvar app = express();\n\nvar TICKRATE = 60;\n\nvar tickLengthMs = 1000 / TICKRATE;\n\nvar previousTick = Date.now()\nvar actualTicks = 0;\n\nvar clients = [];\n\nvar lastID = 0;\n\nvar teamRed = false;\n\nvar directions = {\n	LEFT:37,\n	RIGHT:39,\n	UP:38,\n	DOWN:40\n};\n\napp.get('/', function (req, res) {\n	res.sendFile(__dirname + \"/html/index.html\");\n});\n\napp.get('/js/pixi.js', function(req,res){\n	res.sendFile(__dirname + \"/js/pixi.min.js\");\n});\n\napp.get('/js/physics.js', function(req,res){\n	res.sendFile(__dirname + \"/node_modules/p2/build/p2.min.js\");\n});\n\nvar server = app.listen(3000, function () {\n	var host = server.address().address;\n	var port = server.address().port;\n	console.log('Example app listening at http://%s:%s', host, port);\n});\n\nvar io = require('socket.io')(server);\n\nio.on('connection', function(socket){\n	socket.emit(\"connectionInfo\", {ID:lastID, Team: teamRed ? \"Red\" : \"Blue\"});\n	var ClientObj = {\n		skt: socket,\n		ID: lastID,\n		Team: teamRed ? \"Red\" : \"Blue\",\n		Data: {position:{x:0,y:0}},\n		pressed: {},\n		physicsBody: createPlayerBody(0, 0),\n		isDown: function(keyCode){\n			return this.pressed[keyCode];\n		}\n	};\n	teamRed = !teamRed;\n	lastID++;\n	clients.push(ClientObj);\n	socket.on(\"update\", function(update){\n		ClientObj.pressed = update.pressed;\n		if(ClientObj.isDown(directions.LEFT) && ClientObj.physicsBody.position[0] > 0) ClientObj.physicsBody.velocity[0] = -100;\n		if(ClientObj.isDown(directions.RIGHT) &&  ClientObj.physicsBody.position[0] < 790) ClientObj.physicsBody.velocity[0] = 100;\n		if(ClientObj.isDown(directions.UP) && ClientObj.physicsBody.position[1] < 590) ClientObj.physicsBody.velocity[1] = 100;\n		if(ClientObj.isDown(directions.DOWN) && ClientObj.physicsBody.position[1] > 0) ClientObj.physicsBody.velocity[1] = -500;\n\n		if(!ClientObj.isDown(directions.LEFT) && !ClientObj.isDown(directions.RIGHT)){\n			ClientObj.physicsBody.velocity[0] = 0;\n		}\n	});\n	socket.on('disconnect', function(event) {\n		console.log(\"User Disconnected\");\n		clients = clients.filter(function(index) {\n			return index.skt !== socket;\n		});\n		notifyDisconnect(ClientObj.ID);\n	});\n});\n\n//Define Server Physics\nvar world = new p2.World({\n	gravity:[0, -100]\n});\n\nworld.setGlobalStiffness(1e8);\nworld.setGlobalRelaxation(10);\n\n// Create an infinite ground plane.\nvar groundBody = new p2.Body({\n	mass: 0, // Setting mass to 0 makes the body static\n	position: [0,0]\n});\n\nvar groundShape = new p2.Plane();\ngroundBody.addShape(groundShape);\nworld.addBody(groundBody);\nvar wallBody = new p2.Body({\n	mass: 0, // Setting mass to 0 makes the body static\n	position: [-5,0],\n	angle:4.71238898\n});\nvar wallShape = new p2.Plane();\nwallBody.addShape(wallShape);\nworld.addBody(wallBody);\nvar wallBody = new p2.Body({\n	mass: 0, // Setting mass to 0 makes the body static\n	position: [800,0],\n	angle:1.57079633\n});\nvar wallShape = new p2.Plane();\nwallBody.addShape(wallShape);\nvar ceilingBody = new p2.Body({\n	mass: 0, // Setting mass to 0 makes the body static\n	position: [0,600],\n	angle:3.14159265\n});\nvar ceilingShape = new p2.Plane();\nceilingBody.addShape(ceilingShape);\nworld.addBody(ceilingBody);\n\n\nvar gameLoop = function(){\n	var now = Date.now() \n\n	actualTicks++\n	if (previousTick + tickLengthMs <= now) {\n		var delta = (now - previousTick) / 1000;\n		previousTick = now;\n\n		world.step(delta);\n		update(delta);\n\n		actualTicks = 0\n	}\n\n	if (Date.now() - previousTick < tickLengthMs - 16) {\n		setTimeout(gameLoop, 1)\n	} else {\n		setImmediate(gameLoop)\n	}\n}\n\nvar update = function(delta){\n	for (var i = clients.length - 1; i >= 0; i--) {\n		clients[i].skt.emit(\"update\", updateInfo());\n	};\n}\n\nvar updateInfo = function(){\n	var clientInfo = [];\n	for (var i = clients.length - 1; i >= 0; i--) {\n		clientInfo.push({\n			ID:clients[i].ID,\n			Team: clients[i].Team,\n			Data: {position:{x:clients[i].physicsBody.position[0],y:clients[i].physicsBody.position[1]}}\n		});\n	};\n	return clientInfo;\n}\n\nvar notifyDisconnect = function(clientID){\n	for (var i = clients.length - 1; i >= 0; i--) {\n		clients[i].skt.emit(\"clientDisconnected\", clientID);\n	};	\n}\n\nvar createPlayerBody = function(x,y){\n	var playerBody = new p2.Body({\n		mass:1,\n		position: [50, 50]\n	});\n\n	var playerShape = new p2.Box({\n		width:10,\n		height:10\n	});\n\n	playerBody.addShape(playerShape);\n	world.addBody(playerBody);\n\n	return playerBody;\n}\n\nvar createFlagBody = function(colour,x,y){\n	var body = new p2.Body({\n					mass:0,\n					position: [x,0]\n				});\n	var bodyShape = new p2.Box({\n					width:15,\n					height:40,\n					sensor:true\n				});\n\n	body.addShape(bodyShape);\n	world.addBody(body);\n\n	return body;\n}\n\ngameLoop();",
 			"file": "index.js",
-			"file_size": 4822,
-			"file_write_time": 130882653655931277,
 			"settings":
 			{
-				"buffer_size": 4621,
+				"buffer_size": 12253,
 				"line_ending": "Windows"
+			}
+		},
+		{
+			"contents": "\n  BRANCH:  On branch `master` tracking `origin/master`.\n           You're ahead by 1.\n  ROOT:    C:/Users/aaron.polley/Documents/dummy\n  HEAD:    f6de7af Fixes a bug where a non graceful disconnect can crash the serer\n\n  LOCAL:\n  ▸ f6de7af master (origin/master, ahead 1)\n\n  ** Press [e] to toggle display of remote branches. **\n\n  #############\n  ## ACTIONS ##\n  #############\n\n  [c] checkout                                  [p] push selected to remote\n  [b] create new branch (from HEAD)             [P] push all branches to remote\n  [d] delete                                    [D] delete (force)\n  [R] rename (local)                            [m] merge selected into active branch\n  [t] configure tracking                        [M] fetch and merge into active branch\n  [o] checkout remote as local                  [h] fetch remote branches\n\n  [f] diff against active\n  [H] diff history against active\n  [e] toggle display of remote branches\n  [r] refresh\n\n-\n",
+			"settings":
+			{
+				"buffer_size": 968,
+				"line_ending": "Windows",
+				"name": "BRANCHES: dummy",
+				"read_only": true,
+				"scratch": true
 			}
 		},
 		{
 			"file": "html/index.html",
 			"settings":
 			{
-				"buffer_size": 6365,
+				"buffer_size": 11291,
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": ".gitignore",
+			"file": "gulpfile.js",
 			"settings":
 			{
-				"buffer_size": 13,
+				"buffer_size": 211,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "level/definition.json",
+			"settings":
+			{
+				"buffer_size": 3183,
 				"line_ending": "Windows"
 			}
 		}
@@ -226,13 +390,129 @@
 	"build_varint": "",
 	"command_palette":
 	{
-		"height": 222.0,
-		"last_filter": "install",
+		"height": 333.0,
+		"last_filter": "branch",
 		"selected_items":
 		[
 			[
+				"branch",
+				"git: branch"
+			],
+			[
+				"status",
+				"git: status"
+			],
+			[
+				"git pus",
+				"git: push"
+			],
+			[
+				"pull",
+				"git: pull"
+			],
+			[
+				"push",
+				"git: push"
+			],
+			[
+				"statu",
+				"git: status"
+			],
+			[
+				"remote",
+				"github: set remote for integration"
+			],
+			[
+				"brna",
+				"git: branch"
+			],
+			[
+				"stat",
+				"git: status"
+			],
+			[
+				"br",
+				"git: branch"
+			],
+			[
+				"git",
+				"git: status"
+			],
+			[
 				"install",
 				"Package Control: Install Package"
+			],
+			[
+				"sta",
+				"git: status"
+			],
+			[
+				"brnach",
+				"git: branch"
+			],
+			[
+				"git branc",
+				"git: branch"
+			],
+			[
+				"git quick",
+				"git: quick stage current file and commit"
+			],
+			[
+				"git com",
+				"git: commit"
+			],
+			[
+				"git branch",
+				"git: branch"
+			],
+			[
+				"merg",
+				"git: merge"
+			],
+			[
+				"check",
+				"git: checkout"
+			],
+			[
+				"git mer",
+				"git: merge"
+			],
+			[
+				"git check",
+				"git: checkout"
+			],
+			[
+				"git stat",
+				"git: status"
+			],
+			[
+				"git chec",
+				"git: checkout"
+			],
+			[
+				"gitbra",
+				"git: graph current branch"
+			],
+			[
+				"git me",
+				"git: merge"
+			],
+			[
+				"git merg",
+				"git: merge"
+			],
+			[
+				" check",
+				"git: checkout"
+			],
+			[
+				"gitlog",
+				"git: log"
+			],
+			[
+				"gitgutt",
+				"GitGutter: Compare Against Commit"
 			],
 			[
 				"log",
@@ -241,10 +521,6 @@
 			[
 				" git stage",
 				"git: quick stage"
-			],
-			[
-				"git",
-				"git: status"
 			],
 			[
 				"git br",
@@ -325,10 +601,6 @@
 			[
 				"remove",
 				"Package Control: Remove Package"
-			],
-			[
-				"push",
-				"Pushbullet: Push to device"
 			],
 			[
 				"todon",
@@ -451,9 +723,24 @@
 	],
 	"file_history":
 	[
+		"/S/SVN/2015/Web/_security/ChangePassword.asp",
+		"/S/SVN/2015/Binaries/uniWorkspace/Security.cls",
+		"/S/SVN/2015/Web/_security/Logon.js",
+		"/S/SVN/2015/Web/_Admin/WorkflowInfo.ashx",
+		"/S/SVN/2015/Web/_security/GetNonce.asp",
+		"/S/SVN/2015/Web/_security/UpdateLogon.asp",
+		"/S/SVN/2015/Web/_security/LogonAccept.ashx",
 		"/C/Users/aaron.polley/AppData/Roaming/Sublime Text 3/Packages/User/GitSavvy.sublime-settings",
-		"/C/Users/aaron.polley/Documents/dummy/.gitignore",
 		"/C/Users/aaron.polley/AppData/Roaming/Sublime Text 3/Packages/GitSavvy/GitSavvy.sublime-settings",
+		"//files/shipment/Release/MSI/UniWorkflow/17_4/Risks.txt",
+		"//files/shipment/Release/MSI/UniWorkflow/15_16/Risks.txt",
+		"//files/shipment/Release/MSI/UniWorkflow/14_32/Risks.txt",
+		"/S/SVN/19/Web/App_Code/ExprTHBasePage.cs",
+		"/S/SVN/19/Web/Workspace/render/Bands/THBand2.aspx.cs",
+		"/S/SVN/19/Web/ThoughtHarmonySiteData.js.local",
+		"/C/Users/aaron.polley/AppData/Roaming/Sublime Text 3/Packages/GitGutter/GitGutter.sublime-settings",
+		"/C/Users/aaron.polley/AppData/Roaming/Sublime Text 3/Packages/User/GitGutter.sublime-settings",
+		"/C/Users/aaron.polley/Documents/dummy/.gitignore",
 		"/C/Users/aaron.polley/AppData/Roaming/Sublime Text 3/Packages/tern_for_sublime/Tern.sublime-settings",
 		"/C/Users/aaron.polley/Documents/dummy/package.json",
 		"/C/Users/aaron.polley/AppData/Roaming/Sublime Text 3/Packages/User/Preferences.sublime-settings",
@@ -563,22 +850,7 @@
 		"/S/SVN/18/Source/UnionSquare.Workflow.Web/Website/render/Scripts/Controls/TabControl.js",
 		"/S/SVN/18/Web/render/Scripts/Functions/Query.js",
 		"/S/SVN/18/Web/Global.asax",
-		"/S/SVN/18/build-n-run.bat",
-		"/S/SVN/18/build web only.bat",
-		"/C/Users/aaron.polley/AppData/Local/Microsoft/Windows/INetCache/RawFile.htm",
-		"/C/Users/aaron.polley/AppData/Roaming/Sublime Text 3/Packages/Sublimerge Pro/Sublimerge.sublime-settings",
-		"/S/SVN/18/build.bat",
-		"/S/SVN/18/run.bat",
-		"/S/SVN/18/setup.bat",
-		"/S/SVN/18/eslint.json",
-		"/C/Users/aaron.polley/AppData/Roaming/npm/eslint.cmd",
-		"/C/Users/aaron.polley/AppData/Roaming/Sublime Text 3/Packages/tern_for_sublime/node_modules/tern/.tern-project",
-		"/C/Users/aaron.polley/AppData/Roaming/npm/gulp.cmd",
-		"/S/SVN/18/Web/render/Scripts/Functions/String.js",
-		"/S/SVN/18/Web/render/Scripts/Functions/UI.js",
-		"/S/SVN/18/Web/render/Scripts/Functions/len.js",
-		"/C/Users/aaron.polley/AppData/Roaming/Sublime Text 3/Packages/tern_for_sublime/node_modules/tern/bin/tern",
-		"/S/SVN/18/Source/UnionSquare.Workflow.Runtime/UnionSquare.Workflow.Runtime/UnionSquare.Workflow.Runtime.csproj"
+		"/S/SVN/18/build-n-run.bat"
 	],
 	"find":
 	{
@@ -596,6 +868,48 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"updatelogon",
+			";\n",
+			"flag",
+			"reset",
+			"wall",
+			"1",
+			"screen",
+			"screenX",
+			"x",
+			"entityGraphics",
+			"createPlayerBody",
+			"x",
+			"bullets[i]",
+			"bulletList",
+			"bulletGraphics",
+			"x:entity.physicsBody.position[0],",
+			"on(\"update",
+			"createBulletBody",
+			"player",
+			"notifyFlagCapture",
+			"capture",
+			"x",
+			"bullets",
+			"PLAYER",
+			"graphics",
+			"pressed",
+			"sprite",
+			"sprite.position.x = x;",
+			"Flag",
+			"graphics",
+			"BlueFlag",
+			"RedFlag",
+			"createPlayerBody",
+			"state",
+			"{\n",
+			"players[serverUpdate[i].ID]",
+			"blue",
+			"Math.pow(2,31)",
+			"ceilingShape",
+			"    ",
+			"createPlayerBody",
+			"flag",
 			"\\",
 			"JSON.parse(",
 			"ClientObj.UP",
@@ -681,7 +995,7 @@
 	"groups":
 	[
 		{
-			"selected": 0,
+			"selected": 1,
 			"sheets":
 			[
 				{
@@ -690,15 +1004,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 4621,
+						"buffer_size": 12253,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								3634,
-								3634
+								212,
+								212
 							]
 						],
 						"settings":
@@ -708,49 +1022,18 @@
 							"syntax": "Packages/Babel/JavaScript (Babel).tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 2130.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 1,
 					"type": "text"
 				},
 				{
 					"buffer": 1,
-					"file": "html/index.html",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 6365,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								5097,
-								5097
-							]
-						],
-						"settings":
-						{
-							"git_savvy.file_path": "C:\\Users\\aaron.polley\\Documents\\dummy\\html\\index.html",
-							"git_savvy.repo_path": "C:/Users/aaron.polley/Documents/dummy",
-							"syntax": "Packages/HTML/HTML.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 2372.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 2,
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": ".gitignore",
-					"semi_transient": true,
-					"settings":
-					{
-						"buffer_size": 13,
+						"buffer_size": 968,
 						"regions":
 						{
 						},
@@ -763,15 +1046,115 @@
 						],
 						"settings":
 						{
-							"git_savvy.file_path": "C:\\Users\\aaron.polley\\Documents\\dummy\\.gitignore",
+							"__vi_external_disable": true,
+							"git_savvy.branch_view": true,
+							"git_savvy.interface": "branch",
 							"git_savvy.repo_path": "C:/Users/aaron.polley/Documents/dummy",
-							"syntax": "Packages/Theme - Afterglow/Prefs/Langs/Git.tmLanguage"
+							"syntax": "Packages/GitSavvy/syntax/branch.tmLanguage",
+							"word_wrap": false
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "html/index.html",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 11291,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								4300,
+								4304
+							]
+						],
+						"settings":
+						{
+							"git_savvy.file_path": "C:\\Users\\aaron.polley\\Documents\\dummy\\html\\index.html",
+							"git_savvy.repo_path": "C:/Users/aaron.polley/Documents/dummy",
+							"syntax": "Packages/HTML/HTML.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 1587.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"file": "images/concrete_low.png",
+					"semi_transient": true,
+					"stack_index": 5,
+					"type": "image"
+				},
+				{
+					"buffer": 3,
+					"file": "gulpfile.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 211,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								161,
+								161
+							]
+						],
+						"settings":
+						{
+							"git_savvy.file_path": "C:\\Users\\aaron.polley\\Documents\\dummy\\gulpfile.js",
+							"git_savvy.repo_path": "C:/Users/aaron.polley/Documents/dummy",
+							"syntax": "Packages/Theme - Afterglow/Prefs/Langs/Gulpfile JS.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "level/definition.json",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3183,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2989,
+								2989
+							]
+						],
+						"settings":
+						{
+							"git_savvy.file_path": "C:\\Users\\aaron.polley\\Documents\\dummy\\level\\definition.json",
+							"git_savvy.repo_path": "C:/Users/aaron.polley/Documents/dummy",
+							"syntax": "Packages/JavaScript/JSON.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 3060.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
 					"type": "text"
 				}
 			]
@@ -815,6 +1198,10 @@
 	"output.find_results":
 	{
 		"height": 0.0
+	},
+	"output.show_commit_info":
+	{
+		"height": 98.0
 	},
 	"pinned_build_system": "",
 	"project": "dummy.sublime-project",
