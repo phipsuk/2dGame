@@ -22,11 +22,11 @@ function Level(stage){
 		for (var i = data.length - 1; i >= 0; i--) {
 			var entity = data[i];
 			if(Entities[entity.ID]){
-				Entities[entity.ID].position.x = entity.position.x;
-				Entities[entity.ID].position.y = -entity.position.y;
+				Entities[entity.ID].position.x = entity.position.x + (-entity.shapeOptions.width/2) + 5;
+				Entities[entity.ID].position.y = -entity.position.y + (-entity.shapeOptions.height/2) + 595;
 			}else{
 				if(entity.shape == "Box"){
-					if(entity.type){
+					if(!entity.type){
 						var entityGraphics = new PIXI.Graphics();
 						entityGraphics.lineStyle(2, 0x080808, 1);
 						entityGraphics.beginFill(0x080808);
@@ -37,10 +37,10 @@ function Level(stage){
 						Entities[entity.ID].position.x = entity.position.x;
 						Entities[entity.ID].position.y = -entity.position.y;
 					}else{
-						var texture = PIXI.Texture.fromImage("/images/" + entity.type + ".png");
-						var entitySprite = new extras.TilingSprite(texture, entity.shapeOptions.width, entity.shapeOptions.height);
-						entitySprite.position.x = entity.position.x;
-						entitySprite.position.y = -entity.position.y;
+						var texture = PIXI.Texture.fromImage("/images/wall.png");
+						var entitySprite = new PIXI.extras.TilingSprite(texture, entity.shapeOptions.width, entity.shapeOptions.height);
+						entitySprite.position.x = entity.position.x + (-entity.shapeOptions.width/2) + 5;
+						entitySprite.position.y = -entity.position.y + (-entity.shapeOptions.height/2) + 595;
 						stage.addChild(entitySprite);
 						Entities[entity.ID] = entitySprite;
 					}
