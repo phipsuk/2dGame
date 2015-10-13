@@ -349,10 +349,16 @@ var gameLoop = function(){
 
 var update = function(delta){
 	var levelInfo = levelUpdateInfo();
+	var dynamicLevelInfo = levelDynamicUpdateInfo();
 	for (var i = clients.length - 1; i >= 0; i--) {
-		clients[i].skt.emit("update", updateInfo());
-		if(clients[i] && !clients[i].staticObjectsSent)
-			clients[i].skt.emit("levelUpdate", levelInfo);
+		if(clients[i] && clients[i].skt){
+			clients[i].skt.emit("update", updateInfo());
+			clients[i].skt.emit("levelUpdate", dynamicLevelInfo);
+			if(clients[i] && !clients[i].staticObjectsSent){
+				clients[i].skt.emit("levelUpdate", levelInfo);
+				clients[i].staticObjectsSent = true;
+			}
+		}
 	};
 }
 
@@ -388,23 +394,82 @@ var loadLevel = function(name){
 		if(levelEntity.type === "wall"){
 			shape.collisionGroup = OTHER;
 			shape.collisionMask = PLAYER | GROUND | BULLET | OTHER;
+			levelEntities.static.push({
+				ID:entityID++,
+				physicsBody: body,
+				type: levelEntity.type,
+				shape: levelEntity.shape,
+				shapeOptions: levelEntity.shapeOptions
+			});
 		}else if(levelEntity.type === "floor"){
 			shape.collisionGroup = GROUND;
 			shape.collisionMask = PLAYER | GROUND | BULLET | OTHER;
+			levelEntities.static.push({
+				ID:entityID++,
+				physicsBody: body,
+				type: levelEntity.type,
+				shape: levelEntity.shape,
+				shapeOptions: levelEntity.shapeOptions
+			});
+		}else if(levelEntity.type === "slider"){
+			shape.collisionGroup = GROUND;
+			shape.collisionMask = PLAYER | GROUND | BULLET | OTHER;
+			levelEntities.dynamic.push({
+				ID:entityID++,
+				physicsBody: body,
+				type: levelEntity.type,
+				shape: levelEntity.shape,
+				shapeOptions: levelEntity.shapeOptions,
+				startPosition: levelEntity.startPosition,
+				endPosition: levelEntity.endPosition,
+				repeat: levelEntity.repeat,
+				speedX: levelEntity.speedX,
+				speedY: levelEntity.speedY,	
+				update: function(){
+					if((this.physicsBody.position[0] + this.speedX) > this.endPosition.x){
+						this.speedX = -this.speedX;
+					}
+					if((this.physicsBody.position[1] + this.speedY) > this.endPosition.y){
+						this.speedY = -this.speedY;
+					}
+
+					if((this.physicsBody.position[0] + this.speedX) < this.startPosition.x){
+						this.speedX = -this.speedX;
+					}
+					if((this.physicsBody.position[1] + this.speeY) < this.startPosition.y){
+						this.speedY = -this.speedY;
+					}
+
+					this.physicsBody.velocity[0] = this.speedX;
+					this.physicsBody.velocity[1] = this.speedY;
+				}
+			});
 		}
 		world.addBody(body);
-		levelEntities.static.push({
-			ID:entityID++,
-			physicsBody: body,
-			type: levelEntity.type,
-			shape: levelEntity.shape,
-			shapeOptions: levelEntity.shapeOptions
-		});
 	};
 	return levelEntities;
 }
 
 var levelEntities = loadLevel("definition");
+
+var levelDynamicUpdateInfo = function(){
+	var updateInfo = [];
+	for (var i = levelEntities.dynamic.length - 1; i >= 0; i--) {
+		var entity = levelEntities.dynamic[i];
+		entity.update();
+		updateInfo.push({
+			ID:entity.ID,
+			position:{
+				x:entity.physicsBody.position[0],
+				y:entity.physicsBody.position[1]
+			},
+			type:entity.type,
+			shape: entity.shape,
+			shapeOptions: entity.shapeOptions
+		});
+	};
+	return updateInfo;
+};
 
 var levelUpdateInfo = function(){
 	var updateInfo = [];
