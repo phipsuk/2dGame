@@ -338,7 +338,7 @@ var update = function(delta){
 	var levelInfo = levelUpdateInfo();
 	for (var i = clients.length - 1; i >= 0; i--) {
 		clients[i].skt.emit("update", updateInfo());
-		if(!clients[i].staticObjectsSent)
+		if(clients[i] && !clients[i].staticObjectsSent)
 			clients[i].skt.emit("levelUpdate", levelInfo);
 	};
 }
