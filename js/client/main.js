@@ -153,6 +153,7 @@ function onConnected(){
 
 	socket.on("clientDisconnected", function(clientid){
 		stage.removeChild(players[clientid].graphics);
+		stage.removeChild(players[clientid].nameText);
 		if(players[clientid].hasFlag){
 			if(players[clientid].team == "Blue"){
 				BlueFlag.reset();
