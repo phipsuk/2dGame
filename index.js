@@ -60,6 +60,10 @@ app.get('/js/pixi.js', function(req,res){
 	res.sendFile(__dirname + "/js/pixi.min.js");
 });
 
+app.get('/js/moment.js', function(req,res){
+	res.sendFile(__dirname + "/node_modules/moment/min/moment.min.js");
+});
+
 app.get('/js/physics.js', function(req,res){
 	res.sendFile(__dirname + "/node_modules/p2/build/p2.min.js");
 });
@@ -208,7 +212,7 @@ var groundBody = new p2.Body({
 var groundShape = new p2.Plane();
 groundBody.addShape(groundShape);
 groundShape.collisionGroup = GROUND;
-groundShape.collisionMask = PLAYER | BULLET;
+groundShape.collisionMask = PLAYER | BULLET | GROUND | OTHER;
 world.addBody(groundBody);
 var wallBody = new p2.Body({
 	mass: 0, // Setting mass to 0 makes the body static
@@ -217,7 +221,7 @@ var wallBody = new p2.Body({
 });
 var wallShape = new p2.Plane();
 wallShape.collisionGroup = GROUND;
-wallShape.collisionMask = PLAYER | BULLET;
+wallShape.collisionMask = PLAYER | BULLET | GROUND | OTHER;
 wallBody.addShape(wallShape);
 world.addBody(wallBody);
 var wallBody = new p2.Body({
@@ -227,7 +231,7 @@ var wallBody = new p2.Body({
 });
 var wallShape = new p2.Plane();
 wallShape.collisionGroup = GROUND;
-wallShape.collisionMask = PLAYER | BULLET;
+wallShape.collisionMask = PLAYER | BULLET | GROUND | OTHER;
 wallBody.addShape(wallShape);
 world.addBody(wallBody);
 var ceilingBody = new p2.Body({
@@ -237,7 +241,7 @@ var ceilingBody = new p2.Body({
 });
 var ceilingShape = new p2.Plane();
 ceilingShape.collisionGroup = GROUND;
-ceilingShape.collisionMask = PLAYER | BULLET;
+ceilingShape.collisionMask = PLAYER | BULLET | GROUND | OTHER;
 ceilingBody.addShape(ceilingShape);
 world.addBody(ceilingBody);
 
@@ -277,6 +281,15 @@ world.on("beginContact",function(evt){
 	if((shapeA.collisionGroup == GROUND || shapeB.collisionGroup == GROUND) && (shapeA.collisionGroup == PLAYER || shapeB.collisionGroup == PLAYER)){
 		var player = findPlayer(clients, shapeA.collisionGroup == PLAYER ? shapeA.body :shapeB.body);
 		player.jumping = false;
+	}
+	if((shapeA.collisionGroup == BULLET || shapeB.collisionGroup == BULLET) && (shapeA.body.health || shapeB.body.health)){
+		var destructableShape = shapeA.body.health ? shapeA.body : shapeB.body;
+		destructableShape.health--;
+		if(destructableShape.health == 0){
+			destructableShape.owner.die();
+			console.log("reset Shape");
+		}
+		console.log("health: " + destructableShape.health);
 	}
 	if((shapeA.collisionGroup == BULLET || shapeB.collisionGroup == BULLET) && (shapeA.collisionGroup == PLAYER || shapeB.collisionGroup == PLAYER)){
 		var player = findPlayer(clients, shapeA.collisionGroup == PLAYER ? shapeA.body :shapeB.body);
@@ -464,6 +477,36 @@ var loadLevel = function(name){
 					this.physicsBody.velocity[1] = this.speedY;
 				}
 			});
+		}else if(levelEntity.type === "crate"){
+			shape.collisionGroup = OTHER;
+			shape.collisionMask = PLAYER | GROUND | BULLET | OTHER;
+			if(levelEntity.health){
+				body.health = levelEntity.health;
+			}
+			var entity = {
+				ID:entityID++,
+				physicsBody: body,
+				type: levelEntity.type,
+				shape: levelEntity.shape,
+				shapeOptions: levelEntity.shapeOptions,
+				initialHealth: levelEntity.health,
+				initialPosition: {
+					x: levelEntity.position.x,
+					y: levelEntity.position.y
+				},
+				update: function(){
+				},
+				die: function(){
+					this.physicsBody.position[0] = this.initialPosition.x;
+					this.physicsBody.position[1] = this.initialPosition.y;
+					this.physicsBody.health = this.initialHealth;
+					this.physicsBody.velocity[0] = 0;
+					this.physicsBody.velocity[1] = 0;
+					this.physicsBody.setZeroForce();
+				}
+			};
+			levelEntities.dynamic.push(entity);
+			body.owner = entity;
 		}
 		world.addBody(body);
 	};
