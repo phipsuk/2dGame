@@ -20,7 +20,8 @@ function RemotePlayer(stage, team, x, y, id, name){
 	self.graphics = graphics;
 	self.team = team;
 	self.nameText = nameText;
-	self.update = function(x, y, dead){
+	self.update = function(x, y, dead, name){
+		self.name = name;
 		if(dead){
 			nameText.text = "DEAD";
 		}else{

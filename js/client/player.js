@@ -34,7 +34,8 @@ function Player(Team, stage, name){
 		onKeyUp: function(event){
 			delete this.pressed[event.keyCode];
 		},
-		update: function(x, y, dead){
+		update: function(x, y, dead, name){
+			self.name = name;
 			if(dead){
 				nameText.text = "DEAD";
 			}else{

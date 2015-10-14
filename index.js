@@ -78,6 +78,7 @@ var server = app.listen(3000, function () {
 });
 
 var io = require('socket.io')(server);
+var feed = new require(__dirname + "/js/FeedServer.js")(io.sockets);
 
 io.on('connection', function(socket){
 	if(blueTeamCount > redTeamCount){
@@ -121,10 +122,12 @@ io.on('connection', function(socket){
 			}
 		}
 	};
+	socket.emit("connectionInfo", {ID:lastID, Team: teamRed ? "Red" : "Blue"});
 	socket.on("name", function(name){
 		ClientObj.name = name;
+		feed.sendMessage("<b style=\"color:" + ClientObj.Team + "\">" + name + "</b> Joined the game.");
 	});
-	socket.emit("connectionInfo", {ID:lastID, Team: teamRed ? "Red" : "Blue"});
+	
 	if(teamRed){
 		redTeamCount++;
 	}else{
@@ -152,6 +155,7 @@ io.on('connection', function(socket){
 			if(ClientObj.isPressed(mouseButtons.LEFT) && ClientObj.bulletFired === false){
 				var angle = ClientObj.mousePressed[mouseButtons.LEFT].angle;
 				var bullet = createBulletBody(ClientObj.physicsBody.position[0]+-Math.cos(angle) * 10, ClientObj.physicsBody.position[1]+Math.sin(angle) * 10, 200, angle);
+				bullet.physicsBody.owner = ClientObj;
 				ClientObj.bullets.push(bullet);
 				ClientObj.bulletFired = true;
 				setTimeout(function(){
@@ -173,7 +177,7 @@ io.on('connection', function(socket){
 		}
 	});
 	socket.on('disconnect', function(event) {
-		console.log("User Disconnected");
+		feed.sendMessage("<b style=\"color:" + ClientObj.Team + "\">" + ClientObj.name + "</b> left the game");
 		world.removeBody(ClientObj.physicsBody);
 		if(ClientObj.Team === "Blue"){
 			blueTeamCount--;
@@ -276,7 +280,9 @@ world.on("beginContact",function(evt){
 	}
 	if((shapeA.collisionGroup == BULLET || shapeB.collisionGroup == BULLET) && (shapeA.collisionGroup == PLAYER || shapeB.collisionGroup == PLAYER)){
 		var player = findPlayer(clients, shapeA.collisionGroup == PLAYER ? shapeA.body :shapeB.body);
+		var bullet = shapeA.collisionGroup == BULLET ? shapeA.body :shapeB.body;
 		if(!player.isHit){
+			feed.sendMessage("<b style=\"color:" + bullet.owner.Team + "\">" + bullet.owner.name + "</b> Killed <b style=\"color:" + player.Team + "\">" + player.name + "</b>");
 			player.isHit = true;
 			if(player.hasFlag){
 				player.hasFlag = false;
@@ -298,24 +304,28 @@ world.on("beginContact",function(evt){
 	    	if(player && player.Team == "Blue" && RedFlag.isHome){
 	    		player.hasFlag = true;
 	    		RedFlag.isHome = false;
+	    		feed.sendMessage("<b style=\"color:" + player.Team + "\">" + player.name + "</b> has the Red Flag!");
 	    	}else if(player && RedFlag.isHome){
 	    		if(player.hasFlag){
 	    			player.hasFlag = false;
 	    			BlueFlag.isHome = true;
 	    			gameScore.red++;
 	    			notifyFlagCapture("Red");
+	    			feed.sendMessage("<b style=\"color:" + player.Team + "\">" + player.name + "</b> Captured the Flag!");
 	    		}
 	    	}
 	    }else if(shapeA.body == BlueFlag.body || shapeB.body == BlueFlag.body){
 	    	if(player && player.Team == "Red" && BlueFlag.isHome){
 	    		player.hasFlag = true;
 	    		BlueFlag.isHome = false;
+	    		feed.sendMessage("<b style=\"color:" + player.Team + "\">" + player.name + "</b> has the Blue Flag!");
 	    	}else if(player && BlueFlag.isHome){
 	    		if(player.hasFlag){
 	    			player.hasFlag = false;
 	    			RedFlag.isHome = true;
 	    			gameScore.blue++;
 	    			notifyFlagCapture("Blue");
+	    			feed.sendMessage("<b style=\"color:" + player.Team + "\">" + player.name + "</b> Captured the Flag!");
 	    		}
 	    	}
 	    }

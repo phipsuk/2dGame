@@ -35,7 +35,9 @@ function onConnected(){
 
 	var players = {};
 	var renderer = PIXI.autoDetectRenderer(800, 600,{backgroundColor : 0x1099bb});
-	document.body.appendChild(renderer.view);
+	document.getElementById("game").appendChild(renderer.view);
+
+	var feed = new Feed(socket, $("#feed"));
 
 	var blueTeamScoreCount = 0;
 	var redTeamScoreCount = 0;
@@ -82,7 +84,7 @@ function onConnected(){
 		for (var i = serverUpdate.length - 1; i >= 0; i--) {
 			updateBulletPositions(serverUpdate[i].Bullets);
 			if(serverUpdate[i].ID == ClientID){
-				player.update(serverUpdate[i].Data.position.x, -serverUpdate[i].Data.position.y, serverUpdate[i].Dead);
+				player.update(serverUpdate[i].Data.position.x, -serverUpdate[i].Data.position.y, serverUpdate[i].Dead, serverUpdate[i].Name);
 				if(serverUpdate[i].Data.hasFlag){
 						if(player.team == "Blue"){
 							RedFlag.setPosition(player.graphics.position.x, player.graphics.position.y + 570);
@@ -92,7 +94,7 @@ function onConnected(){
 					}
 			}else{
 				if(players[serverUpdate[i].ID]){
-					players[serverUpdate[i].ID].update(serverUpdate[i].Data.position.x, -serverUpdate[i].Data.position.y, serverUpdate[i].Dead);
+					players[serverUpdate[i].ID].update(serverUpdate[i].Data.position.x, -serverUpdate[i].Data.position.y, serverUpdate[i].Dead, serverUpdate[i].Name);
 					if(serverUpdate[i].Data.hasFlag){
 						if(players[serverUpdate[i].ID].team == "Blue"){
 							RedFlag.setPosition(players[serverUpdate[i].ID].graphics.position.x, players[serverUpdate[i].ID].graphics.position.y + 570);
