@@ -503,6 +503,8 @@ var loadLevel = function(name){
 					this.physicsBody.velocity[0] = 0;
 					this.physicsBody.velocity[1] = 0;
 					this.physicsBody.setZeroForce();
+					world.removeBody(this.physicsBody);
+					world.addBody(this.physicsBody);
 				}
 			};
 			levelEntities.dynamic.push(entity);
