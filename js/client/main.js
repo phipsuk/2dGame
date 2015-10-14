@@ -1,10 +1,27 @@
+var socket;
 var ClientID = 0;
 var Team;
-var socket = io();
-socket.on("connectionInfo", function(msg){
-	ClientID = msg.ID;
-	Team = msg.Team;
-	onConnected();
+var Name;
+
+bootbox.prompt("What is your name?", function(result) {
+	if (result === null) {
+		window.location.reload();
+	} else {
+		socket = io();
+		socket.on("connectionInfo", function(msg){
+			if(result.match(/dead/i)){
+				result = "NOT " + result;
+			}
+			if(result.length > 30){
+				result = result.substr(0, 30);
+			}
+			ClientID = msg.ID;
+			Team = msg.Team;
+			Name = result;
+			socket.emit("name", result);
+			onConnected();
+		});
+	}
 });
 
 var connected = false;
@@ -55,7 +72,7 @@ function onConnected(){
 		}
 	});
 
-	var player = Player(Team, stage);
+	var player = Player(Team, stage, Name);
 
 	socket.on("update", function(serverUpdate){
 		var score = serverUpdate[0].Score;
@@ -65,8 +82,7 @@ function onConnected(){
 		for (var i = serverUpdate.length - 1; i >= 0; i--) {
 			updateBulletPositions(serverUpdate[i].Bullets);
 			if(serverUpdate[i].ID == ClientID){
-				player.graphics.position.x = serverUpdate[i].Data.position.x;
-				player.graphics.position.y = -serverUpdate[i].Data.position.y;
+				player.update(serverUpdate[i].Data.position.x, -serverUpdate[i].Data.position.y, serverUpdate[i].Dead);
 				if(serverUpdate[i].Data.hasFlag){
 						if(player.team == "Blue"){
 							RedFlag.setPosition(player.graphics.position.x, player.graphics.position.y + 570);
@@ -76,8 +92,7 @@ function onConnected(){
 					}
 			}else{
 				if(players[serverUpdate[i].ID]){
-					players[serverUpdate[i].ID].graphics.x = serverUpdate[i].Data.position.x;
-					players[serverUpdate[i].ID].graphics.y = -serverUpdate[i].Data.position.y;
+					players[serverUpdate[i].ID].update(serverUpdate[i].Data.position.x, -serverUpdate[i].Data.position.y, serverUpdate[i].Dead);
 					if(serverUpdate[i].Data.hasFlag){
 						if(players[serverUpdate[i].ID].team == "Blue"){
 							RedFlag.setPosition(players[serverUpdate[i].ID].graphics.position.x, players[serverUpdate[i].ID].graphics.position.y + 570);
@@ -86,7 +101,7 @@ function onConnected(){
 						}
 					}
 				}else{
-					players[serverUpdate[i].ID] = new RemotePlayer(stage, serverUpdate[i].Team, serverUpdate[i].Data.position.x, serverUpdate[i].Data.position.y, serverUpdate[i].ID);
+					players[serverUpdate[i].ID] = new RemotePlayer(stage, serverUpdate[i].Team, serverUpdate[i].Data.position.x, serverUpdate[i].Data.position.y, serverUpdate[i].ID, serverUpdate[i].Name);
 				}
 			}
 		};		
@@ -170,10 +185,6 @@ function onConnected(){
 		}
 
 		socket.emit("update", update);
-
-		for (var item in players) {
-			players[item].update();
-		};
 
 	    // render the root container
 	    renderer.render(stage);

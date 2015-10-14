@@ -1,4 +1,4 @@
-function RemotePlayer(stage, team, x, y, id){
+function RemotePlayer(stage, team, x, y, id, name){
 	var self = this;
 	var graphics = new PIXI.Graphics();
 
@@ -12,13 +12,29 @@ function RemotePlayer(stage, team, x, y, id){
 	graphics.position.x = x;
 	graphics.position.y = y;
 
-	this.ID = id;
+	var nameText = new PIXI.Text(name, {font:"10px Arial", fill:playerColour});
 
-	this.graphics = graphics;
-	this.team = team;
-	this.update = function(){
+	self.ID = id;
+	self.name = name;
 
+	self.graphics = graphics;
+	self.team = team;
+	self.update = function(x, y, dead){
+		if(dead){
+			nameText.text = "DEAD";
+		}else{
+			nameText.text = self.name;
+		}
+		graphics.position.x = x;
+		graphics.position.y = y;
+		if(graphics.position.x + nameText.width > 750){
+			nameText.position.x = x - nameText.width - 5;
+		}else{
+			nameText.position.x = x + 5;
+		}
+		nameText.position.y = y + 575;
 	};
 
 	stage.addChild(graphics);
+	stage.addChild(nameText);
 }

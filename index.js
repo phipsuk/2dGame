@@ -64,6 +64,10 @@ app.get('/js/physics.js', function(req,res){
 	res.sendFile(__dirname + "/node_modules/p2/build/p2.min.js");
 });
 
+app.get('/js/bootbox.js', function(req,res){
+	res.sendFile(__dirname + "/node_modules/bootbox/bootbox.min.js");
+});
+
 app.use('/images', express.static(__dirname + '/images'));
 app.use('/js/client', express.static(__dirname + '/js/client'));
 
@@ -80,12 +84,6 @@ io.on('connection', function(socket){
 		teamRed = true;
 	}else{
 		teamRed = false;
-	}
-	socket.emit("connectionInfo", {ID:lastID, Team: teamRed ? "Red" : "Blue"});
-	if(teamRed){
-		redTeamCount++;
-	}else{
-		blueTeamCount++;
 	}
 	var ClientObj = {
 		skt: socket,
@@ -108,6 +106,7 @@ io.on('connection', function(socket){
 		jumping: false,
 		isHit:false,
 		staticObjectsSent: false,
+		name: "unnamed",
 		reset: function(){
 			this.physicsBody.position[0] = this.Team == "Red" ? 50 : 750;
 			this.physicsBody.position[1] = 70;
@@ -122,6 +121,15 @@ io.on('connection', function(socket){
 			}
 		}
 	};
+	socket.on("name", function(name){
+		ClientObj.name = name;
+	});
+	socket.emit("connectionInfo", {ID:lastID, Team: teamRed ? "Red" : "Blue"});
+	if(teamRed){
+		redTeamCount++;
+	}else{
+		blueTeamCount++;
+	}
 	teamRed = !teamRed;
 	lastID++;
 	clients.push(ClientObj);
@@ -370,6 +378,8 @@ var updateInfo = function(){
 			Team: clients[i].Team,
 			Data: {position:{x:clients[i].physicsBody.position[0],y:clients[i].physicsBody.position[1]}, hasFlag: clients[i].hasFlag, rotation:clients[i].physicsBody.angle},
 			Score: gameScore,
+			Name: clients[i].name,
+			Dead: clients[i].isHit,
 			TimeRemaining: roundTimeRemaining(),
 			Bullets: getBulletPositions(clients[i].bullets)
 		});
