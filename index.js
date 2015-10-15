@@ -46,6 +46,7 @@ var FLAG =  Math.pow(2,2);
 var GROUND = Math.pow(2,3);
 var OTHER = Math.pow(2,4);
 var BULLET = Math.pow(2,5);
+var TRIGGER = Math.pow(2,6);
 
 var gameScore = {
 	red: 0,
@@ -282,14 +283,17 @@ world.on("beginContact",function(evt){
 		var player = findPlayer(clients, shapeA.collisionGroup == PLAYER ? shapeA.body :shapeB.body);
 		player.jumping = false;
 	}
+	if((shapeA.collisionGroup == TRIGGER || shapeB.collisionGroup == TRIGGER) && (shapeA.collisionGroup == PLAYER || shapeB.collisionGroup == PLAYER)){
+		var player = findPlayer(clients, shapeA.collisionGroup == PLAYER ? shapeA.body :shapeB.body);
+		var trigger = shapeA.body.owner ? shapeA.body.owner : shapeB.body.owner;
+		trigger.trigger();
+	}
 	if((shapeA.collisionGroup == BULLET || shapeB.collisionGroup == BULLET) && (shapeA.body.health || shapeB.body.health)){
 		var destructableShape = shapeA.body.health ? shapeA.body : shapeB.body;
 		destructableShape.health--;
 		if(destructableShape.health == 0){
 			destructableShape.owner.die();
-			console.log("reset Shape");
 		}
-		console.log("health: " + destructableShape.health);
 	}
 	if((shapeA.collisionGroup == BULLET || shapeB.collisionGroup == BULLET) && (shapeA.collisionGroup == PLAYER || shapeB.collisionGroup == PLAYER)){
 		var player = findPlayer(clients, shapeA.collisionGroup == PLAYER ? shapeA.body :shapeB.body);
@@ -430,6 +434,7 @@ var loadLevel = function(name){
 			levelEntities.static.push({
 				ID:entityID++,
 				physicsBody: body,
+				key: levelEntity.key,
 				type: levelEntity.type,
 				shape: levelEntity.shape,
 				shapeOptions: levelEntity.shapeOptions
@@ -440,6 +445,7 @@ var loadLevel = function(name){
 			levelEntities.static.push({
 				ID:entityID++,
 				physicsBody: body,
+				key: levelEntity.key,
 				type: levelEntity.type,
 				shape: levelEntity.shape,
 				shapeOptions: levelEntity.shapeOptions
@@ -450,29 +456,43 @@ var loadLevel = function(name){
 			levelEntities.dynamic.push({
 				ID:entityID++,
 				physicsBody: body,
+				key: levelEntity.key,
 				type: levelEntity.type,
 				shape: levelEntity.shape,
 				shapeOptions: levelEntity.shapeOptions,
 				startPosition: levelEntity.startPosition,
 				endPosition: levelEntity.endPosition,
 				repeat: levelEntity.repeat,
+				complete: false,
 				speedX: levelEntity.speedX,
 				speedY: levelEntity.speedY,	
 				update: function(){
-					if((this.physicsBody.position[0] + this.speedX) > this.endPosition.x){
-						this.speedX = -this.speedX;
-					}
-					if((this.physicsBody.position[1] + this.speedY) > this.endPosition.y){
-						this.speedY = -this.speedY;
-					}
+					if(this.complete === false || this.repeat === true){
+						if((this.physicsBody.position[0] + this.speedX) > this.endPosition.x){
+							this.speedX = -this.speedX;
+						}
+						if((this.physicsBody.position[1] + this.speedY) > this.endPosition.y){
+							this.speedY = -this.speedY;
+						}
 
-					if((this.physicsBody.position[0] + this.speedX) < this.startPosition.x){
-						this.speedX = -this.speedX;
-					}
-					if((this.physicsBody.position[1] + this.speeY) < this.startPosition.y){
-						this.speedY = -this.speedY;
-					}
+						if((this.physicsBody.position[0] + this.speedX) < this.startPosition.x){
+							this.speedX = -this.speedX;
+							this.complete = true;
+						}
+						if((this.physicsBody.position[1] + this.speeY) < this.startPosition.y){
+							this.speedY = -this.speedY;
+							this.complete = true;
+						}
 
+						this.physicsBody.velocity[0] = this.speedX;
+						this.physicsBody.velocity[1] = this.speedY;
+					}else if(this.complete === true){
+						this.physicsBody.velocity[0] = 0;
+						this.physicsBody.velocity[1] = 0;
+					}
+				},
+				triggerBehaviour: function(){
+					this.complete = false;
 					this.physicsBody.velocity[0] = this.speedX;
 					this.physicsBody.velocity[1] = this.speedY;
 				}
@@ -485,6 +505,7 @@ var loadLevel = function(name){
 			}
 			var entity = {
 				ID:entityID++,
+				key: levelEntity.key,
 				physicsBody: body,
 				type: levelEntity.type,
 				shape: levelEntity.shape,
@@ -509,10 +530,54 @@ var loadLevel = function(name){
 			};
 			levelEntities.dynamic.push(entity);
 			body.owner = entity;
+		}else if(levelEntity.type === "trigger"){
+			shape.collisionGroup = TRIGGER;
+			shape.collisionMask = PLAYER;
+			body.mass = 0;
+			var triggerKey = levelEntity.key;
+			var entity = {
+				ID:entityID++,
+				physicsBody: body,
+				type: levelEntity.type,
+				shape: levelEntity.shape,
+				shapeOptions: levelEntity.shapeOptions,
+				initialHealth: levelEntity.health,
+				triggerTimeInterval: levelEntity.interval,
+				key: triggerKey,
+				initialPosition: {
+					x: levelEntity.position.x,
+					y: levelEntity.position.y
+				},
+				lastTriggered: null,
+				trigger: function(){
+					if(this.lastTriggered === null || this.lastTriggered + this.triggerTimeInterval < Date.now()){
+						this.lastTriggered = Date.now();
+						var items = findByKey(levelEntities.dynamic, this.key);
+						for (var i = items.length - 1; i >= 0; i--) {
+							var item = items[i];
+							if(item.triggerBehaviour){
+								item.triggerBehaviour();
+							}
+						};
+					}
+				}
+			};
+			body.owner = entity;
+			levelEntities.static.push(entity);
 		}
 		world.addBody(body);
 	};
 	return levelEntities;
+}
+
+function findByKey(source, key) {
+  var items = [];
+  for (var i = 0; i < source.length; i++) {
+    if (source[i].key === key) {
+      items.push(source[i]);
+    }
+  }
+  return items;
 }
 
 var levelEntities = loadLevel("definition");
@@ -604,7 +669,7 @@ var createPlayerBody = function(x,y){
 
 	playerShape.collisionGroup = PLAYER;
 
-	playerShape.collisionMask = PLAYER | FLAG | GROUND | OTHER | BULLET;
+	playerShape.collisionMask = PLAYER | FLAG | GROUND | OTHER | BULLET | TRIGGER;
 
 	playerBody.addShape(playerShape);
 	world.addBody(playerBody);

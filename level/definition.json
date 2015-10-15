@@ -293,5 +293,45 @@
 			"x": 480,
 			"y": 200
 		}
+	},
+	{
+		"type": "slider",
+		"mass": 0,
+		"key": "test",
+		"shape": "Box",
+		"shapeOptions":{
+				"height": 3,
+				"width": 15
+			},
+		"position": {
+			"x": 180,
+			"y": 120
+		},
+		"startPosition": {
+			"x": 180,
+			"y": 120
+		},
+		"endPosition":{
+			"x": 580,
+			"y": 120
+		},
+		"repeat": false,
+		"speedX": 20,
+		"speedY": 0
+	},
+	{
+		"type": "trigger",
+		"mass": 0,
+		"interval": 1,
+		"key" : "test",
+		"shape": "Box",
+		"shapeOptions":{
+				"height": 3,
+				"width": 5
+			},
+		"position": {
+			"x": 680,
+			"y": 52
+		}
 	}
 ]
