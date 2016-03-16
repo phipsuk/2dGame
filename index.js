@@ -22,7 +22,7 @@ var teamRed = false;
 var redTeamCount = 0;
 var blueTeamCount = 0;
 
-var ROUND_TIME = 1;
+var ROUND_TIME = 10;
 var ROUND_SCORE = 10;
 
 var round_start_time = new Date();
