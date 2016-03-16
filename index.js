@@ -2,6 +2,9 @@ var express = require('express');
 var p2 = require('p2');
 var app = express();
 var fs = require("fs");
+const World = require("./classes/world.js");
+const Level = require("./classes/level.js");
+const Flag = require("./classes/flag.js")
 
 var TICKRATE = 60;
 
@@ -13,8 +16,6 @@ var actualTicks = 0;
 var clients = [];
 
 var lastID = 0;
-
-var entityID = 0
 
 var teamRed = false;
 
@@ -114,6 +115,7 @@ io.on('connection', function(socket){
 		staticObjectsSent: false,
 		name: "unnamed",
 		reset: function(){
+			this.physicsBody = createPlayerBody(this.Team == "Red" ? 50 : 750, 70);
 			this.physicsBody.position[0] = this.Team == "Red" ? 50 : 750;
 			this.physicsBody.position[1] = 70;
 			this.hasFlag = false;
@@ -197,84 +199,13 @@ io.on('connection', function(socket){
 });
 
 //Define Server Physics
-var world = new p2.World({
-	gravity:[0, -100]
-});
+var world = new World();
+var currentLevel = new Level("definition", world);
 
-world.setGlobalStiffness(1e8);
-world.setGlobalRelaxation(10);
-
-// Create an infinite ground plane.
-var groundBody = new p2.Body({
-	mass: 0, // Setting mass to 0 makes the body static
-	position: [0,0]
-});
-
-var groundShape = new p2.Plane();
-groundBody.addShape(groundShape);
-groundShape.collisionGroup = GROUND;
-groundShape.collisionMask = PLAYER | BULLET | GROUND | OTHER;
-world.addBody(groundBody);
-var wallBody = new p2.Body({
-	mass: 0, // Setting mass to 0 makes the body static
-	position: [-5,0],
-	angle:4.71238898
-});
-var wallShape = new p2.Plane();
-wallShape.collisionGroup = GROUND;
-wallShape.collisionMask = PLAYER | BULLET | GROUND | OTHER;
-wallBody.addShape(wallShape);
-world.addBody(wallBody);
-var wallBody = new p2.Body({
-	mass: 0, // Setting mass to 0 makes the body static
-	position: [800,0],
-	angle:1.57079633
-});
-var wallShape = new p2.Plane();
-wallShape.collisionGroup = GROUND;
-wallShape.collisionMask = PLAYER | BULLET | GROUND | OTHER;
-wallBody.addShape(wallShape);
-world.addBody(wallBody);
-var ceilingBody = new p2.Body({
-	mass: 0, // Setting mass to 0 makes the body static
-	position: [0,600],
-	angle:3.14159265
-});
-var ceilingShape = new p2.Plane();
-ceilingShape.collisionGroup = GROUND;
-ceilingShape.collisionMask = PLAYER | BULLET | GROUND | OTHER;
-ceilingBody.addShape(ceilingShape);
-world.addBody(ceilingBody);
-
-var createFlagBody = function(x,y){
-	var body = new p2.Body({
-					mass:0,
-					position: [x,0]
-				});
-	var bodyShape = new p2.Box({
-					width:15,
-					height:40,
-					sensor:true
-				});
-
-	bodyShape.collisionGroup = FLAG;
-
-	bodyShape.collisionMask = PLAYER;
-
-	body.addShape(bodyShape);
-	world.addBody(body);
-
-	return body;
-}
-
-var RedFlag = {
-	body: createFlagBody(10,0),
-	isHome: true
-};
-var BlueFlag = {
-	body: createFlagBody(760,0),
-	isHome: true
-};
+var RedFlag = new Flag(10,0);
+world.addBody(RedFlag.getBody());
+var BlueFlag = new Flag(760,0);
+world.addBody(BlueFlag.getBody());
 
 world.on("beginContact",function(evt){
 	var shapeA = evt.shapeA;
@@ -304,10 +235,10 @@ world.on("beginContact",function(evt){
 			if(player.hasFlag){
 				player.hasFlag = false;
 				if(player.Team == "Red"){
-					BlueFlag.isHome = true;
+					BlueFlag.setHome(true);
 					notifyFlagCapture("Red");
 				}else{
-					RedFlag.issssHome = true;
+					RedFlag.setHome(true);
 					notifyFlagCapture("Blue");
 				}
 			}
@@ -318,28 +249,28 @@ world.on("beginContact",function(evt){
 	}else{
 		var player = findPlayer(clients, shapeB.body)
 	    if(shapeA.body == RedFlag.body || shapeB.body == RedFlag.body){
-	    	if(player && player.Team == "Blue" && RedFlag.isHome){
+	    	if(player && player.Team == "Blue" && RedFlag.isHome()){
 	    		player.hasFlag = true;
-	    		RedFlag.isHome = false;
+	    		RedFlag.setHome(false);
 	    		feed.sendMessage("<b style=\"color:" + player.Team + "\">" + player.name + "</b> has the Red Flag!");
-	    	}else if(player && RedFlag.isHome){
+	    	}else if(player && RedFlag.isHome()){
 	    		if(player.hasFlag){
 	    			player.hasFlag = false;
-	    			BlueFlag.isHome = true;
+	    			BlueFlag.setHome(true);
 	    			gameScore.red++;
 	    			notifyFlagCapture("Red");
 	    			feed.sendMessage("<b style=\"color:" + player.Team + "\">" + player.name + "</b> Captured the Flag!");
 	    		}
 	    	}
 	    }else if(shapeA.body == BlueFlag.body || shapeB.body == BlueFlag.body){
-	    	if(player && player.Team == "Red" && BlueFlag.isHome){
+	    	if(player && player.Team == "Red" && BlueFlag.isHome()){
 	    		player.hasFlag = true;
-	    		BlueFlag.isHome = false;
+	    		BlueFlag.setHome(false);
 	    		feed.sendMessage("<b style=\"color:" + player.Team + "\">" + player.name + "</b> has the Blue Flag!");
-	    	}else if(player && BlueFlag.isHome){
+	    	}else if(player && BlueFlag.isHome()){
 	    		if(player.hasFlag){
 	    			player.hasFlag = false;
-	    			RedFlag.isHome = true;
+	    			RedFlag.setHome(true);
 	    			gameScore.blue++;
 	    			notifyFlagCapture("Blue");
 	    			feed.sendMessage("<b style=\"color:" + player.Team + "\">" + player.name + "</b> Captured the Flag!");
@@ -383,8 +314,8 @@ var gameLoop = function(){
 }
 
 var update = function(delta){
-	var levelInfo = levelUpdateInfo();
-	var dynamicLevelInfo = levelDynamicUpdateInfo();
+	var levelInfo = currentLevel.levelUpdateInfo();
+	var dynamicLevelInfo = currrentLevel.levelDynamicUpdateInfo();
 	for (var i = clients.length - 1; i >= 0; i--) {
 		if(clients[i] && clients[i].skt){
 			clients[i].skt.emit("update", updateInfo());
@@ -412,211 +343,6 @@ var updateInfo = function(){
 		});
 	};
 	return clientInfo;
-};
-
-var loadLevel = function(name){
-	var levelDefinition = JSON.parse(fs.readFileSync(__dirname + "/level/" + name + ".json", 'utf8'));
-	var levelEntities = {
-		static:[],
-		dynamic:[]
-	};
-	for (var i = levelDefinition.length - 1; i >= 0; i--) {
-		var levelEntity = levelDefinition[i];
-		var body = new p2.Body({
-			mass: levelEntity.mass,
-			position: [levelEntity.position.x,levelEntity.position.y]
-		});
-		var shape = new p2[levelEntity.shape](levelEntity.shapeOptions);
-		body.addShape(shape);
-		if(levelEntity.type === "wall"){
-			shape.collisionGroup = OTHER;
-			shape.collisionMask = PLAYER | GROUND | BULLET | OTHER;
-			levelEntities.static.push({
-				ID:entityID++,
-				physicsBody: body,
-				key: levelEntity.key,
-				type: levelEntity.type,
-				shape: levelEntity.shape,
-				shapeOptions: levelEntity.shapeOptions
-			});
-		}else if(levelEntity.type === "floor"){
-			shape.collisionGroup = GROUND;
-			shape.collisionMask = PLAYER | GROUND | BULLET | OTHER;
-			levelEntities.static.push({
-				ID:entityID++,
-				physicsBody: body,
-				key: levelEntity.key,
-				type: levelEntity.type,
-				shape: levelEntity.shape,
-				shapeOptions: levelEntity.shapeOptions
-			});
-		}else if(levelEntity.type === "slider"){
-			shape.collisionGroup = GROUND;
-			shape.collisionMask = PLAYER | GROUND | BULLET | OTHER;
-			levelEntities.dynamic.push({
-				ID:entityID++,
-				physicsBody: body,
-				key: levelEntity.key,
-				type: levelEntity.type,
-				shape: levelEntity.shape,
-				shapeOptions: levelEntity.shapeOptions,
-				startPosition: levelEntity.startPosition,
-				endPosition: levelEntity.endPosition,
-				repeat: levelEntity.repeat,
-				complete: false,
-				speedX: levelEntity.speedX,
-				speedY: levelEntity.speedY,	
-				update: function(){
-					if(this.complete === false || this.repeat === true){
-						if((this.physicsBody.position[0] + this.speedX) > this.endPosition.x){
-							this.speedX = -this.speedX;
-						}
-						if((this.physicsBody.position[1] + this.speedY) > this.endPosition.y){
-							this.speedY = -this.speedY;
-						}
-
-						if((this.physicsBody.position[0] + this.speedX) < this.startPosition.x){
-							this.speedX = -this.speedX;
-							this.complete = true;
-						}
-						if((this.physicsBody.position[1] + this.speeY) < this.startPosition.y){
-							this.speedY = -this.speedY;
-							this.complete = true;
-						}
-
-						this.physicsBody.velocity[0] = this.speedX;
-						this.physicsBody.velocity[1] = this.speedY;
-					}else if(this.complete === true){
-						this.physicsBody.velocity[0] = 0;
-						this.physicsBody.velocity[1] = 0;
-					}
-				},
-				triggerBehaviour: function(){
-					this.complete = false;
-					this.physicsBody.velocity[0] = this.speedX;
-					this.physicsBody.velocity[1] = this.speedY;
-				}
-			});
-		}else if(levelEntity.type === "crate"){
-			shape.collisionGroup = OTHER;
-			shape.collisionMask = PLAYER | GROUND | BULLET | OTHER;
-			if(levelEntity.health){
-				body.health = levelEntity.health;
-			}
-			var entity = {
-				ID:entityID++,
-				key: levelEntity.key,
-				physicsBody: body,
-				type: levelEntity.type,
-				shape: levelEntity.shape,
-				shapeOptions: levelEntity.shapeOptions,
-				initialHealth: levelEntity.health,
-				initialPosition: {
-					x: levelEntity.position.x,
-					y: levelEntity.position.y
-				},
-				update: function(){
-				},
-				die: function(){
-					this.physicsBody.position[0] = this.initialPosition.x;
-					this.physicsBody.position[1] = this.initialPosition.y;
-					this.physicsBody.health = this.initialHealth;
-					this.physicsBody.velocity[0] = 0;
-					this.physicsBody.velocity[1] = 0;
-					this.physicsBody.setZeroForce();
-					world.removeBody(this.physicsBody);
-					world.addBody(this.physicsBody);
-				}
-			};
-			levelEntities.dynamic.push(entity);
-			body.owner = entity;
-		}else if(levelEntity.type === "trigger"){
-			shape.collisionGroup = TRIGGER;
-			shape.collisionMask = PLAYER;
-			body.mass = 0;
-			var triggerKey = levelEntity.key;
-			var entity = {
-				ID:entityID++,
-				physicsBody: body,
-				type: levelEntity.type,
-				shape: levelEntity.shape,
-				shapeOptions: levelEntity.shapeOptions,
-				initialHealth: levelEntity.health,
-				triggerTimeInterval: levelEntity.interval,
-				key: triggerKey,
-				initialPosition: {
-					x: levelEntity.position.x,
-					y: levelEntity.position.y
-				},
-				lastTriggered: null,
-				trigger: function(){
-					if(this.lastTriggered === null || this.lastTriggered + this.triggerTimeInterval < Date.now()){
-						this.lastTriggered = Date.now();
-						var items = findByKey(levelEntities.dynamic, this.key);
-						for (var i = items.length - 1; i >= 0; i--) {
-							var item = items[i];
-							if(item.triggerBehaviour){
-								item.triggerBehaviour();
-							}
-						};
-					}
-				}
-			};
-			body.owner = entity;
-			levelEntities.static.push(entity);
-		}
-		world.addBody(body);
-	};
-	return levelEntities;
-}
-
-function findByKey(source, key) {
-  var items = [];
-  for (var i = 0; i < source.length; i++) {
-    if (source[i].key === key) {
-      items.push(source[i]);
-    }
-  }
-  return items;
-}
-
-var levelEntities = loadLevel("definition");
-
-var levelDynamicUpdateInfo = function(){
-	var updateInfo = [];
-	for (var i = levelEntities.dynamic.length - 1; i >= 0; i--) {
-		var entity = levelEntities.dynamic[i];
-		entity.update();
-		updateInfo.push({
-			ID:entity.ID,
-			position:{
-				x:entity.physicsBody.position[0],
-				y:entity.physicsBody.position[1]
-			},
-			type:entity.type,
-			shape: entity.shape,
-			shapeOptions: entity.shapeOptions
-		});
-	};
-	return updateInfo;
-};
-
-var levelUpdateInfo = function(){
-	var updateInfo = [];
-	for (var i = levelEntities.static.length - 1; i >= 0; i--) {
-		var entity = levelEntities.static[i];
-		updateInfo.push({
-			ID:entity.ID,
-			position:{
-				x:entity.physicsBody.position[0],
-				y:entity.physicsBody.position[1]
-			},
-			type:entity.type,
-			shape: entity.shape,
-			shapeOptions: entity.shapeOptions
-		});
-	};
-	return updateInfo;
 };
 
 var getBulletPositions = function(bullets){
@@ -694,7 +420,7 @@ var createBulletBody = function(x,y,speed, angle){
 	world.addBody(body);
 
 	return {
-		ID:entityID++,
+		ID:currentLevel.getEntityID(),
 		physicsBody: body
 	};
 }
@@ -714,8 +440,17 @@ var newRound = function(time, score){
 	notifyFlagCapture("Blue");
 	gameScore.blue = 0;
 	gameScore.red = 0;
-	BlueFlag.isHome = true;
-	RedFlag.isHome = true;
+
+	//Reset Level
+	world = new World();
+	currentLevel = new Level("definition", world);
+
+	RedFlag = new Flag(10,0);
+	world.addBody(RedFlag.getBody());
+	BlueFlag = new Flag(760,0);
+	world.addBody(BlueFlag.getBody());
+	BlueFlag.setHome(true);
+	RedFlag.setHome(true);
 	for (var i = clients.length - 1; i >= 0; i--) {
 		clients[i].reset();
 	};
