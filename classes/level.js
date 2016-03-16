@@ -12,8 +12,8 @@ class Level{
 
 	levelDynamicUpdateInfo(){
 		var updateInfo = [];
-		for (var i = levelEntities.dynamic.length - 1; i >= 0; i--) {
-			var entity = levelEntities.dynamic[i];
+		for (var i = this.entities.dynamic.length - 1; i >= 0; i--) {
+			var entity = this.entities.dynamic[i];
 			entity.update();
 			updateInfo.push({
 				ID:entity.ID,
@@ -31,8 +31,8 @@ class Level{
 
 	levelUpdateInfo(){
 		var updateInfo = [];
-		for (var i = levelEntities.static.length - 1; i >= 0; i--) {
-			var entity = levelEntities.static[i];
+		for (var i = this.entities.static.length - 1; i >= 0; i--) {
+			var entity = this.entities.static[i];
 			updateInfo.push({
 				ID:entity.ID,
 				position:{

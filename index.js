@@ -22,7 +22,7 @@ var teamRed = false;
 var redTeamCount = 0;
 var blueTeamCount = 0;
 
-var ROUND_TIME = 10;
+var ROUND_TIME = 1;
 var ROUND_SCORE = 10;
 
 var round_start_time = new Date();
@@ -122,10 +122,10 @@ io.on('connection', function(socket){
 			this.isHit = false;
 			if(this.Team == "Red"){
 				notifyFlagCapture("Blue");
-				BlueFlag.isHome = true;
+				BlueFlag.isHome(true);
 			}else{
 				notifyFlagCapture("Red");
-				RedFlag.isHome = true;
+				RedFlag.isHome(true);
 			}
 		}
 	};
@@ -200,6 +200,7 @@ io.on('connection', function(socket){
 
 //Define Server Physics
 var world = new World();
+world.on("beginContact", doCollisions);
 var currentLevel = new Level("definition", world);
 
 var RedFlag = new Flag(10,0);
@@ -207,12 +208,14 @@ world.addBody(RedFlag.getBody());
 var BlueFlag = new Flag(760,0);
 world.addBody(BlueFlag.getBody());
 
-world.on("beginContact",function(evt){
+function doCollisions(evt){
 	var shapeA = evt.shapeA;
 	var shapeB = evt.shapeB;
 	if((shapeA.collisionGroup == GROUND || shapeB.collisionGroup == GROUND) && (shapeA.collisionGroup == PLAYER || shapeB.collisionGroup == PLAYER)){
 		var player = findPlayer(clients, shapeA.collisionGroup == PLAYER ? shapeA.body :shapeB.body);
-		player.jumping = false;
+		if(player){
+			player.jumping = false;
+		}
 	}
 	if((shapeA.collisionGroup == TRIGGER || shapeB.collisionGroup == TRIGGER) && (shapeA.collisionGroup == PLAYER || shapeB.collisionGroup == PLAYER)){
 		var player = findPlayer(clients, shapeA.collisionGroup == PLAYER ? shapeA.body :shapeB.body);
@@ -248,7 +251,7 @@ world.on("beginContact",function(evt){
 		}
 	}else{
 		var player = findPlayer(clients, shapeB.body)
-	    if(shapeA.body == RedFlag.body || shapeB.body == RedFlag.body){
+	    if(shapeA.body == RedFlag.getBody() || shapeB.body == RedFlag.getBody()){
 	    	if(player && player.Team == "Blue" && RedFlag.isHome()){
 	    		player.hasFlag = true;
 	    		RedFlag.setHome(false);
@@ -262,7 +265,7 @@ world.on("beginContact",function(evt){
 	    			feed.sendMessage("<b style=\"color:" + player.Team + "\">" + player.name + "</b> Captured the Flag!");
 	    		}
 	    	}
-	    }else if(shapeA.body == BlueFlag.body || shapeB.body == BlueFlag.body){
+	    }else if(shapeA.body == BlueFlag.getBody() || shapeB.body == BlueFlag.getBody()){
 	    	if(player && player.Team == "Red" && BlueFlag.isHome()){
 	    		player.hasFlag = true;
 	    		BlueFlag.setHome(false);
@@ -278,7 +281,7 @@ world.on("beginContact",function(evt){
 	    	}
 	    }
 	}
-});	
+}	
 
 function findPlayer(source, physicsObject) {
   for (var i = 0; i < source.length; i++) {
@@ -315,7 +318,7 @@ var gameLoop = function(){
 
 var update = function(delta){
 	var levelInfo = currentLevel.levelUpdateInfo();
-	var dynamicLevelInfo = currrentLevel.levelDynamicUpdateInfo();
+	var dynamicLevelInfo = currentLevel.levelDynamicUpdateInfo();
 	for (var i = clients.length - 1; i >= 0; i--) {
 		if(clients[i] && clients[i].skt){
 			clients[i].skt.emit("update", updateInfo());
@@ -443,6 +446,7 @@ var newRound = function(time, score){
 
 	//Reset Level
 	world = new World();
+	world.on("beginContact", doCollisions);
 	currentLevel = new Level("definition", world);
 
 	RedFlag = new Flag(10,0);

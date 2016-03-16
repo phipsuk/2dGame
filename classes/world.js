@@ -55,12 +55,20 @@ class World{
 		world.addBody(ceilingBody);
 	}
 
+	step(delta){
+		this.physics.step(delta);
+	}
+
 	addBody(body){
 		this.physics.addBody(body);
 	}
 
 	on(event, func){
 		this.physics.on(event, func);
+	}
+
+	removeBody(body){
+		this.physics.removeBody(body);
 	}
 }
 
