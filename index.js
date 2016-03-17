@@ -4,9 +4,10 @@ var app = express();
 var fs = require("fs");
 const World = require("./classes/world.js");
 const Level = require("./classes/level.js");
-const Flag = require("./classes/flag.js")
+const Flag = require("./classes/flag.js");
+const Player = require("./classes/player.js");
 
-var TICKRATE = 60;
+var TICKRATE = 45;
 
 var tickLengthMs = 1000 / TICKRATE;
 
@@ -92,43 +93,10 @@ io.on('connection', function(socket){
 	}else{
 		teamRed = false;
 	}
-	var ClientObj = {
-		skt: socket,
-		ID: lastID,
-		Team: teamRed ? "Red" : "Blue",
-		Data: {position:{x:0,y:0}},
-		pressed: {},
-		mousePressed: {},
-		bullets: [],
-		physicsBody: createPlayerBody(teamRed ? 50 : 750, 70),
-		isDown: function(keyCode){
-			return this.pressed[keyCode];
-		},
-		isPressed: function(mouseButton){
-			return this.mousePressed[mouseButton];
-		},
-		hasFlag: false,
-		bulletFired: false,
-		reloading: false,
-		jumping: false,
-		isHit:false,
-		staticObjectsSent: false,
-		name: "unnamed",
-		reset: function(){
-			this.physicsBody = createPlayerBody(this.Team == "Red" ? 50 : 750, 70);
-			this.physicsBody.position[0] = this.Team == "Red" ? 50 : 750;
-			this.physicsBody.position[1] = 70;
-			this.hasFlag = false;
-			this.isHit = false;
-			if(this.Team == "Red"){
-				notifyFlagCapture("Blue");
-				BlueFlag.isHome(true);
-			}else{
-				notifyFlagCapture("Red");
-				RedFlag.isHome(true);
-			}
-		}
-	};
+	var ClientObj = new Player(socket, teamRed ? "Red" : "Blue", lastID);
+	ClientObj.setPosition(teamRed ? currentLevel.redStart.x : currentLevel.blueStart.x, teamRed ? currentLevel.redStart.y : currentLevel.blueStart.y);
+	ClientObj.setSpawn(teamRed ? currentLevel.redStart : currentLevel.blueStart);
+	world.addBody(ClientObj.physicsBody);
 	socket.emit("connectionInfo", {ID:lastID, Team: teamRed ? "Red" : "Blue"});
 	socket.on("name", function(name){
 		ClientObj.name = name;
@@ -246,7 +214,18 @@ function doCollisions(evt){
 				}
 			}
 			setTimeout(function(){
+				world.removeBody(player.physicsBody);
 				player.reset();
+				if (player.hasFlag) {
+					if(player.Team == "Red"){
+						notifyFlagCapture("Blue");
+						BlueFlag.isHome(true);
+					}else{
+						notifyFlagCapture("Red");
+						RedFlag.isHome(true);
+					}
+				}
+				world.addBody(player.physicsBody);
 			}, 5000);
 		}
 	}else{
@@ -383,27 +362,6 @@ var notifyBulletRemoved = function(id){
 	for (var i = clients.length - 1; i >= 0; i--) {
 		clients[i].skt.emit("bulletRemoved", id);
 	};	
-}
-
-var createPlayerBody = function(x,y){
-	var playerBody = new p2.Body({
-		mass:1,
-		position: [x, y]
-	});
-
-	var playerShape = new p2.Box({
-		width:10,
-		height:10
-	});
-
-	playerShape.collisionGroup = PLAYER;
-
-	playerShape.collisionMask = PLAYER | FLAG | GROUND | OTHER | BULLET | TRIGGER;
-
-	playerBody.addShape(playerShape);
-	world.addBody(playerBody);
-
-	return playerBody;
 }
 
 var createBulletBody = function(x,y,speed, angle){

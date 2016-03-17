@@ -55,12 +55,14 @@ class Level{
 
 	loadLevelEntities(name, world){
 		var levelDefinition = JSON.parse(fs.readFileSync(__dirname + "/../level/" + name + ".json", 'utf8'));
+		this.redStart = levelDefinition.playerSpawns.red;
+		this.blueStart = levelDefinition.playerSpawns.blue;
 		var levelEntities = {
 			static:[],
 			dynamic:[]
 		};
-		for (var i = levelDefinition.length - 1; i >= 0; i--) {
-			var levelEntity = levelDefinition[i];
+		for (var i = levelDefinition.entities.length - 1; i >= 0; i--) {
+			var levelEntity = levelDefinition.entities[i];
 			var body = new p2.Body({
 				mass: levelEntity.mass,
 				position: [levelEntity.position.x,levelEntity.position.y]
