@@ -2,6 +2,8 @@
 const fs = require("fs");
 const p2 = require('p2');
 const constants = require("./constants.js");
+const Slider = require("./entities/slider.js");
+const Crate = require("./entities/crate.js");
 
 class Level{
 	constructor(name, world){
@@ -90,83 +92,14 @@ class Level{
 			}else if(levelEntity.type === "slider"){
 				shape.collisionGroup = constants.GROUND;
 				shape.collisionMask = constants.PLAYER | constants.GROUND | constants.BULLET | constants.OTHER;
-				levelEntities.dynamic.push({
-					ID:this.getEntityID(),
-					physicsBody: body,
-					key: levelEntity.key,
-					type: levelEntity.type,
-					shape: levelEntity.shape,
-					shapeOptions: levelEntity.shapeOptions,
-					startPosition: levelEntity.startPosition,
-					endPosition: levelEntity.endPosition,
-					repeat: levelEntity.repeat,
-					complete: false,
-					speedX: levelEntity.speedX,
-					speedY: levelEntity.speedY,	
-					update: function(){
-						if(this.complete === false || this.repeat === true){
-							if((this.physicsBody.position[0] + this.speedX) > this.endPosition.x){
-								this.speedX = -this.speedX;
-							}
-							if((this.physicsBody.position[1] + this.speedY) > this.endPosition.y){
-								this.speedY = -this.speedY;
-							}
-
-							if((this.physicsBody.position[0] + this.speedX) < this.startPosition.x){
-								this.speedX = -this.speedX;
-								this.complete = true;
-							}
-							if((this.physicsBody.position[1] + this.speeY) < this.startPosition.y){
-								this.speedY = -this.speedY;
-								this.complete = true;
-							}
-
-							this.physicsBody.velocity[0] = this.speedX;
-							this.physicsBody.velocity[1] = this.speedY;
-						}else if(this.complete === true){
-							this.physicsBody.velocity[0] = 0;
-							this.physicsBody.velocity[1] = 0;
-						}
-					},
-					triggerBehaviour: function(){
-						this.complete = false;
-						this.physicsBody.velocity[0] = this.speedX;
-						this.physicsBody.velocity[1] = this.speedY;
-					}
-				});
+				levelEntities.dynamic.push(new Slider(this.getEntityID(), levelEntity, body));
 			}else if(levelEntity.type === "crate"){
 				shape.collisionGroup = constants.OTHER;
 				shape.collisionMask = constants.PLAYER | constants.GROUND | constants.BULLET | constants.OTHER;
 				if(levelEntity.health){
 					body.health = levelEntity.health;
 				}
-				var entity = {
-					ID:this.getEntityID(),
-					key: levelEntity.key,
-					physicsBody: body,
-					type: levelEntity.type,
-					shape: levelEntity.shape,
-					shapeOptions: levelEntity.shapeOptions,
-					initialHealth: levelEntity.health,
-					initialPosition: {
-						x: levelEntity.position.x,
-						y: levelEntity.position.y
-					},
-					update: function(){
-					},
-					die: function(){
-						this.physicsBody.position[0] = this.initialPosition.x;
-						this.physicsBody.position[1] = this.initialPosition.y;
-						this.physicsBody.health = this.initialHealth;
-						this.physicsBody.velocity[0] = 0;
-						this.physicsBody.velocity[1] = 0;
-						this.physicsBody.setZeroForce();
-						world.removeBody(this.physicsBody);
-						world.addBody(this.physicsBody);
-					}
-				};
-				levelEntities.dynamic.push(entity);
-				body.owner = entity;
+				levelEntities.dynamic.push(new Crate(this.getEntityID(), levelEntity, body, world));
 			}else if(levelEntity.type === "trigger"){
 				shape.collisionGroup = constants.TRIGGER;
 				shape.collisionMask = constants.PLAYER;
