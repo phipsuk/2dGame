@@ -22,7 +22,7 @@ var teamRed = false;
 var redTeamCount = 0;
 var blueTeamCount = 0;
 
-var ROUND_TIME = 10;
+var ROUND_TIME = 5;
 var ROUND_SCORE = 10;
 
 var round_start_time = new Date();
@@ -232,7 +232,7 @@ function doCollisions(evt){
 	if((shapeA.collisionGroup == BULLET || shapeB.collisionGroup == BULLET) && (shapeA.collisionGroup == PLAYER || shapeB.collisionGroup == PLAYER)){
 		var player = findPlayer(clients, shapeA.collisionGroup == PLAYER ? shapeA.body :shapeB.body);
 		var bullet = shapeA.collisionGroup == BULLET ? shapeA.body :shapeB.body;
-		if(!player.isHit){
+		if(player && !player.isHit){
 			feed.sendMessage("<b style=\"color:" + bullet.owner.Team + "\">" + bullet.owner.name + "</b> Killed <b style=\"color:" + player.Team + "\">" + player.name + "</b>");
 			player.isHit = true;
 			if(player.hasFlag){
