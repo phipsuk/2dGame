@@ -6,6 +6,7 @@ const World = require("./classes/world.js");
 const Level = require("./classes/level.js");
 const Flag = require("./classes/flag.js");
 const Player = require("./classes/player.js");
+const Player = require("./classes/entities/bullet.js");
 
 var TICKRATE = 45;
 
@@ -93,14 +94,14 @@ io.on('connection', function(socket){
 	}else{
 		teamRed = false;
 	}
-	var ClientObj = new Player(socket, teamRed ? "Red" : "Blue", lastID);
-	ClientObj.setPosition(teamRed ? currentLevel.redStart.x : currentLevel.blueStart.x, teamRed ? currentLevel.redStart.y : currentLevel.blueStart.y);
-	ClientObj.setSpawn(teamRed ? currentLevel.redStart : currentLevel.blueStart);
-	world.addBody(ClientObj.physicsBody);
+	var player = new Player(socket, teamRed ? "Red" : "Blue", lastID);
+	player.setPosition(teamRed ? currentLevel.redStart.x : currentLevel.blueStart.x, teamRed ? currentLevel.redStart.y : currentLevel.blueStart.y);
+	player.setSpawn(teamRed ? currentLevel.redStart : currentLevel.blueStart);
+	world.addBody(player.physicsBody);
 	socket.emit("connectionInfo", {ID:lastID, Team: teamRed ? "Red" : "Blue"});
 	socket.on("name", function(name){
-		ClientObj.name = name;
-		feed.sendMessage("<b style=\"color:" + ClientObj.Team + "\">" + name + "</b> Joined the game.");
+		player.name = name;
+		feed.sendMessage("<b style=\"color:" + player.Team + "\">" + name + "</b> Joined the game.");
 	});
 	
 	if(teamRed){
@@ -110,51 +111,52 @@ io.on('connection', function(socket){
 	}
 	teamRed = !teamRed;
 	lastID++;
-	clients.push(ClientObj);
+	clients.push(player);
 	socket.on("update", function(update){
-		if(!ClientObj.isHit){
-			ClientObj.pressed = update.pressed;
-			ClientObj.mousePressed = update.mousePressed;
-			if(ClientObj.isDown(directions.LEFT) && ClientObj.physicsBody.position[0] > 0) ClientObj.physicsBody.velocity[0] = -100;
-			if(ClientObj.isDown(directions.RIGHT) &&  ClientObj.physicsBody.position[0] < 790) ClientObj.physicsBody.velocity[0] = 100;
-			if((ClientObj.isDown(directions.UP) || ClientObj.isDown(directions.SPACE))  && ClientObj.physicsBody.position[1] < 590 && !ClientObj.jumping){
-				ClientObj.physicsBody.velocity[1] = 100;
-				ClientObj.jumping = true;
+		if(!player.isHit){
+			player.pressed = update.pressed;
+			player.mousePressed = update.mousePressed;
+			if(player.isDown(directions.LEFT) && player.physicsBody.position[0] > 0) player.physicsBody.velocity[0] = -100;
+			if(player.isDown(directions.RIGHT) &&  player.physicsBody.position[0] < 790) player.physicsBody.velocity[0] = 100;
+			if((player.isDown(directions.UP) || player.isDown(directions.SPACE))  && player.physicsBody.position[1] < 590 && !player.jumping){
+				player.physicsBody.velocity[1] = 100;
+				player.jumping = true;
 			}
-			if(ClientObj.isDown(directions.DOWN) && ClientObj.physicsBody.position[1] > 0) ClientObj.physicsBody.velocity[1] = -500;
+			if(player.isDown(directions.DOWN) && player.physicsBody.position[1] > 0) player.physicsBody.velocity[1] = -500;
 
-			if(!ClientObj.isDown(directions.LEFT) && !ClientObj.isDown(directions.RIGHT)){
-				ClientObj.physicsBody.velocity[0] = 0;
+			if(!player.isDown(directions.LEFT) && !player.isDown(directions.RIGHT)){
+				player.physicsBody.velocity[0] = 0;
 			}
 
-			if(ClientObj.isPressed(mouseButtons.LEFT) && ClientObj.bulletFired === false){
-				var angle = ClientObj.mousePressed[mouseButtons.LEFT].angle;
-				var bullet = createBulletBody(ClientObj.physicsBody.position[0]+-Math.cos(angle) * 10, ClientObj.physicsBody.position[1]+Math.sin(angle) * 10, 200, angle);
-				bullet.physicsBody.owner = ClientObj;
-				ClientObj.bullets.push(bullet);
-				ClientObj.bulletFired = true;
+			if(player.isPressed(mouseButtons.LEFT) && player.bulletFired === false){
+				var angle = player.mousePressed[mouseButtons.LEFT].angle;
+				var bullet = new Bullet(currentLevel.getEntityID(), player.physicsBody.position[0]+-Math.cos(angle) * 10, player.physicsBody.position[1]+Math.sin(angle) * 10, 200, angle, 3000);
+				world.addBody(bullet);
+				bullet.physicsBody.owner = player;
+				player.bullets.push(bullet);
+				player.bulletFired = true;
 				setTimeout(function(){
-					ClientObj.bullets = ClientObj.bullets.filter(function(index) {
+					player.bullets = player.bullets.filter(function(index) {
 						return index !== bullet;
 					});
 					world.removeBody(bullet.physicsBody);
 					notifyBulletRemoved(bullet.ID);
-				}, 3000);
-			}else if(!ClientObj.isPressed(mouseButtons.LEFT)){
-				if(ClientObj.reloading === false){
+				}, bullet.range);
+			}else if(!player.isPressed(mouseButtons.LEFT)){
+				if(player.reloading === false){
 					setTimeout(function(){
-						ClientObj.bulletFired = false;
-						ClientObj.reloading = false;
+						player.bulletFired = false;
+						player.reloading = false;
 					}, 200);
-					ClientObj.reloading = true;
+					player.reloading = true;
 				}
 			}
 		}
 	});
 	socket.on('disconnect', function(event) {
-		feed.sendMessage("<b style=\"color:" + ClientObj.Team + "\">" + ClientObj.name + "</b> left the game");
-		world.removeBody(ClientObj.physicsBody);
-		if(ClientObj.Team === "Blue"){
+		feed.sendMessage("<b style=\"color:" + player.Team + "\">" + player.name + "</b> left the game");
+		world.removeBody(player.physicsBody);
+		if(player.Team === "Blue"){
 			blueTeamCount--;
 		}else{
 			redTeamCount--;
@@ -162,7 +164,7 @@ io.on('connection', function(socket){
 		clients = clients.filter(function(index) {
 			return index.skt !== socket;
 		});
-		notifyDisconnect(ClientObj.ID);
+		notifyDisconnect(player.ID);
 	});
 });
 
@@ -298,13 +300,16 @@ var gameLoop = function(){
 var update = function(delta){
 	var levelInfo = currentLevel.levelUpdateInfo();
 	var dynamicLevelInfo = currentLevel.levelDynamicUpdateInfo();
+	let updateData = updateInfo();
 	for (var i = clients.length - 1; i >= 0; i--) {
 		if(clients[i] && clients[i].skt){
-			clients[i].skt.emit("update", updateInfo());
-			clients[i].skt.emit("levelUpdate", dynamicLevelInfo);
-			if(clients[i] && !clients[i].staticObjectsSent){
-				clients[i].skt.emit("levelUpdate", levelInfo);
-				clients[i].staticObjectsSent = true;
+			clients[i].skt.emit("update", updateData);
+			if(clients[i] && clients[i].skt){
+				clients[i].skt.emit("levelUpdate", dynamicLevelInfo);
+				if(clients[i] && !clients[i].staticObjectsSent){
+					clients[i].skt.emit("levelUpdate", levelInfo);
+					clients[i].staticObjectsSent = true;
+				}
 			}
 		}
 	};
@@ -364,28 +369,6 @@ var notifyBulletRemoved = function(id){
 	};	
 }
 
-var createBulletBody = function(x,y,speed, angle){
-	var body = new p2.Body({
-		mass: 10,
-		position: [x,y],
-		velocity: [-Math.cos(angle) * speed, Math.sin(angle) * speed]
-	})
-
-	var shape = new p2.Circle({ radius: 2 });
-
-	shape.collisionGroup = BULLET;
-	shape.collisionMask = PLAYER | GROUND | BULLET | OTHER;
-
-	body.addShape(shape);
-
-	world.addBody(body);
-
-	return {
-		ID:currentLevel.getEntityID(),
-		physicsBody: body
-	};
-}
-
 var newRound = function(time, score){
 	if(gameScore.blue > gameScore.red){
 		notifyRoundWinner("Blue");
@@ -415,6 +398,7 @@ var newRound = function(time, score){
 	RedFlag.setHome(true);
 	for (var i = clients.length - 1; i >= 0; i--) {
 		clients[i].reset();
+		world.addBody(clients[i].physicsBody);
 	};
 	roundCount++;
 }
