@@ -55,6 +55,7 @@ class Level{
 
 	loadLevelEntities(name, world){
 		var levelDefinition = JSON.parse(fs.readFileSync(__dirname + "/../level/" + name + ".json", 'utf8'));
+		this.definition = levelDefinition;
 		this.redStart = levelDefinition.playerSpawns.red;
 		this.blueStart = levelDefinition.playerSpawns.blue;
 		var levelEntities = {

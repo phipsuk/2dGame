@@ -9,6 +9,19 @@
 			"y": 70
 		}
 	},
+	"settings":{
+		"spawnTime": 5000
+	},
+	"flags":{
+		"red": {
+			"x": 10,
+			"y": 0
+		},
+		"blue": {
+			"x": 760,
+			"y": 0
+		}
+	},
 	"entities": [
 		{
 			"type": "wall",

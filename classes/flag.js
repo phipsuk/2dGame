@@ -2,7 +2,7 @@
 const constants = require("./constants.js");
 const p2 = require('p2');
 class Flag{
-	constructor(x,y){
+	constructor(x, y, team){
 		this.body = new p2.Body({
 						mass:0,
 						position: [x,0]
@@ -20,6 +20,8 @@ class Flag{
 		this.body.addShape(bodyShape);
 
 		this.home = true;
+
+		this.Team = team;
 	}
 
 	getBody(){
