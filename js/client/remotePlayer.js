@@ -6,7 +6,7 @@ function RemotePlayer(stage, team, x, y, id, name){
 
 	graphics.lineStyle(2, playerColour, 1);
 	graphics.beginFill(playerColour);
-	graphics.drawRect(0, 590, 10, 10);
+	graphics.drawRect(0, coordinateConverter(10, 590), 10, 10);
 	graphics.endFill();
 
 	graphics.position.x = x;
@@ -35,6 +35,10 @@ function RemotePlayer(stage, team, x, y, id, name){
 			nameText.position.x = x + 5;
 		}
 		nameText.position.y = y + 575;
+	};
+
+	self.setAvatar = function(){
+
 	};
 
 	stage.addChild(graphics);

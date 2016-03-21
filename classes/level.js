@@ -23,6 +23,7 @@ class Level{
 					x:entity.physicsBody.position[0],
 					y:entity.physicsBody.position[1]
 				},
+				rotation: entity.physicsBody.angle,
 				type:entity.type,
 				shape: entity.shape,
 				shapeOptions: entity.shapeOptions

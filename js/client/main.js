@@ -34,7 +34,7 @@ function onConnected(){
 	var BACKWARD = -FORWARD; 
 
 	var players = {};
-	var renderer = PIXI.autoDetectRenderer(800, 600,{backgroundColor : 0x1099bb});
+	var renderer = PIXI.autoDetectRenderer(800, 600,{transparent: true, antialias: true});
 	document.getElementById("game").appendChild(renderer.view);
 
 	var feed = new Feed(socket, $("#feed"));
@@ -85,6 +85,7 @@ function onConnected(){
 			updateBulletPositions(serverUpdate[i].Bullets);
 			if(serverUpdate[i].ID == ClientID){
 				player.update(serverUpdate[i].Data.position.x, -serverUpdate[i].Data.position.y, serverUpdate[i].Dead, serverUpdate[i].Name);
+				player.setAvatar(serverUpdate[i].Data.avatar, stage);
 				if(serverUpdate[i].Data.hasFlag){
 						if(player.team == "Blue"){
 							RedFlag.setPosition(player.graphics.position.x, player.graphics.position.y + 570);
@@ -95,6 +96,7 @@ function onConnected(){
 			}else{
 				if(players[serverUpdate[i].ID]){
 					players[serverUpdate[i].ID].update(serverUpdate[i].Data.position.x, -serverUpdate[i].Data.position.y, serverUpdate[i].Dead, serverUpdate[i].Name);
+					players[serverUpdate[i].ID].setAvatar(serverUpdate[i].Data.avatar, stage);
 					if(serverUpdate[i].Data.hasFlag){
 						if(players[serverUpdate[i].ID].team == "Blue"){
 							RedFlag.setPosition(players[serverUpdate[i].ID].graphics.position.x, players[serverUpdate[i].ID].graphics.position.y + 570);

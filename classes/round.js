@@ -195,7 +195,15 @@ class Round{
 			clientInfo.push({
 				ID: this.clients[i].ID,
 				Team: this.clients[i].Team,
-				Data: {position:{x:this.clients[i].physicsBody.position[0],y:this.clients[i].physicsBody.position[1]}, hasFlag: this.clients[i].hasFlag, rotation:this.clients[i].physicsBody.angle},
+				Data: {
+					position:{
+						x:this.clients[i].physicsBody.position[0],
+						y:this.clients[i].physicsBody.position[1]
+					},
+					hasFlag: this.clients[i].hasFlag,
+					rotation:this.clients[i].physicsBody.angle,
+					avatar: this.currentLevel.definition.playerAvatars[this.clients[i].Team]
+				},
 				Score: this.score,
 				Name: this.clients[i].name,
 				Dead: this.clients[i].isHit,

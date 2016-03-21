@@ -22,6 +22,10 @@
 			"y": 0
 		}
 	},
+	"playerAvatars":{
+		"Red": "wall.png",
+		"Blue": "wall.png"
+	},
 	"entities": [
 		{
 			"type": "wall",
