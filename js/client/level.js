@@ -38,8 +38,11 @@ function Level(stage){
 						Entities[entity.ID].position.x = entity.position.x;
 						Entities[entity.ID].position.y = -entity.position.y;
 					}else{
-						var texture = PIXI.Texture.fromImage("/images/wall.png");
+						var texture = PIXI.Texture.fromImage("/images/" + entity.type + ".png");
 						var entitySprite = new PIXI.extras.TilingSprite(texture, entity.shapeOptions.width, entity.shapeOptions.height);
+						if(entity.nonTileable){
+							entitySprite.tileScale.set(0.04, 0.04);
+						}
 						entitySprite.position.x = entity.position.x + 5;
 						entitySprite.position.y = -entity.position.y + 595;
 						entitySprite.pivot.set(entity.shapeOptions.width/2, entity.shapeOptions.height/2);

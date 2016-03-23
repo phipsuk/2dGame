@@ -298,6 +298,7 @@
 			"type": "crate",
 			"mass": 100,
 			"health": 30,
+			"nonTileable": true,
 			"shape": "Box",
 			"shapeOptions":{
 					"height": 20,
@@ -312,6 +313,7 @@
 			"type": "crate",
 			"mass": 100,
 			"health": 30,
+			"nonTileable": true,
 			"shape": "Box",
 			"shapeOptions":{
 					"height": 20,

@@ -25,6 +25,7 @@ class Level{
 				},
 				rotation: entity.physicsBody.angle,
 				type:entity.type,
+				nonTileable: entity.nonTileable,
 				shape: entity.shape,
 				shapeOptions: entity.shapeOptions
 			});
