@@ -1,4 +1,5 @@
 {
+	"css":"canvas {cursor: none;background-image: url(\"/images/grass.png\"), url(\"/images/sky2.png\");background-repeat: repeat-x, no-repeat;background-size: 100px auto, auto;background-position: bottom left, top left;}",
 	"playerSpawns":{
 		"red":{
 			"x": 50,

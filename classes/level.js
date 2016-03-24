@@ -13,11 +13,13 @@ class Level{
 	}
 
 	levelDynamicUpdateInfo(){
-		var updateInfo = [];
+		var updateInfo = {
+			entities: []
+		};
 		for (var i = this.entities.dynamic.length - 1; i >= 0; i--) {
 			var entity = this.entities.dynamic[i];
 			entity.update();
-			updateInfo.push({
+			updateInfo.entities.push({
 				ID:entity.ID,
 				position:{
 					x:entity.physicsBody.position[0],
@@ -34,10 +36,13 @@ class Level{
 	};
 
 	levelUpdateInfo(){
-		var updateInfo = [];
+		var updateInfo = {
+			entities: [],
+			definition: this.definition
+		};
 		for (var i = this.entities.static.length - 1; i >= 0; i--) {
 			var entity = this.entities.static[i];
-			updateInfo.push({
+			updateInfo.entities.push({
 				ID:entity.ID,
 				position:{
 					x:entity.physicsBody.position[0],
@@ -45,7 +50,7 @@ class Level{
 				},
 				type:entity.type,
 				shape: entity.shape,
-				shapeOptions: entity.shapeOptions
+				shapeOptions: entity.shapeOptions,
 			});
 		};
 		return updateInfo;

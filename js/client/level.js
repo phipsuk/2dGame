@@ -3,8 +3,11 @@ function Level(stage){
 	var Entities = {};
 
 	self.update = function(data){
-		for (var i = data.length - 1; i >= 0; i--) {
-			var entity = data[i];
+		if(data && data.definition && data.definition.css){
+			$("#levelcss").text(data.definition.css);
+		}
+		for (var i = data.entities.length - 1; i >= 0; i--) {
+			var entity = data.entities[i];
 			if(Entities[entity.ID]){
 				Entities[entity.ID].position.x = entity.position.x + 5;
 				Entities[entity.ID].position.y = -entity.position.y + 595;
