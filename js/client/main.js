@@ -144,7 +144,7 @@ function onConnected(){
 					var bulletGraphics = new PIXI.Graphics();
 					bulletGraphics.lineStyle(2, 0x080808, 1);
 					bulletGraphics.beginFill(0x080808);
-					bulletGraphics.drawCircle(5, 595, 2);
+					bulletGraphics.drawCircle(5, 595, 1);
 					bulletGraphics.endFill();
 					stage.addChild(bulletGraphics);
 					bulletList[bullets[i].id] = bulletGraphics;

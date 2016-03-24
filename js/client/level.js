@@ -2,22 +2,6 @@ function Level(stage){
 	var self = this;
 	var Entities = {};
 
-	//Create Sky
-	var skyTexture = PIXI.Texture.fromImage("/images/sky2.png");
-	var sky = new PIXI.Sprite(skyTexture);
-
-	stage.addChild(sky);
-
-	//Create Grass
-	var texture = PIXI.Texture.fromImage("/images/grass.png");
-	var grass = new PIXI.extras.TilingSprite(texture, 800, 50);
-	grass.tileScale.x = 0.2;
-	grass.tileScale.y = 0.2;
-	grass.position.x = 0;
-	grass.position.y = 570;
-
-	stage.addChild(grass);
-
 	self.update = function(data){
 		for (var i = data.length - 1; i >= 0; i--) {
 			var entity = data[i];

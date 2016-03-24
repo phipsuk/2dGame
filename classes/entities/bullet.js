@@ -11,7 +11,7 @@ class Bullet{
 			velocity: [-Math.cos(angle) * speed, Math.sin(angle) * speed]
 		})
 
-		var shape = new p2.Circle({ radius: 2 });
+		var shape = new p2.Circle({ radius: 1 });
 
 		shape.collisionGroup = constants.BULLET;
 		shape.collisionMask = constants.PLAYER | constants.GROUND | constants.BULLET | constants.OTHER;

@@ -26,6 +26,7 @@ function Player(stage, Team, id, name){
 		team:Team,
 		name: name,
 		hasFlag:false,
+		nameText: nameText,
 		isDown: function(keyCode){
 			return this.pressed[keyCode];
 		},
