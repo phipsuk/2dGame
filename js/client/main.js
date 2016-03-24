@@ -74,7 +74,7 @@ function onConnected(){
 		}
 	});
 
-	var player = Player(Team, stage, Name);
+	var player = Player(stage, Team, ClientID, Name);
 
 	socket.on("update", function(serverUpdate){
 		var score = serverUpdate[0].Score;
@@ -88,9 +88,9 @@ function onConnected(){
 				player.setAvatar(serverUpdate[i].Data.avatar, stage);
 				if(serverUpdate[i].Data.hasFlag){
 						if(player.team == "Blue"){
-							RedFlag.setPosition(player.graphics.position.x, player.graphics.position.y + 570);
+							RedFlag.setPosition(player.graphics.position.x, player.graphics.position.y - RedFlag.graphics.height/2);
 						}else{
-							BlueFlag.setPosition(player.graphics.position.x, player.graphics.position.y + 570);
+							BlueFlag.setPosition(player.graphics.position.x, player.graphics.position.y - BlueFlag.graphics.height/2);
 						}
 					}
 			}else{
@@ -99,13 +99,13 @@ function onConnected(){
 					players[serverUpdate[i].ID].setAvatar(serverUpdate[i].Data.avatar, stage);
 					if(serverUpdate[i].Data.hasFlag){
 						if(players[serverUpdate[i].ID].team == "Blue"){
-							RedFlag.setPosition(players[serverUpdate[i].ID].graphics.position.x, players[serverUpdate[i].ID].graphics.position.y + 570);
+							RedFlag.setPosition(players[serverUpdate[i].ID].graphics.position.x, players[serverUpdate[i].ID].graphics.position.y - RedFlag.graphics.height/2);
 						}else{
-							BlueFlag.setPosition(players[serverUpdate[i].ID].graphics.position.x, players[serverUpdate[i].ID].graphics.position.y + 570);
+							BlueFlag.setPosition(players[serverUpdate[i].ID].graphics.position.x, players[serverUpdate[i].ID].graphics.position.y - BlueFlag.graphics.height/2);
 						}
 					}
 				}else{
-					players[serverUpdate[i].ID] = new RemotePlayer(stage, serverUpdate[i].Team, serverUpdate[i].Data.position.x, serverUpdate[i].Data.position.y, serverUpdate[i].ID, serverUpdate[i].Name);
+					players[serverUpdate[i].ID] = new Player(stage, serverUpdate[i].Team, serverUpdate[i].ID, serverUpdate[i].Name);
 				}
 			}
 		};		

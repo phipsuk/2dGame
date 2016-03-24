@@ -1,4 +1,4 @@
-function Player(Team, stage, name){
+function Player(stage, Team, id, name){
 	var graphics = new PIXI.Sprite.fromImage("/images/flag_" + Team + ".png");
 
 	var playerColour = Team == "Red" ? 0xFF0000 : 0x0000FF;
