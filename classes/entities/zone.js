@@ -21,7 +21,10 @@ class Zone{
 	trigger(player){
 		if(this.lastActivated === null || this.lastActivated + this.interval < Date.now()){
 			this.lastActivated = Date.now();
-			
+			for (var i = 0; i < this.effects.length; i++) {
+				let effect = this.effects[i];
+				
+			}
 		}
 	}
 }

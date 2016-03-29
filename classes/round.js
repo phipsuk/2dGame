@@ -117,20 +117,7 @@ class Round{
 						this.notifyFlagCapture("Blue");
 					}
 				}
-				setTimeout(() => {
-					this.world.removeBody(player.physicsBody);
-					player.reset();
-					if (player.hasFlag) {
-						if(player.Team == "Red"){
-							this.notifyFlagCapture("Blue");
-							this.flags.blue.isHome(true);
-						}else{
-							this.notifyFlagCapture("Red");
-							this.flags.red.isHome(true);
-						}
-					}
-					this.world.addBody(player.physicsBody);
-				}, this.currentLevel.definition.settings.spawnTime);
+				player.die(this.currentLevel.definition.settings.spawnTime, this.world);
 			}
 		}else{
 			var player = this.findPlayer(this.clients, shapeB.body)
@@ -176,6 +163,7 @@ class Round{
 		var dynamicLevelInfo = this.currentLevel.levelDynamicUpdateInfo();
 		let updateData = this.updateInfo();
 		for (var i = this.clients.length - 1; i >= 0; i--) {
+			this.clients[i].update(this.currentLevel.definition.settings.spawnTime, this.world);
 			if(this.clients[i] && this.clients[i].skt){
 				this.clients[i].skt.emit("update", updateData);
 				if(this.clients[i] && this.clients[i].skt){
