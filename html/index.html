@@ -17,11 +17,12 @@
         <script src="js/pixi.js"></script>
         <script src="socket.io/socket.io.js"></script>
 		<style type="text/css" media="screen">
+            body {background-color: #F1EECC;}
 			canvas { cursor: none; }
 			#feed { 
 				position: absolute;
 				top: 10px;
-				left: 810px;
+				right: 1px;
 				height: 590px;
 				overflow-y: auto;
     			width: 300px;
@@ -35,14 +36,17 @@
 				font-size: 8pt;
 				margin-right: 2px;
 			}
+            .game-bg { background-image: url("/images/land.png"); padding-bottom: 100px; width: 800px; height: 900px; background-position-y: 110px;}
+            
 		</style>
     </head>
     <body>
         <!--[if lt IE 8]>
             <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
+        <div class="game-bg">
         <div id="game">
-        	
+        	</div>
         </div>
         <div id="feed">
         	
