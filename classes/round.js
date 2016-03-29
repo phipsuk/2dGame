@@ -92,7 +92,7 @@ class Round{
 		if((shapeA.collisionGroup == constants.TRIGGER || shapeB.collisionGroup == constants.TRIGGER) && (shapeA.collisionGroup == constants.PLAYER || shapeB.collisionGroup == constants.PLAYER)){
 			var player = this.findPlayer(this.clients, shapeA.collisionGroup == constants.PLAYER ? shapeA.body :shapeB.body);
 			var trigger = shapeA.body.owner ? shapeA.body.owner : shapeB.body.owner;
-			trigger.trigger();
+			trigger.trigger(player);
 		}
 		if((shapeA.collisionGroup == constants.BULLET || shapeB.collisionGroup == constants.BULLET) && (shapeA.body.health || shapeB.body.health)){
 			var destructableShape = shapeA.body.health ? shapeA.body : shapeB.body;
