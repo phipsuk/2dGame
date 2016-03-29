@@ -13,7 +13,7 @@ class World{
 		// Create an infinite ground plane.
 		var groundBody = new p2.Body({
 			mass: 0, // Setting mass to 0 makes the body static
-			position: [0,0]
+			position: [0,-5]
 		});
 		var groundShape = new p2.Plane();
 		groundBody.addShape(groundShape);
