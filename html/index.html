@@ -17,8 +17,6 @@
         <script src="js/pixi.js"></script>
         <script src="socket.io/socket.io.js"></script>
 		<style type="text/css" media="screen">
-            body {background-color: #F1EECC;}
-			canvas { cursor: none; }
 			#feed { 
 				position: absolute;
 				top: 10px;
@@ -39,6 +37,7 @@
             .game-bg { background-image: url("/images/land.png"); padding-bottom: 100px; width: 800px; height: 900px; background-position-y: 110px;}
             
 		</style>
+        <style type="text/css" id="levelcss"></style>
     </head>
     <body>
         <!--[if lt IE 8]>
@@ -60,8 +59,8 @@
         <script type="text/javascript" src="js/client/level.js" async defer ></script>
         <script type="text/javascript" src="js/client/flag.js" async defer ></script>
         <script type="text/javascript" src="js/client/player.js" async defer ></script>
-        <script type="text/javascript" src="js/client/remotePlayer.js" async defer ></script>
         <script type="text/javascript" src="js/client/crosshair.js" async defer ></script>
         <script type="text/javascript" src="js/client/main.js" async defer ></script>
+        <script type="text/javascript" src="js/client/helpers.js" async defer ></script>
     </body>
 </html>

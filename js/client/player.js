@@ -1,18 +1,19 @@
-function Player(Team, stage, name){
-	var graphics = new PIXI.Graphics();
+function Player(stage, Team, id, name){
+	var graphics = new PIXI.Sprite.fromImage("/images/flag_" + Team + ".png");
 
 	var playerColour = Team == "Red" ? 0xFF0000 : 0x0000FF;
 
-	graphics.lineStyle(2, playerColour, 1);
-	graphics.beginFill(playerColour);
-	graphics.drawRect(0, 590, 10, 10);
-	graphics.endFill();
+	graphics.position.x = 0;
+	graphics.position.y = 0;
+	graphics.scale.x = 0.1;
+	graphics.scale.y = 0.1;
 
 	var nameText = new PIXI.Text(name, {font:"10px Arial", fill:playerColour});
 
 	var player = {
 		ID:ClientID,
 		graphics:graphics,
+		avatarLocation: "",
 		pressed: {},
 		mousePressed: {},
 		LEFT:65,
@@ -25,6 +26,7 @@ function Player(Team, stage, name){
 		team:Team,
 		name: name,
 		hasFlag:false,
+		nameText: nameText,
 		isDown: function(keyCode){
 			return this.pressed[keyCode];
 		},
@@ -42,7 +44,7 @@ function Player(Team, stage, name){
 				nameText.text = this.name;
 			}
 			this.graphics.position.x = x;
-			this.graphics.position.y = y;
+			this.graphics.position.y = coordinateConverter(y, 600 - this.graphics.height);
 			if(this.graphics.position.x + nameText.width > 750){
 				nameText.position.x = x - nameText.width - 5;
 			}else{
@@ -51,7 +53,7 @@ function Player(Team, stage, name){
 			nameText.position.y = y + 575;
 		},
 		onMouseDown: function(event){
-			var angle = Math.atan2(this.graphics.position.y - (event.layerY - 600), this.graphics.position.x - event.layerX);
+			var angle = Math.atan2(this.graphics.position.y - event.layerY, this.graphics.position.x - event.layerX);
 			this.mousePressed[event.button] = {
 				x: event.x,
 				y: event.y,
@@ -60,6 +62,20 @@ function Player(Team, stage, name){
 		},
 		onMouseUp: function(event){
 			delete this.mousePressed[event.button];
+		},
+		setAvatar: function(avatar, stage){
+			if(this.avatarLocation != avatar){
+				stage.removeChild(this.graphics)
+				this.graphics = new PIXI.Sprite.fromImage("/images/" + avatar);
+
+				this.graphics.position.x = 0;
+				this.graphics.position.y = 0;
+				this.graphics.scale.x = 0.1;
+				this.graphics.scale.y = 0.1;
+
+				this.avatarLocation = avatar;
+				stage.addChild(this.graphics);
+			}
 		}
 	};
 

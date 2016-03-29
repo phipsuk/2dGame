@@ -34,7 +34,7 @@ function onConnected(){
 	var BACKWARD = -FORWARD; 
 
 	var players = {};
-	var renderer = PIXI.autoDetectRenderer(800, 600,{backgroundColor : 0x1099bb});
+	var renderer = PIXI.autoDetectRenderer(800, 600,{transparent: true, antialias: true});
 	document.getElementById("game").appendChild(renderer.view);
 
 	var feed = new Feed(socket, $("#feed"));
@@ -74,7 +74,7 @@ function onConnected(){
 		}
 	});
 
-	var player = Player(Team, stage, Name);
+	var player = Player(stage, Team, ClientID, Name);
 
 	socket.on("update", function(serverUpdate){
 		var score = serverUpdate[0].Score;
@@ -85,25 +85,27 @@ function onConnected(){
 			updateBulletPositions(serverUpdate[i].Bullets);
 			if(serverUpdate[i].ID == ClientID){
 				player.update(serverUpdate[i].Data.position.x, -serverUpdate[i].Data.position.y, serverUpdate[i].Dead, serverUpdate[i].Name);
+				player.setAvatar(serverUpdate[i].Data.avatar, stage);
 				if(serverUpdate[i].Data.hasFlag){
 						if(player.team == "Blue"){
-							RedFlag.setPosition(player.graphics.position.x, player.graphics.position.y + 570);
+							RedFlag.setPosition(player.graphics.position.x, player.graphics.position.y - RedFlag.graphics.height/2);
 						}else{
-							BlueFlag.setPosition(player.graphics.position.x, player.graphics.position.y + 570);
+							BlueFlag.setPosition(player.graphics.position.x, player.graphics.position.y - BlueFlag.graphics.height/2);
 						}
 					}
 			}else{
 				if(players[serverUpdate[i].ID]){
 					players[serverUpdate[i].ID].update(serverUpdate[i].Data.position.x, -serverUpdate[i].Data.position.y, serverUpdate[i].Dead, serverUpdate[i].Name);
+					players[serverUpdate[i].ID].setAvatar(serverUpdate[i].Data.avatar, stage);
 					if(serverUpdate[i].Data.hasFlag){
 						if(players[serverUpdate[i].ID].team == "Blue"){
-							RedFlag.setPosition(players[serverUpdate[i].ID].graphics.position.x, players[serverUpdate[i].ID].graphics.position.y + 570);
+							RedFlag.setPosition(players[serverUpdate[i].ID].graphics.position.x, players[serverUpdate[i].ID].graphics.position.y - RedFlag.graphics.height/2);
 						}else{
-							BlueFlag.setPosition(players[serverUpdate[i].ID].graphics.position.x, players[serverUpdate[i].ID].graphics.position.y + 570);
+							BlueFlag.setPosition(players[serverUpdate[i].ID].graphics.position.x, players[serverUpdate[i].ID].graphics.position.y - BlueFlag.graphics.height/2);
 						}
 					}
 				}else{
-					players[serverUpdate[i].ID] = new RemotePlayer(stage, serverUpdate[i].Team, serverUpdate[i].Data.position.x, serverUpdate[i].Data.position.y, serverUpdate[i].ID, serverUpdate[i].Name);
+					players[serverUpdate[i].ID] = new Player(stage, serverUpdate[i].Team, serverUpdate[i].ID, serverUpdate[i].Name);
 				}
 			}
 		};		
@@ -142,7 +144,7 @@ function onConnected(){
 					var bulletGraphics = new PIXI.Graphics();
 					bulletGraphics.lineStyle(2, 0x080808, 1);
 					bulletGraphics.beginFill(0x080808);
-					bulletGraphics.drawRect(0, 590, 2, 2);
+					bulletGraphics.drawCircle(5, 595, 1);
 					bulletGraphics.endFill();
 					stage.addChild(bulletGraphics);
 					bulletList[bullets[i].id] = bulletGraphics;
