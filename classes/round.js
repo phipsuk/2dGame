@@ -287,8 +287,8 @@ class Round{
 			player.pressed = update.pressed;
 			player.mousePressed = update.mousePressed;
 			if(player.isDown(directions.LEFT) && player.physicsBody.position[0] > 0) player.physicsBody.velocity[0] = -100;
-			if(player.isDown(directions.RIGHT) &&  player.physicsBody.position[0] < 790) player.physicsBody.velocity[0] = 100;
-			if((player.isDown(directions.UP) || player.isDown(directions.SPACE))  && player.physicsBody.position[1] < 590 && !player.jumping){
+			if(player.isDown(directions.RIGHT) &&  player.physicsBody.position[0] < constants.SCREEN.WIDTH) player.physicsBody.velocity[0] = 100;
+			if((player.isDown(directions.UP) || player.isDown(directions.SPACE))  && player.physicsBody.position[1] < constants.SCREEN.HEIGHT && !player.jumping){
 				player.physicsBody.velocity[1] = 100;
 				player.jumping = true;
 			}

@@ -10,7 +10,7 @@ function Level(stage){
 			var entity = data.entities[i];
 			if(Entities[entity.ID]){
 				Entities[entity.ID].position.x = entity.position.x + 5;
-				Entities[entity.ID].position.y = -entity.position.y + 595;
+				Entities[entity.ID].position.y = -entity.position.y + SCREEN.HEIGHT - 5;
 				Entities[entity.ID].rotation = -entity.rotation;
 			}else{
 				if(entity.shape == "Box"){
@@ -18,7 +18,7 @@ function Level(stage){
 						var entityGraphics = new PIXI.Graphics();
 						entityGraphics.lineStyle(2, 0x080808, 1);
 						entityGraphics.beginFill(0x080808);
-						entityGraphics.drawRect((-entity.shapeOptions.width/2) + 5, (-entity.shapeOptions.height/2) + 595, entity.shapeOptions.width, entity.shapeOptions.height);
+						entityGraphics.drawRect((-entity.shapeOptions.width/2) + 5, (-entity.shapeOptions.height/2) + SCREEN.HEIGHT - 5, entity.shapeOptions.width, entity.shapeOptions.height);
 						entityGraphics.endFill();
 						stage.addChild(entityGraphics);
 						Entities[entity.ID] = entityGraphics;
@@ -31,7 +31,7 @@ function Level(stage){
 							entitySprite.tileScale.set(0.04, 0.04);
 						}
 						entitySprite.position.x = entity.position.x + 5;
-						entitySprite.position.y = -entity.position.y + 595;
+						entitySprite.position.y = -entity.position.y + (SCREEN.HEIGHT - 5);
 						entitySprite.pivot.set(entity.shapeOptions.width/2, entity.shapeOptions.height/2);
 						stage.addChild(entitySprite);
 						Entities[entity.ID] = entitySprite;

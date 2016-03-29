@@ -49,6 +49,10 @@ app.get('/js/bootbox.js', function(req,res){
 	res.sendFile(__dirname + "/node_modules/bootbox/bootbox.min.js");
 });
 
+app.get('/js/constants.js', function(req,res){
+	res.sendFile(__dirname + "/classes/constants.js");
+});
+
 app.use('/images', express.static(__dirname + '/images'));
 app.use('/js/client', express.static(__dirname + '/js/client'));
 
