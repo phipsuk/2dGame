@@ -44,13 +44,13 @@ function Player(stage, Team, id, name){
 				nameText.text = this.name;
 			}
 			this.graphics.position.x = x;
-			this.graphics.position.y = coordinateConverter(y, SCREEN.HEIGHT - this.graphics.height);
-			if(this.graphics.position.x + nameText.width > SCREEN.WIDTH - 80){
+			this.graphics.position.y = coordinateConverter(y, 600 - this.graphics.height);
+			if(this.graphics.position.x + nameText.width > 750){
 				nameText.position.x = x - nameText.width - 5;
 			}else{
 				nameText.position.x = x + 5;
 			}
-			nameText.position.y = y + SCREEN.HEIGHT - 25;
+			nameText.position.y = y + 575;
 		},
 		onMouseDown: function(event){
 			var angle = Math.atan2(this.graphics.position.y - event.layerY, this.graphics.position.x - event.layerX);

@@ -13,46 +13,13 @@ class World{
 		// Create an infinite ground plane.
 		var groundBody = new p2.Body({
 			mass: 0, // Setting mass to 0 makes the body static
-			position: [0,0]
+			position: [0,-5]
 		});
 		var groundShape = new p2.Plane();
 		groundBody.addShape(groundShape);
 		groundShape.collisionGroup = constants.GROUND;
 		groundShape.collisionMask = constants.PLAYER | constants.BULLET | constants.GROUND | constants.OTHER;
 		world.addBody(groundBody);
-
-		var wallBody = new p2.Body({
-			mass: 0, // Setting mass to 0 makes the body static
-			position: [-5,0],
-			angle:4.71238898
-		});
-		var wallShape = new p2.Plane();
-		wallShape.collisionGroup = constants.GROUND;
-		wallShape.collisionMask = constants.PLAYER | constants.BULLET | constants.GROUND | constants.OTHER;
-		wallBody.addShape(wallShape);
-		world.addBody(wallBody);
-
-		var wallBody = new p2.Body({
-			mass: 0, // Setting mass to 0 makes the body static
-			position: [800,0],
-			angle:1.57079633
-		});
-		var wallShape = new p2.Plane();
-		wallShape.collisionGroup = constants.GROUND;
-		wallShape.collisionMask = constants.PLAYER | constants.BULLET | constants.GROUND | constants.OTHER;
-		wallBody.addShape(wallShape);
-		world.addBody(wallBody);
-
-		var ceilingBody = new p2.Body({
-			mass: 0, // Setting mass to 0 makes the body static
-			position: [0,600],
-			angle:3.14159265
-		});
-		var ceilingShape = new p2.Plane();
-		ceilingShape.collisionGroup = constants.GROUND;
-		ceilingShape.collisionMask = constants.PLAYER | constants.BULLET | constants.GROUND | constants.OTHER;
-		ceilingBody.addShape(ceilingShape);
-		world.addBody(ceilingBody);
 	}
 
 	step(delta){

@@ -34,7 +34,7 @@ function onConnected(){
 	var BACKWARD = -FORWARD; 
 
 	var players = {};
-	var renderer = PIXI.autoDetectRenderer(SCREEN.WIDTH, SCREEN.HEIGHT,{transparent: true, antialias: true});
+	var renderer = PIXI.autoDetectRenderer(800, 600,{transparent: true, antialias: true});
 	document.getElementById("game").appendChild(renderer.view);
 
 	var feed = new Feed(socket, $("#feed"));
@@ -45,10 +45,10 @@ function onConnected(){
 	var blueTeamScore = new PIXI.Text("0", {font:"50px Arial", fill:"blue"});
 	var redTeamScore = new PIXI.Text("0", {font:"50px Arial", fill:"red"});
 	blueTeamScore.position.x = 50;
-	redTeamScore.position.x = SCREEN.WIDTH - 50;
+	redTeamScore.position.x = 700;
 
 	var roundTime = new PIXI.Text("-- : --", {font:"50px Arial", fill:"black"});
-	roundTime.position.x = SCREEN.WIDTH/2 - 70;
+	roundTime.position.x = 320;
 
 	// create the root of the scene graph
 	var stage = new PIXI.Container();
@@ -113,7 +113,7 @@ function onConnected(){
 
 	socket.on("roundComplete", function(data){
 		var winText = new PIXI.Text("", {font:"50px Arial", fill:"black"});
-		winText.position.x = (SCREEN.WIDTH/2) - 100;
+		winText.position.x = 300;
 		winText.position.y = 200;
 		if(data == "Red"){
 			winText.text = "Red Team Wins!";
@@ -133,8 +133,8 @@ function onConnected(){
 		if(data && data.definition && data.definition.flags){
 			stage.removeChild(RedFlag.graphics);
 			stage.removeChild(BlueFlag.graphics);
-			RedFlag = Flag("Red", data.definition.flags.red.x, SCREEN.HEIGHT - 30 - data.definition.flags.blue.y);
-			BlueFlag = Flag("Blue", data.definition.flags.blue.x, SCREEN.HEIGHT - 30 - data.definition.flags.blue.y);
+			RedFlag = Flag("Red", data.definition.flags.red.x, 570 - data.definition.flags.blue.y);
+			BlueFlag = Flag("Blue", data.definition.flags.blue.x, 570 - data.definition.flags.blue.y);
 
 			stage.addChild(RedFlag.graphics);
 			stage.addChild(BlueFlag.graphics);
@@ -153,7 +153,7 @@ function onConnected(){
 					var bulletGraphics = new PIXI.Graphics();
 					bulletGraphics.lineStyle(2, 0x080808, 1);
 					bulletGraphics.beginFill(0x080808);
-					bulletGraphics.drawCircle(5, SCREEN.HEIGHT - 5, 1);
+					bulletGraphics.drawCircle(5, 595, 1);
 					bulletGraphics.endFill();
 					stage.addChild(bulletGraphics);
 					bulletList[bullets[i].id] = bulletGraphics;
