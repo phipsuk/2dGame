@@ -17,6 +17,36 @@
         <script src="js/pixi.js"></script>
         <script src="socket.io/socket.io.js"></script>
 		<style type="text/css" media="screen">
+            body {background-color: #1C4559;}
+            
+            .floating{
+    float: left;
+    -webkit-animation-name: Floatingx;
+    -webkit-animation-duration: 3s;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-timing-function: ease-in-out;
+    -moz-animation-name: Floating;
+    -moz-animation-duration: 3s;
+    -moz-animation-iteration-count: infinite;
+    -moz-animation-timing-function: ease-in-out;
+    margin-left: 30px;
+    margin-top: 5px;
+
+}
+
+@-webkit-keyframes Floatingx{
+    from {-webkit-transform:translate(0, 0px);}
+    65% {-webkit-transform:translate(0, 15px);}
+    to {-webkit-transform: translate(0, -0px);    }    
+}
+    
+@-moz-keyframes Floating{
+    from {-moz-transform:translate(0, 0px);}
+    65% {-moz-transform:translate(0, 15px);}
+    to {-moz-transform: translate(0, -0px);}    
+}
+
+            
 			#feed { 
 				position: absolute;
 				top: 10px;
@@ -34,7 +64,7 @@
 				font-size: 8pt;
 				margin-right: 2px;
 			}
-            .game-bg { background-image: url("/images/land.png"); padding-bottom: 100px; width: 800px; height: 900px; background-position-y: 110px;}
+            .game-bg {margin-left:20%; background-image: url("/images/land.png"); padding-bottom: 100px; width: 800px; height: 900px; background-position-y: 110px; background-repeat: no-repeat;}
             
 		</style>
         <style type="text/css" id="levelcss"></style>
@@ -43,7 +73,7 @@
         <!--[if lt IE 8]>
             <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
-        <div class="game-bg">
+        <div class="game-bg floating">
         <div id="game">
         	</div>
         </div>
