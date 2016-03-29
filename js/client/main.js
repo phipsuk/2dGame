@@ -130,6 +130,15 @@ function onConnected(){
 
 	socket.on("levelUpdate", function(data){
 		level.update(data);
+		if(data && data.definition && data.definition.flags){
+			stage.removeChild(RedFlag.graphics);
+			stage.removeChild(BlueFlag.graphics);
+			RedFlag = Flag("Red", data.definition.flags.red.x, 570 - data.definition.flags.blue.y);
+			BlueFlag = Flag("Blue", data.definition.flags.blue.x, 570 - data.definition.flags.blue.y);
+
+			stage.addChild(RedFlag.graphics);
+			stage.addChild(BlueFlag.graphics);
+		}
 	});
 
 	var bulletList = {};
