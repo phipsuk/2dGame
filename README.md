@@ -1,4 +1,4 @@
-# 2dGame - Battle of the Squares
+# 2dGame - Space Sheep Wars
 A multiplayer 2d Game based on node.js
 
 ## Adding features
