@@ -144,6 +144,10 @@ class Level{
 				};
 				body.owner = entity;
 				levelEntities.static.push(entity);
+			}else if(levelEntity.type === "zone"){
+				shape.collisionGroup = constants.TRIGGER;
+				shape.collisionMask = constants.PLAYER;
+				levelEntities.static.push(new Zone(this.getEntityID, levelEntity, body, world));
 			}
 			world.addBody(body);
 		};

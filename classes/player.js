@@ -18,6 +18,10 @@ class Player{
 		this.isHit = false;
 		this.staticObjectsSent = false;
 		this.name = "unnamed";
+		this.o2 = 100;
+		this.health = 100;
+		this.lastHealthDepletion = null;
+		this.interval = 1000;
 	}
 
 	isDown(keyCode){
@@ -41,7 +45,33 @@ class Player{
 		this.physicsBody = createPlayerBody(0,0);
 		this.hasFlag = false;
 		this.isHit = false;
+		this.o2 = 100;
+		this.health = 100;
 		this.setPosition(this.spawn.x, this.spawn.y);
+	}
+
+	die(spawnTime, world){
+		this.isHit = true;
+		this.health = 0;
+		setTimeout(() => {
+				world.removeBody(this.physicsBody);
+				this.reset();
+				world.addBody(this.physicsBody);
+			}, spawnTime);
+	}
+
+	update(spawnTime, world){
+		if(!this.isHit){
+			if(this.health <= 0){
+				this.die(spawnTime, world);
+			}
+			if(this.o2 <= 0){
+				if(this.lastHealthDepletion === null || this.lastHealthDepletion + this.interval < Date.now()){
+					this.lastActivated = Date.now();
+					this.health -= 10;
+				}
+			}
+		}
 	}
 }
 
