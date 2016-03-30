@@ -58,7 +58,7 @@ function Player(stage, Team, id, name){
 				nameText.text = this.name;
 			}
 			this.graphics.position.x = x - (this.graphics.width/2) + 4.8;
-			this.graphics.position.y = coordinateConverter(y, SCREEN.HEIGHT - (this.graphics.height/2) - 4.8);
+			this.graphics.position.y = coordinateConverter(y, SCREEN.HEIGHT - (this.graphics.height/2) - 8.4);
 			if(this.graphics.position.x + nameText.width > SCREEN.WIDTH - 80){
 				nameText.position.x = x - nameText.width - 5;
 			}else{
