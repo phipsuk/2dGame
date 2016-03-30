@@ -1,7 +1,7 @@
 function Player(stage, Team, id, name){
 	var graphics = new PIXI.Sprite.fromImage("/images/flag_" + Team + ".png");
 
-	var playerColour = Team == "Red" ? 0xFF0000 : 0x0000FF;
+	var playerColour = Team == "Red" ? COLOURS.RED : COLOURS.BLUE;
 
 	graphics.position.x = 0;
 	graphics.position.y = 0;
@@ -23,15 +23,27 @@ function Player(stage, Team, id, name){
 		SPACE:32,
 		JUMPING:false,
 		JUMPCOUNT:0,
+		FACELEFT: "LEFT",
+		FACERIGHT: "RIGHT",
 		team:Team,
 		name: name,
 		hasFlag:false,
 		nameText: nameText,
+		facing: Team == "Red" ? this.FACERIGHT : this.FACELEFT,
 		isDown: function(keyCode){
 			return this.pressed[keyCode];
 		},
 		onKeyDown: function(event){
 			this.pressed[event.keyCode] = true;
+			if(this.isDown(this.LEFT)){
+				this.facing = this.FACELEFT;
+				this.graphics.scale.x = 0.1;
+				this.graphics.anchor.x = 0;
+			}else if(this.isDown(this.RIGHT)){
+				this.facing = this.FACERIGHT;
+				this.graphics.scale.x = -0.1;
+				this.graphics.anchor.x = 1;
+			}
 		},
 		onKeyUp: function(event){
 			delete this.pressed[event.keyCode];
