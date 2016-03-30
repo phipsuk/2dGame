@@ -42,12 +42,12 @@ function onConnected(){
 	var blueTeamScoreCount = 0;
 	var redTeamScoreCount = 0;
 
-	var blueTeamScore = new PIXI.Text("0", {font:"50px Arial", fill:"blue"});
-	var redTeamScore = new PIXI.Text("0", {font:"50px Arial", fill:"red"});
+	var blueTeamScore = new PIXI.Text("0", {font:"50px " + FONT, fill:COLOURS.BLUE});
+	var redTeamScore = new PIXI.Text("0", {font:"50px " + FONT, fill:COLOURS.RED});
 	blueTeamScore.position.x = 50;
 	redTeamScore.position.x = SCREEN.WIDTH - 50;
 
-	var roundTime = new PIXI.Text("-- : --", {font:"50px Arial", fill:"black"});
+	var roundTime = new PIXI.Text("-- : --", {font:"50px " + FONT, fill:COLOURS.WHITE});
 	roundTime.position.x = SCREEN.WIDTH/2 - 70;
 
 	// create the root of the scene graph
@@ -112,7 +112,7 @@ function onConnected(){
 	});
 
 	socket.on("roundComplete", function(data){
-		var winText = new PIXI.Text("", {font:"50px Arial", fill:"black"});
+		var winText = new PIXI.Text("", {font:"50px " + FONT, fill:"black"});
 		winText.position.x = (SCREEN.WIDTH/2) - 100;
 		winText.position.y = 200;
 		if(data == "Red"){

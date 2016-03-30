@@ -59,7 +59,7 @@ app.use('/js/client', express.static(__dirname + '/js/client'));
 var server = app.listen(3000, function () {
 	var host = server.address().address;
 	var port = server.address().port;
-	console.log('Example app listening at http://%s:%s', host, port);
+	console.log('Space Sheep wars at http://%s:%s', host, port);
 });
 
 var io = require('socket.io')(server);

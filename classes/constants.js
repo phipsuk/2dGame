@@ -12,4 +12,10 @@ module.exports.TRIGGER = Math.pow(2,6);
 module.exports.SCREEN = {
 	WIDTH: 1920,
 	HEIGHT: 1080
-}
+};
+module.exports.COLOURS = {
+	BLUE: "#53B9FF",
+	RED: "#FF654B",
+	WHITE: "#FFF9EE"
+};
+module.exports.FONT = "Exo";
