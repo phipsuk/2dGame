@@ -3,10 +3,12 @@ function Player(stage, Team, id, name){
 
 	var playerColour = Team == "Red" ? COLOURS.RED : COLOURS.BLUE;
 
+	var SCALE = 0.5;
+
 	graphics.position.x = 0;
 	graphics.position.y = 0;
-	graphics.scale.x = 0.5;
-	graphics.scale.y = 0.5;
+	graphics.scale.x = SCALE;
+	graphics.scale.y = SCALE;
 
 	var nameText = new PIXI.Text(name, {font:"10px " + FONT, fill:playerColour});
 
@@ -37,11 +39,11 @@ function Player(stage, Team, id, name){
 			this.pressed[event.keyCode] = true;
 			if(this.isDown(this.LEFT)){
 				this.facing = this.FACELEFT;
-				this.graphics.scale.x = 0.5;
+				this.graphics.scale.x = SCALE;
 				this.graphics.anchor.x = 0;
 			}else if(this.isDown(this.RIGHT)){
 				this.facing = this.FACERIGHT;
-				this.graphics.scale.x = -0.5;
+				this.graphics.scale.x = -SCALE;
 				this.graphics.anchor.x = 1;
 			}
 		},
@@ -55,8 +57,8 @@ function Player(stage, Team, id, name){
 			}else{
 				nameText.text = this.name;
 			}
-			this.graphics.position.x = x;
-			this.graphics.position.y = coordinateConverter(y, SCREEN.HEIGHT - this.graphics.height);
+			this.graphics.position.x = x - (this.graphics.width/2) + 4.8;
+			this.graphics.position.y = coordinateConverter(y, SCREEN.HEIGHT - (this.graphics.height/2) - 4.8);
 			if(this.graphics.position.x + nameText.width > SCREEN.WIDTH - 80){
 				nameText.position.x = x - nameText.width - 5;
 			}else{
@@ -82,8 +84,8 @@ function Player(stage, Team, id, name){
 
 				this.graphics.position.x = 0;
 				this.graphics.position.y = 0;
-				this.graphics.scale.x = 0.1;
-				this.graphics.scale.y = 0.1;
+				this.graphics.scale.x = SCALE;
+				this.graphics.scale.y = SCALE;
 
 				this.avatarLocation = avatar;
 				stage.addChild(this.graphics);
