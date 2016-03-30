@@ -8,7 +8,7 @@ function Player(stage, Team, id, name){
 	graphics.scale.x = 0.1;
 	graphics.scale.y = 0.1;
 
-	var nameText = new PIXI.Text(name, {font:"10px Arial", fill:playerColour});
+	var nameText = new PIXI.Text(name, {font:"10px Exo", fill:playerColour});
 
 	var player = {
 		ID:ClientID,
