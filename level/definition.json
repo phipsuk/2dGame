@@ -24,8 +24,8 @@
 		}
 	},
 	"playerAvatars":{
-		"Red": "wall.png",
-		"Blue": "wall.png"
+		"Red": "red.png",
+		"Blue": "blue.png"
 	},
 	"entities": [
 		{

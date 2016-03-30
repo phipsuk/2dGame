@@ -5,8 +5,8 @@ function Player(stage, Team, id, name){
 
 	graphics.position.x = 0;
 	graphics.position.y = 0;
-	graphics.scale.x = 0.1;
-	graphics.scale.y = 0.1;
+	graphics.scale.x = 0.5;
+	graphics.scale.y = 0.5;
 
 	var nameText = new PIXI.Text(name, {font:"10px " + FONT, fill:playerColour});
 
@@ -37,11 +37,11 @@ function Player(stage, Team, id, name){
 			this.pressed[event.keyCode] = true;
 			if(this.isDown(this.LEFT)){
 				this.facing = this.FACELEFT;
-				this.graphics.scale.x = 0.1;
+				this.graphics.scale.x = 0.5;
 				this.graphics.anchor.x = 0;
 			}else if(this.isDown(this.RIGHT)){
 				this.facing = this.FACERIGHT;
-				this.graphics.scale.x = -0.1;
+				this.graphics.scale.x = -0.5;
 				this.graphics.anchor.x = 1;
 			}
 		},
