@@ -17,4 +17,5 @@ module.exports.COLOURS = {
 	BLUE: "#53B9FF",
 	RED: "#FF654B",
 	WHITE: "#FFF9EE"
-}
+};
+module.exports.FONT = "Exo";
