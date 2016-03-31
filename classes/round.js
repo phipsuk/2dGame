@@ -288,7 +288,7 @@ class Round{
 
 			if(player.isPressed(mouseButtons.LEFT) && player.bulletFired === false){
 				var angle = player.mousePressed[mouseButtons.LEFT].angle;
-				var bullet = new Bullet(this.currentLevel.getEntityID(), player.physicsBody.position[0]+-Math.cos(angle) * 10, player.physicsBody.position[1]+Math.sin(angle) * 10, 200, angle, 3000);
+				var bullet = new Bullet(this.currentLevel.getEntityID(), player.physicsBody.position[0]+-Math.cos(angle) * 20, player.physicsBody.position[1]+Math.sin(angle) * 20, 200, angle, 3000);
 				this.world.addBody(bullet.physicsBody);
 				bullet.physicsBody.owner = player;
 				player.bullets.push(bullet);
