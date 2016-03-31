@@ -5,7 +5,7 @@ class Flag{
 	constructor(x, y, team){
 		this.body = new p2.Body({
 						mass:0,
-						position: [x,0]
+						position: [x,y]
 					});
 		var bodyShape = new p2.Box({
 						width:15,
