@@ -19,18 +19,20 @@ class Level{
 		for (var i = this.entities.dynamic.length - 1; i >= 0; i--) {
 			var entity = this.entities.dynamic[i];
 			entity.update();
-			updateInfo.entities.push({
-				ID:entity.ID,
-				position:{
-					x:entity.physicsBody.position[0],
-					y:entity.physicsBody.position[1]
-				},
-				rotation: entity.physicsBody.angle,
-				type:entity.type,
-				nonTileable: entity.nonTileable,
-				shape: entity.shape,
-				shapeOptions: entity.shapeOptions
-			});
+			if(!entity.hidden){
+				updateInfo.entities.push({
+					ID:entity.ID,
+					position:{
+						x:entity.physicsBody.position[0],
+						y:entity.physicsBody.position[1]
+					},
+					rotation: entity.physicsBody.angle,
+					type:entity.type,
+					nonTileable: entity.nonTileable,
+					shape: entity.shape,
+					shapeOptions: entity.shapeOptions
+				});
+			}
 		};
 		return updateInfo;
 	};
@@ -42,16 +44,18 @@ class Level{
 		};
 		for (var i = this.entities.static.length - 1; i >= 0; i--) {
 			var entity = this.entities.static[i];
-			updateInfo.entities.push({
-				ID:entity.ID,
-				position:{
-					x:entity.physicsBody.position[0],
-					y:entity.physicsBody.position[1]
-				},
-				type:entity.type,
-				shape: entity.shape,
-				shapeOptions: entity.shapeOptions,
-			});
+			if(!entity.hidden){
+				updateInfo.entities.push({
+					ID:entity.ID,
+					position:{
+						x:entity.physicsBody.position[0],
+						y:entity.physicsBody.position[1]
+					},
+					type:entity.type,
+					shape: entity.shape,
+					shapeOptions: entity.shapeOptions,
+				});
+			}
 		};
 		return updateInfo;
 	};
@@ -86,7 +90,8 @@ class Level{
 					key: levelEntity.key,
 					type: levelEntity.type,
 					shape: levelEntity.shape,
-					shapeOptions: levelEntity.shapeOptions
+					shapeOptions: levelEntity.shapeOptions,
+					hidden: levelEntity.hidden
 				});
 			}else if(levelEntity.type === "floor"){
 				shape.collisionGroup = constants.GROUND;
@@ -97,7 +102,8 @@ class Level{
 					key: levelEntity.key,
 					type: levelEntity.type,
 					shape: levelEntity.shape,
-					shapeOptions: levelEntity.shapeOptions
+					shapeOptions: levelEntity.shapeOptions,
+					hidden: levelEntity.hidden
 				});
 			}else if(levelEntity.type === "slider"){
 				shape.collisionGroup = constants.GROUND;
