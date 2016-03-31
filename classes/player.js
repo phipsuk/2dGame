@@ -82,8 +82,8 @@ var createPlayerBody = function(x,y){
 	});
 
 	var playerShape = new p2.Box({
-		width:10,
-		height:10
+		width:20,
+		height:20
 	});
 
 	playerShape.collisionGroup = constants.PLAYER;

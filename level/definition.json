@@ -2,8 +2,8 @@
 	"css":"canvas {cursor: none;background-image: url(\"/images/grass.png\"), url(\"/images/sky2.png\");background-repeat: repeat-x, no-repeat;background-size: 100px auto, auto;background-position: bottom left, top left;}",
 	"playerSpawns":{
 		"red":{
-			"x": 50,
-			"y": 70
+			"x": 600,
+			"y": 300
 		},
 		"blue":{
 			"x": 750,
@@ -29,16 +29,17 @@
 	},
 	"entities": [
 		{
-			"type": "wall",
+			"type": "floor",
 			"mass": 0,
+			"hidden": true,
 			"shape": "Box",
 			"shapeOptions":{
-					"height": 50,
-					"width": 15
+					"height": 30,
+					"width": 830
 				},
 			"position": {
-				"x": 400,
-				"y": 20
+				"x": 955,
+				"y": 293
 			}
 		},
 		{
