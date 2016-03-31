@@ -6,7 +6,7 @@
 			"y": 300
 		},
 		"blue":{
-			"x": 900,
+			"x": 1300,
 			"y": 300
 		}
 	},
@@ -170,32 +170,6 @@
 			"position": {
 				"x": 1200,
 				"y": 350
-			}
-		},
-		{
-			"type": "wall",
-			"mass": 0,
-			"shape": "Box",
-			"shapeOptions":{
-					"height": 15,
-					"width": 5
-				},
-			"position": {
-				"x": 123,
-				"y": 330
-			}
-		},
-		{
-			"type": "wall",
-			"mass": 0,
-			"shape": "Box",
-			"shapeOptions":{
-					"height": 15,
-					"width": 5
-				},
-			"position": {
-				"x": 1170,
-				"y": 330
 			}
 		},
 		{
