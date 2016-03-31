@@ -96,7 +96,8 @@ class Round{
 		}
 		if((shapeA.collisionGroup == constants.BULLET || shapeB.collisionGroup == constants.BULLET) && (shapeA.body.health || shapeB.body.health)){
 			var destructableShape = shapeA.body.health ? shapeA.body : shapeB.body;
-			destructableShape.health--;
+			var bullet = shapeA.collisionGroup == constants.BULLET ? shapeA.body :shapeB.body;
+			destructableShape.health -= bullet.damage;
 			if(destructableShape.health == 0){
 				destructableShape.owner.die();
 			}
@@ -105,8 +106,6 @@ class Round{
 			var player = this.findPlayer(this.clients, shapeA.collisionGroup == constants.PLAYER ? shapeA.body :shapeB.body);
 			var bullet = shapeA.collisionGroup == constants.BULLET ? shapeA.body :shapeB.body;
 			if(player && !player.isHit){
-				this.feed.playerKilled(player, bullet);
-				player.isHit = true;
 				if(player.hasFlag){
 					player.hasFlag = false;
 					if(player.Team == "Red"){
@@ -117,7 +116,13 @@ class Round{
 						this.notifyFlagCapture("Blue");
 					}
 				}
-				player.die(this.currentLevel.definition.settings.spawnTime, this.world);
+				player.health -= bullet.damage;
+				if(player.isDead()){
+					this.feed.playerKilled(player, bullet);
+				}
+				this.world.removeBody(bullet);
+				this.notifyBulletRemoved(bullet.ID);
+				bullet.active = false;
 			}
 		}else{
 			var player = this.findPlayer(this.clients, shapeB.body)
@@ -190,7 +195,9 @@ class Round{
 					},
 					hasFlag: this.clients[i].hasFlag,
 					rotation:this.clients[i].physicsBody.angle,
-					avatar: this.currentLevel.definition.playerAvatars[this.clients[i].Team]
+					avatar: this.currentLevel.definition.playerAvatars[this.clients[i].Team],
+					health: this.clients[i].health,
+					o2: this.clients[i].o2
 				},
 				Score: this.score,
 				Name: this.clients[i].name,
@@ -294,11 +301,13 @@ class Round{
 				player.bullets.push(bullet);
 				player.bulletFired = true;
 				setTimeout(() => {
-					player.bullets = player.bullets.filter(function(index) {
-						return index !== bullet;
-					});
-					this.world.removeBody(bullet.physicsBody);
-					this.notifyBulletRemoved(bullet.ID);
+					if(bullet.physicsBody.active){
+						player.bullets = player.bullets.filter(function(index) {
+							return index !== bullet;
+						});
+						this.world.removeBody(bullet.physicsBody);
+						this.notifyBulletRemoved(bullet.ID);
+					}
 				}, bullet.range);
 			}else if(!player.isPressed(mouseButtons.LEFT)){
 				if(player.reloading === false){
@@ -315,11 +324,12 @@ class Round{
 	getBulletPositions(bullets){
 		var bulletPositions = [];
 		for (var i = bullets.length - 1; i >= 0; i--) {
-			bulletPositions.push({
-				id: bullets[i].ID,
-				x: bullets[i].physicsBody.position[0],
-				y: bullets[i].physicsBody.position[1]
-			})
+			if(bullets[i].physicsBody.active)
+				bulletPositions.push({
+					id: bullets[i].ID,
+					x: bullets[i].physicsBody.position[0],
+					y: bullets[i].physicsBody.position[1]
+				})
 		};
 
 		return bulletPositions;

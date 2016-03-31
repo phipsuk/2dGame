@@ -73,6 +73,10 @@ class Player{
 			}
 		}
 	}
+
+	isDead(){
+		return this.health <= 0;
+	}
 }
 
 var createPlayerBody = function(x,y){

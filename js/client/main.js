@@ -87,12 +87,13 @@ function onConnected(){
 				player.update(serverUpdate[i].Data.position.x, -serverUpdate[i].Data.position.y, serverUpdate[i].Dead, serverUpdate[i].Name);
 				player.setAvatar(serverUpdate[i].Data.avatar, stage);
 				if(serverUpdate[i].Data.hasFlag){
-						if(player.team == "Blue"){
-							RedFlag.setPosition(player.graphics.position.x, player.graphics.position.y - RedFlag.graphics.height/2);
-						}else{
-							BlueFlag.setPosition(player.graphics.position.x, player.graphics.position.y - BlueFlag.graphics.height/2);
-						}
+					if(player.team == "Blue"){
+						RedFlag.setPosition(player.graphics.position.x, player.graphics.position.y - RedFlag.graphics.height/2);
+					}else{
+						BlueFlag.setPosition(player.graphics.position.x, player.graphics.position.y - BlueFlag.graphics.height/2);
 					}
+				}
+				updateHealthBars(serverUpdate[i].Data.o2, serverUpdate[i].Data.health);
 			}else{
 				if(players[serverUpdate[i].ID]){
 					players[serverUpdate[i].ID].update(serverUpdate[i].Data.position.x, -serverUpdate[i].Data.position.y, serverUpdate[i].Dead, serverUpdate[i].Name);
@@ -112,7 +113,7 @@ function onConnected(){
 	});
 
 	socket.on("roundComplete", function(data){
-		var winText = new PIXI.Text("", {font:"50px " + FONT, fill:"black"});
+		var winText = new PIXI.Text("", {font:"50px " + FONT, fill:COLOURS.WHITE});
 		winText.position.x = (SCREEN.WIDTH/2) - 100;
 		winText.position.y = 200;
 		if(data == "Red"){

@@ -89,7 +89,45 @@
                 width:100%;
                 padding-bottom: 100px;
             }
+
+            #playerStats{
+                color:#FFF9EE;
+                position: absolute;
+                top: 80px;
+                text-align: center;
+                width: 100%;
+            }
+
+            #playerStats label{
+                display: block;
+                font-size: 8pt;
+                margin: 0;
+            }
+
+            meter {
+                width: 100px;
+                height: 10px;
+                -webkit-appearance: none; /* Reset appearance */
+                border: 1px solid #ccc;
+                border-radius: 1px;
+            }
+
+            meter::-webkit-meter-bar {
+                background: none; /* Required to get rid of the default background property */
+                background-color: whiteSmoke;
+            }
             
+            meter::-webkit-meter-optimum-value {
+                background: #28A605;
+            }
+
+            meter::-webkit-meter-suboptimum-value{
+                background: #F2A007;
+            }
+
+            meter::-webkit-meter-even-less-good-value{
+                background: #A60A0A;
+            }
 		</style>
         <link href='https://fonts.googleapis.com/css?family=Exo:200' rel='stylesheet' type='text/css'>
         <style type="text/css" id="levelcss"></style>
@@ -103,6 +141,12 @@
                 <div id="game">
             	</div>
             </div>
+        </div>
+        <div id="playerStats">
+            <label for="health">Health</label>
+            <meter id="health" min=0 max=100 low=25 high=50 optimum=75></meter>
+            <label for="o2">Oxygen</label>
+            <meter id="o2" min=0 max=100 low=25 high=50 optimum=75></meter>
         </div>
         <div id="feed">
         	

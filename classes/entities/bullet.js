@@ -11,6 +11,11 @@ class Bullet{
 			velocity: [-Math.cos(angle) * speed, Math.sin(angle) * speed]
 		})
 
+		this.physicsBody.damage = 15;
+		this.physicsBody.active = true;
+		this.physicsBody.ID = id;
+		this.physicsBody.owner = this;
+
 		var shape = new p2.Circle({ radius: 1 });
 
 		shape.collisionGroup = constants.BULLET;
