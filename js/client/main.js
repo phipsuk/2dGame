@@ -42,21 +42,9 @@ function onConnected(){
 	var blueTeamScoreCount = 0;
 	var redTeamScoreCount = 0;
 
-	var blueTeamScore = new PIXI.Text("0", {font:"50px " + FONT, fill:COLOURS.BLUE});
-	var redTeamScore = new PIXI.Text("0", {font:"50px " + FONT, fill:COLOURS.RED});
-	blueTeamScore.position.x = 50;
-	redTeamScore.position.x = SCREEN.WIDTH - 50;
-
-	var roundTime = new PIXI.Text("-- : --", {font:"50px " + FONT, fill:COLOURS.WHITE});
-	roundTime.position.x = SCREEN.WIDTH/2 - 70;
-
 	// create the root of the scene graph
 	var stage = new PIXI.Container();
 	var level = new Level(stage);
-	
-	stage.addChild(blueTeamScore);
-	stage.addChild(redTeamScore);
-	stage.addChild(roundTime);
 
 	var RedFlag = Flag("Red", 10, 570);
 	var BlueFlag = Flag("Blue", 765, 570);
@@ -78,9 +66,8 @@ function onConnected(){
 
 	socket.on("update", function(serverUpdate){
 		var score = serverUpdate[0].Score;
-		blueTeamScore.text = score.blue;
-		redTeamScore.text = score.red;
-		roundTime.text = serverUpdate[0].TimeRemaining;
+		updateScores(score.blue, score.red);
+		updateTimeRemaining(serverUpdate[0].TimeRemaining);
 		for (var i = serverUpdate.length - 1; i >= 0; i--) {
 			updateBulletPositions(serverUpdate[i].Bullets);
 			if(serverUpdate[i].ID == ClientID){
