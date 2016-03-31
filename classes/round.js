@@ -190,7 +190,9 @@ class Round{
 					},
 					hasFlag: this.clients[i].hasFlag,
 					rotation:this.clients[i].physicsBody.angle,
-					avatar: this.currentLevel.definition.playerAvatars[this.clients[i].Team]
+					avatar: this.currentLevel.definition.playerAvatars[this.clients[i].Team],
+					health: this.clients[i].health,
+					o2: this.clients[i].o2
 				},
 				Score: this.score,
 				Name: this.clients[i].name,
