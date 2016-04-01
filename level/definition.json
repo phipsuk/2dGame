@@ -353,12 +353,12 @@
 			"interval": 1000,
 			"shape": "Box",
 			"shapeOptions":{
-					"height": 300,
-					"width": 500
+					"height": 500,
+					"width": 750
 				},
 			"position": {
-				"x": 1180,
-				"y": 352
+				"x": 950,
+				"y": 300
 			},
 			"effects":[
 				{
