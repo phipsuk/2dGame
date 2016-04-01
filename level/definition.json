@@ -367,6 +367,23 @@
 					"effect": 20
 				}
 			]
+		},
+		{
+			"type": "zone",
+			"mass": 0,
+			"interval": 1000,
+			"shape": "Plane",
+			"position": {
+				"x": 0,
+				"y": 0
+			},
+			"effects":[
+				{
+					"interval":1,
+					"property": "health",
+					"effect": -100
+				}
+			]
 		}
 	]
 }

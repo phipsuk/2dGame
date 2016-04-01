@@ -88,7 +88,7 @@ class Player{
 			if(e.property === effect.property){
 				let computedEffect = e.effect + effect.effect;
 				if(computedEffect !== 0){
-					activeEffects.push({
+					this.effectList.push({
 						"interval": Math.min(e.interval, effect.interval),
 						"property": e.property,
 						"effect": computedEffect
