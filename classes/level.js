@@ -30,6 +30,7 @@ class Level{
 					rotation: entity.physicsBody.angle,
 					type:entity.type,
 					nonTileable: entity.nonTileable,
+					health: entity.health,
 					shape: entity.shape,
 					shapeOptions: entity.shapeOptions
 				});

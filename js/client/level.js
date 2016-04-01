@@ -2,6 +2,10 @@ function Level(stage){
 	var self = this;
 	var Entities = {};
 
+	self.particles = {
+			explosion: {}
+		};
+
 	self.update = function(data){
 		if(data && data.definition && data.definition.css){
 			$("#levelcss").text(data.definition.css);
@@ -9,9 +13,24 @@ function Level(stage){
 		for (var i = data.entities.length - 1; i >= 0; i--) {
 			var entity = data.entities[i];
 			if(Entities[entity.ID]){
-				Entities[entity.ID].position.x = entity.position.x + 5;
-				Entities[entity.ID].position.y = -entity.position.y + SCREEN.HEIGHT - 5;
-				Entities[entity.ID].rotation = -entity.rotation;
+				if(entity.health <= 0){
+					if(this.particles.explosion[entity.ID] === null){
+						this.particles.explosion[entity.ID] = new ExplosionParticles(stage, "small");
+						stage.removeChild(Entities[entity.ID]);
+					}
+				}else{
+					if(this.particles.explosion[entity.ID] !== null){
+						stage.addChild(Entities[entity.ID]);
+					}
+					this.particles.explosion[entity.ID] = null
+					Entities[entity.ID].position.x = entity.position.x + 5;
+					Entities[entity.ID].position.y = -entity.position.y + SCREEN.HEIGHT - 5;
+					Entities[entity.ID].rotation = -entity.rotation;
+				}
+				if(this.particles.explosion[entity.ID]){
+					this.particles.explosion[entity.ID].update(Entities[entity.ID].position.x, Entities[entity.ID].position.y);
+				}
+
 			}else{
 				if(entity.shape == "Box"){
 					if(!entity.type){
