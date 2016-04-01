@@ -50,6 +50,7 @@ class Player{
 		this.o2 = 100;
 		this.health = 100;
 		this.setPosition(this.spawn.x, this.spawn.y);
+		this.effectList = [];
 	}
 
 	die(spawnTime, world){

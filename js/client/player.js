@@ -54,8 +54,12 @@ function Player(stage, Team, id, name){
 			self.name = name;
 			if(dead){
 				nameText.text = "DEAD";
+				this.graphics.scale.y = -SCALE;
+				this.graphics.anchor.y = 1;
 			}else{
 				nameText.text = this.name;
+				this.graphics.scale.y = SCALE;
+				this.graphics.anchor.y = 0;
 			}
 			this.graphics.position.x = x - (this.graphics.width/2) + 4.8;
 			this.graphics.position.y = coordinateConverter(y, SCREEN.HEIGHT - (this.graphics.height/2) - 8.4);
