@@ -25,7 +25,7 @@ class Zone{
 	}
 
 	deactivate(player){
-		if(this.effects){
+		if(this.effects && player){
 			for (var i = 0; i < this.effects.length; i++) {
 				let effect = this.effects[i];
 				player.removeEffect(effect);
