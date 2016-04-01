@@ -13,6 +13,13 @@
 	"settings":{
 		"spawnTime": 5000
 	},
+	"effects":[
+		{
+			"interval": 1000,
+			"property": "o2",
+			"effect": -10
+		}
+	],
 	"flags":{
 		"red": {
 			"x": 570,
@@ -339,6 +346,27 @@
 				"x": 1180,
 				"y": 352
 			}
+		},
+		{
+			"type": "zone",
+			"mass": 0,
+			"interval": 1000,
+			"shape": "Box",
+			"shapeOptions":{
+					"height": 300,
+					"width": 500
+				},
+			"position": {
+				"x": 1180,
+				"y": 352
+			},
+			"effects":[
+				{
+					"interval":1000,
+					"property": "o2",
+					"effect": 20
+				}
+			]
 		}
 	]
 }

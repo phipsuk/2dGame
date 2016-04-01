@@ -4,6 +4,7 @@ const p2 = require('p2');
 const constants = require("./constants.js");
 const Slider = require("./entities/slider.js");
 const Crate = require("./entities/crate.js");
+const Zone = require("./entities/zone.js");
 
 class Level{
 	constructor(name, world){
@@ -62,6 +63,10 @@ class Level{
 
 	getEntityID(){
 		return this.entityID++;
+	}
+
+	getEffects(){
+		return this.definition.effects;
 	}
 
 	loadLevelEntities(name, world){
@@ -151,8 +156,9 @@ class Level{
 				body.owner = entity;
 				levelEntities.static.push(entity);
 			}else if(levelEntity.type === "zone"){
-				shape.collisionGroup = constants.TRIGGER;
+				shape.collisionGroup = constants.ZONE;
 				shape.collisionMask = constants.PLAYER;
+				shape.sensor = true;
 				levelEntities.static.push(new Zone(this.getEntityID, levelEntity, body, world));
 			}
 			world.addBody(body);

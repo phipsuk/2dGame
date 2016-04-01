@@ -8,22 +8,27 @@ class Zone{
 			this[prop]=levelEntity[prop];
 		}
 		this.physicsBody.mass = 0; //Zones are static
-		this.lastActivated = null;
-		if(!this.interval){
-			this.interval = 1000;
-		}
+		this.physicsBody.owner = this;
 	}
 
 	update(){
 
 	}
 
-	trigger(player){
-		if(this.lastActivated === null || this.lastActivated + this.interval < Date.now()){
-			this.lastActivated = Date.now();
+	activate(player){
+		if(this.effects){
 			for (var i = 0; i < this.effects.length; i++) {
 				let effect = this.effects[i];
-				
+				player.addEffect(effect);
+			}
+		}
+	}
+
+	deactivate(player){
+		if(this.effects){
+			for (var i = 0; i < this.effects.length; i++) {
+				let effect = this.effects[i];
+				player.removeEffect(effect);
 			}
 		}
 	}

@@ -9,6 +9,7 @@ module.exports.GROUND = Math.pow(2,3);
 module.exports.OTHER = Math.pow(2,4);
 module.exports.BULLET = Math.pow(2,5);
 module.exports.TRIGGER = Math.pow(2,6);
+module.exports.ZONE = Math.pow(2,7);
 module.exports.SCREEN = {
 	WIDTH: 1920,
 	HEIGHT: 1080
