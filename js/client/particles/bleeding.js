@@ -56,19 +56,27 @@ function BleedingParticles(stage, infinite){
 	}
 
 	var elapsed = Date.now();
+	var dead = false;
+
+	self.cleanup = function(){
+		dead = true;
+		self.emitter.cleanup();
+		self.emitter.destroy();
+	}
 
 	self.update = function(x,y){
+		if(dead === false){
+			self.emitter.updateSpawnPos(x,y);
 
-		self.emitter.updateSpawnPos(x,y);
+			var now = Date.now();
+			if(infinite){
+				self.emitter.emit = true;
+			}
 
-		var now = Date.now();
-		if(infinite){
-			self.emitter.emit = true;
+			// The emitter requires the elapsed
+			// number of seconds since the last update
+			self.emitter.update((now - elapsed) * 0.001);
+			elapsed = now;
 		}
-
-		// The emitter requires the elapsed
-		// number of seconds since the last update
-		self.emitter.update((now - elapsed) * 0.001);
-		elapsed = now;
 	};
 }
