@@ -30,6 +30,45 @@
 			"y": 318
 		}
 	},
+	"powerups":[
+		{
+			"type": "health",
+			"chance": 0.5,
+			"image": "crate.png",
+			"mass": 100,
+			"effects": [
+				{
+					"property": "health",
+					"effect": 100
+				}
+			],
+			"nonTileable": true,
+			"shape": "Box",
+			"shapeOptions":{
+					"height": 20,
+					"width": 20
+				}
+		},
+		{
+			"type": "speed",
+			"chance": 0.2,
+			"image": "crate.png",
+			"mass": 100,
+			"effects": [
+				{
+					"property": "speed",
+					"effect": 100,
+					"duration": 10000
+				}
+			],
+			"nonTileable": true,
+			"shape": "Box",
+			"shapeOptions":{
+					"height": 20,
+					"width": 20
+				}
+		}
+	],
 	"playerAvatars":{
 		"Red": "red.png",
 		"Blue": "blue.png"

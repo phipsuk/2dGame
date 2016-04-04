@@ -85,22 +85,26 @@ class Player{
 	}
 
 	addEffect(effect){
-		for (var i = 0; i < this.effectList.length; i++) {
-			let e = this.effectList[i];
-			if(e.property === effect.property){
-				let computedEffect = e.effect + effect.effect;
-				if(computedEffect !== 0){
-					this.effectList.push({
-						"interval": Math.min(e.interval, effect.interval),
-						"property": e.property,
-						"effect": computedEffect,
-						"originalValue": this[e.property],
-						"type": e.type
-					});
+		if(effect.interval){
+			for (var i = 0; i < this.effectList.length; i++) {
+				let e = this.effectList[i];
+				if(e.property === effect.property){
+					let computedEffect = e.effect + effect.effect;
+					if(computedEffect !== 0){
+						this.effectList.push({
+							"interval": Math.min(e.interval, effect.interval),
+							"property": e.property,
+							"effect": computedEffect,
+							"originalValue": this[e.property],
+							"type": e.type
+						});
+					}
 				}
 			}
+			this.effectList.push(effect);
+		}else{
+			this.applyEffectDirectly(effect);
 		}
-		this.effectList.push(effect);
 	}
 
 	removeEffect(effect){
@@ -183,7 +187,7 @@ var createPlayerBody = function(x,y){
 
 	playerShape.collisionGroup = constants.PLAYER;
 
-	playerShape.collisionMask = constants.PLAYER | constants.FLAG | constants.GROUND | constants.OTHER | constants.BULLET | constants.TRIGGER | constants.ZONE;
+	playerShape.collisionMask = constants.PLAYER | constants.FLAG | constants.GROUND | constants.OTHER | constants.BULLET | constants.TRIGGER | constants.ZONE | constants.POWER;
 
 	playerBody.addShape(playerShape);
 

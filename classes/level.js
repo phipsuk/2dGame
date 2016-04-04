@@ -5,6 +5,7 @@ const constants = require("./constants.js");
 const Slider = require("./entities/slider.js");
 const Crate = require("./entities/crate.js");
 const Zone = require("./entities/zone.js");
+const PowerUp = require("./entities/powerup.js");
 
 class Level{
 	constructor(name, world){
@@ -27,6 +28,26 @@ class Level{
 						x:entity.physicsBody.position[0],
 						y:entity.physicsBody.position[1]
 					},
+					rotation: entity.physicsBody.angle,
+					type:entity.type,
+					nonTileable: entity.nonTileable,
+					health: entity.health,
+					shape: entity.shape,
+					shapeOptions: entity.shapeOptions
+				});
+			}
+		};
+		for (var i = this.entities.powerups.length - 1; i >= 0; i--) {
+			var entity = this.entities.powerups[i];
+			entity.update();
+			if(!entity.hidden){
+				updateInfo.entities.push({
+					ID:entity.ID,
+					position:{
+						x:entity.physicsBody.position[0],
+						y:entity.physicsBody.position[1]
+					},
+					image: entity.image,
 					rotation: entity.physicsBody.angle,
 					type:entity.type,
 					nonTileable: entity.nonTileable,
@@ -70,6 +91,20 @@ class Level{
 		return this.definition.effects;
 	}
 
+	getActivePowerUps(){
+		return this.entities.powerups;
+	}
+
+	loadPowerUps(world){
+		let powerups = [];
+		for (var i = 0; i < this.definition.powerups.length; i++) {
+			let powerup = this.definition.powerups[i];
+			powerups.push(new PowerUp(this.getEntityID(), powerup, world));
+		}
+
+		return powerups;
+	}
+
 	loadLevelEntities(name, world){
 		var levelDefinition = JSON.parse(fs.readFileSync(__dirname + "/../level/" + name + ".json", 'utf8'));
 		this.definition = levelDefinition;
@@ -77,7 +112,8 @@ class Level{
 		this.blueStart = levelDefinition.playerSpawns.blue;
 		var levelEntities = {
 			static:[],
-			dynamic:[]
+			dynamic:[],
+			powerups: []
 		};
 		for (var i = levelDefinition.entities.length - 1; i >= 0; i--) {
 			var levelEntity = levelDefinition.entities[i];
@@ -89,7 +125,7 @@ class Level{
 			body.addShape(shape);
 			if(levelEntity.type === "wall"){
 				shape.collisionGroup = constants.OTHER;
-				shape.collisionMask = constants.PLAYER | constants.GROUND | constants.BULLET | constants.OTHER;
+				shape.collisionMask = constants.PLAYER | constants.GROUND | constants.BULLET | constants.OTHER | constants.POWER;
 				levelEntities.static.push({
 					ID:this.getEntityID(),
 					physicsBody: body,
@@ -101,7 +137,7 @@ class Level{
 				});
 			}else if(levelEntity.type === "floor"){
 				shape.collisionGroup = constants.GROUND;
-				shape.collisionMask = constants.PLAYER | constants.GROUND | constants.BULLET | constants.OTHER;
+				shape.collisionMask = constants.PLAYER | constants.GROUND | constants.BULLET | constants.OTHER | constants.POWER;
 				levelEntities.static.push({
 					ID:this.getEntityID(),
 					physicsBody: body,
@@ -113,11 +149,11 @@ class Level{
 				});
 			}else if(levelEntity.type === "slider"){
 				shape.collisionGroup = constants.GROUND;
-				shape.collisionMask = constants.PLAYER | constants.GROUND | constants.BULLET | constants.OTHER;
+				shape.collisionMask = constants.PLAYER | constants.GROUND | constants.BULLET | constants.OTHER | constants.POWER;
 				levelEntities.dynamic.push(new Slider(this.getEntityID(), levelEntity, body));
 			}else if(levelEntity.type === "crate"){
 				shape.collisionGroup = constants.OTHER;
-				shape.collisionMask = constants.PLAYER | constants.GROUND | constants.BULLET | constants.OTHER;
+				shape.collisionMask = constants.PLAYER | constants.GROUND | constants.BULLET | constants.OTHER | constants.POWER;
 				if(levelEntity.health){
 					body.health = levelEntity.health;
 				}
@@ -164,6 +200,7 @@ class Level{
 			}
 			world.addBody(body);
 		};
+		levelEntities.powerups = this.loadPowerUps(world);
 		return levelEntities;
 	}
 }
