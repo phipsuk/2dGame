@@ -13,6 +13,13 @@
 	"settings":{
 		"spawnTime": 5000
 	},
+	"effects":[
+		{
+			"interval": 1000,
+			"property": "o2",
+			"effect": -10
+		}
+	],
 	"flags":{
 		"red": {
 			"x": 570,
@@ -339,6 +346,44 @@
 				"x": 1180,
 				"y": 352
 			}
+		},
+		{
+			"type": "zone",
+			"mass": 0,
+			"interval": 1000,
+			"shape": "Box",
+			"shapeOptions":{
+					"height": 500,
+					"width": 750
+				},
+			"position": {
+				"x": 950,
+				"y": 300
+			},
+			"effects":[
+				{
+					"interval":1000,
+					"property": "o2",
+					"effect": 20
+				}
+			]
+		},
+		{
+			"type": "zone",
+			"mass": 0,
+			"interval": 1000,
+			"shape": "Plane",
+			"position": {
+				"x": 0,
+				"y": 0
+			},
+			"effects":[
+				{
+					"interval":1,
+					"property": "health",
+					"effect": -100
+				}
+			]
 		}
 	]
 }

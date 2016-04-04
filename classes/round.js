@@ -34,6 +34,11 @@ class Round{
 				this.doCollisions(evt); 
 			}
 		}());
+		this.world.on("endContact", () => {
+			return (evt) => {
+				this.endCollisions(evt); 
+			}
+		}());
 		this.feed = feed;
 		this.clients = [];
 		this.teamCount = {
@@ -80,6 +85,16 @@ class Round{
 		return "Red";
 	}
 
+	endCollisions(evt){
+		var shapeA = evt.shapeA;
+		var shapeB = evt.shapeB;
+		if((shapeA.collisionGroup == constants.ZONE || shapeB.collisionGroup == constants.ZONE) && (shapeA.collisionGroup == constants.PLAYER || shapeB.collisionGroup == constants.PLAYER)){
+			var player = this.findPlayer(this.clients, shapeA.collisionGroup == constants.PLAYER ? shapeA.body :shapeB.body);
+			var zone = shapeA.body.owner ? shapeA.body.owner : shapeB.body.owner;
+			zone.deactivate(player);
+		}
+	}
+
 	doCollisions(evt){
 		var shapeA = evt.shapeA;
 		var shapeB = evt.shapeB;
@@ -88,6 +103,11 @@ class Round{
 			if(player){
 				player.jumping = false;
 			}
+		}
+		if((shapeA.collisionGroup == constants.ZONE || shapeB.collisionGroup == constants.ZONE) && (shapeA.collisionGroup == constants.PLAYER || shapeB.collisionGroup == constants.PLAYER)){
+			var player = this.findPlayer(this.clients, shapeA.collisionGroup == constants.PLAYER ? shapeA.body :shapeB.body);
+			var zone = shapeA.body.owner ? shapeA.body.owner : shapeB.body.owner;
+			zone.activate(player);
 		}
 		if((shapeA.collisionGroup == constants.TRIGGER || shapeB.collisionGroup == constants.TRIGGER) && (shapeA.collisionGroup == constants.PLAYER || shapeB.collisionGroup == constants.PLAYER)){
 			var player = this.findPlayer(this.clients, shapeA.collisionGroup == constants.PLAYER ? shapeA.body :shapeB.body);
@@ -279,6 +299,7 @@ class Round{
 
 	updatePlayer(player, update){
 		if(!player.isHit){
+			player.applyEffects(this.currentLevel.getEffects(), []);
 			player.pressed = update.pressed;
 			player.mousePressed = update.mousePressed;
 			if(player.isDown(directions.LEFT) && player.physicsBody.position[0] > 0) player.physicsBody.velocity[0] = -100;

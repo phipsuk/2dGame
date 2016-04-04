@@ -37,6 +37,11 @@ app.get('/js/pixi.js', function(req,res){
 	res.sendFile(__dirname + "/js/pixi.min.js");
 });
 
+app.get('/js/pixiparticles.js', function(req,res){
+	res.sendFile(__dirname + "/js/pixi-particles.min.js");
+});
+
+
 app.get('/js/moment.js', function(req,res){
 	res.sendFile(__dirname + "/node_modules/moment/min/moment.min.js");
 });
