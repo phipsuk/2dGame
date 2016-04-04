@@ -38,7 +38,7 @@ function Player(stage, Team, id, name){
 		lowHealth: function(){
 			var low = this.health < 25 ? true : false;
 			if(this.particles.lowHealthBlood === null && low){
-				//this.particles.lowHealthBlood = new BloodParticles(stage, true);
+				this.particles.lowHealthBlood = new BleedingParticles(stage, true);
 			}else if(this.particles.lowHealthBlood !== null && !low){
 				this.particles.lowHealthBlood = null;
 			}
@@ -111,7 +111,7 @@ function Player(stage, Team, id, name){
 				this.particles.blood.update(this.graphics.position.x + (this.graphics.width/2), this.graphics.position.y + this.graphics.height);
 			}
 			if(this.lowHealth()){
-				//this.particles.lowHealthBlood.update(this.graphics.position.x + (this.graphics.width/2), this.graphics.position.y);
+				this.particles.lowHealthBlood.update(this.graphics.position.x + (this.graphics.width/2), this.graphics.position.y + (this.graphics.height/2));
 			}
 		},
 		onMouseDown: function(event){
