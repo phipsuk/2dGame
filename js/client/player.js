@@ -85,8 +85,10 @@ function Player(stage, Team, id, name){
 				if(this.particles.blood === null){
 					this.particles.blood = new BloodParticles(stage);
 				}
-				this.particles.lowHealthBlood.emitter.cleanup();
-				this.particles.lowHealthBlood.emitter.destroy();
+				if(this.particles.lowHealthBlood && this.particles.lowHealthBlood.emitter){
+					this.particles.lowHealthBlood.emitter.cleanup();
+					this.particles.lowHealthBlood.emitter.destroy();
+				}
 				nameText.text = "DEAD";
 				this.graphics.scale.y = -SCALE;
 				this.graphics.anchor.y = 1;
