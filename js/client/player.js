@@ -30,11 +30,24 @@ function Player(stage, Team, id, name){
 		team:Team,
 		name: name,
 		hasFlag:false,
+		health: 100,
+		o2: 100,
 		nameText: nameText,
 		lastExplosionValue: false,
 		facing: Team == "Red" ? this.FACERIGHT : this.FACELEFT,
+		lowHealth: function(){
+			var low = this.health < 25 ? true : false;
+			if(this.particles.lowHealthBlood === null && low){
+				//this.particles.lowHealthBlood = new BloodParticles(stage, true);
+			}else if(this.particles.lowHealthBlood !== null && !low){
+				this.particles.lowHealthBlood = null;
+			}
+			return low;
+		},
 		particles: {
-			gibs: null
+			gibs: null,
+			blood: null,
+			lowHealthBlood: null
 		},
 		isDown: function(keyCode){
 			return this.pressed[keyCode];
@@ -54,13 +67,18 @@ function Player(stage, Team, id, name){
 		onKeyUp: function(event){
 			delete this.pressed[event.keyCode];
 		},
-		update: function(x, y, dead, name){
+		update: function(x, y, dead, name, o2, health){
 			self.name = name;
+			this.health = health;
+			this.o2 = o2;
 			if(dead){
 				if(this.particles.gibs === null){
 					this.particles.gibs = new GibsParticles(stage);
 					stage.removeChild(this.graphics);
 					stage.removeChild(nameText);
+				}
+				if(this.particles.blood === null){
+					this.particles.blood = new BloodParticles(stage);
 				}
 				nameText.text = "DEAD";
 				this.graphics.scale.y = -SCALE;
@@ -70,6 +88,9 @@ function Player(stage, Team, id, name){
 					this.particles.gibs = null;
 					stage.addChild(this.graphics);
 					stage.addChild(nameText);
+				}
+				if(this.particles.blood !== null){
+					this.particles.blood = null;
 				}
 				nameText.text = this.name;
 				this.graphics.scale.y = SCALE;
@@ -85,6 +106,12 @@ function Player(stage, Team, id, name){
 			nameText.position.y = y + SCREEN.HEIGHT - 35;
 			if(this.particles.gibs){
 				this.particles.gibs.update(this.graphics.position.x + (this.graphics.width/2), this.graphics.position.y);
+			}
+			if(this.particles.blood){
+				this.particles.blood.update(this.graphics.position.x + (this.graphics.width/2), this.graphics.position.y + this.graphics.height);
+			}
+			if(this.lowHealth()){
+				//this.particles.lowHealthBlood.update(this.graphics.position.x + (this.graphics.width/2), this.graphics.position.y);
 			}
 		},
 		onMouseDown: function(event){
