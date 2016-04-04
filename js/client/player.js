@@ -34,7 +34,7 @@ function Player(stage, Team, id, name){
 		lastExplosionValue: false,
 		facing: Team == "Red" ? this.FACERIGHT : this.FACELEFT,
 		particles: {
-			explosion: null
+			gibs: null
 		},
 		isDown: function(keyCode){
 			return this.pressed[keyCode];
@@ -57,14 +57,20 @@ function Player(stage, Team, id, name){
 		update: function(x, y, dead, name){
 			self.name = name;
 			if(dead){
-				if(this.particles.explosion === null){
-					this.particles.explosion = new ExplosionParticles(stage);
+				if(this.particles.gibs === null){
+					this.particles.gibs = new GibsParticles(stage);
+					stage.removeChild(this.graphics);
+					stage.removeChild(nameText);
 				}
 				nameText.text = "DEAD";
 				this.graphics.scale.y = -SCALE;
 				this.graphics.anchor.y = 1;
 			}else{
-				this.particles.explosion = null;
+				if(this.particles.gibs !== null){
+					this.particles.gibs = null;
+					stage.addChild(this.graphics);
+					stage.addChild(nameText);
+				}
 				nameText.text = this.name;
 				this.graphics.scale.y = SCALE;
 				this.graphics.anchor.y = 0;
@@ -77,8 +83,8 @@ function Player(stage, Team, id, name){
 				nameText.position.x = x + 5;
 			}
 			nameText.position.y = y + SCREEN.HEIGHT - 35;
-			if(this.particles.explosion){
-				this.particles.explosion.update(this.graphics.position.x + (this.graphics.width/2), this.graphics.position.y);
+			if(this.particles.gibs){
+				this.particles.gibs.update(this.graphics.position.x + (this.graphics.width/2), this.graphics.position.y);
 			}
 		},
 		onMouseDown: function(event){
