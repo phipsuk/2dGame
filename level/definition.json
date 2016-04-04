@@ -17,7 +17,7 @@
 		{
 			"interval": 1000,
 			"property": "o2",
-			"effect": -10
+			"effect": -25
 		}
 	],
 	"flags":{
@@ -364,7 +364,7 @@
 				{
 					"interval":1000,
 					"property": "o2",
-					"effect": 20
+					"effect": 50
 				}
 			]
 		},

@@ -71,7 +71,7 @@ function onConnected(){
 		for (var i = serverUpdate.length - 1; i >= 0; i--) {
 			updateBulletPositions(serverUpdate[i].Bullets);
 			if(serverUpdate[i].ID == ClientID){
-				player.update(serverUpdate[i].Data.position.x, -serverUpdate[i].Data.position.y, serverUpdate[i].Dead, serverUpdate[i].Name);
+				player.update(serverUpdate[i].Data.position.x, -serverUpdate[i].Data.position.y, serverUpdate[i].Dead, serverUpdate[i].Name, serverUpdate[i].Data.o2, serverUpdate[i].Data.health);
 				player.setAvatar(serverUpdate[i].Data.avatar, stage);
 				if(serverUpdate[i].Data.hasFlag){
 					if(player.team == "Blue"){
