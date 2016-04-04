@@ -150,6 +150,7 @@ class Round{
 		    	if(player && player.Team == "Blue" && this.flags.red.isHome()){
 		    		player.hasFlag = true;
 		    		this.flags.red.setHome(false);
+		    		this.flags.red.heldBy = player;
 		    		this.feed.gotFlag(player, this.flags.red);
 		    	}else if(player && this.flags.red.isHome()){
 		    		if(player.hasFlag){
@@ -164,6 +165,7 @@ class Round{
 		    	if(player && player.Team == "Red" && this.flags.blue.isHome()){
 		    		player.hasFlag = true;
 		    		this.flags.blue.setHome(false);
+		    		this.flags.blue.heldBy = player;
 		    		this.feed.gotFlag(player, this.flags.blue);
 		    	}else if(player && this.flags.blue.isHome()){
 		    		if(player.hasFlag){
@@ -187,8 +189,12 @@ class Round{
 		var levelInfo = this.currentLevel.levelUpdateInfo();
 		var dynamicLevelInfo = this.currentLevel.levelDynamicUpdateInfo();
 		let updateData = this.updateInfo();
+		this.resetFlags();
 		for (var i = this.clients.length - 1; i >= 0; i--) {
 			this.clients[i].update(this.currentLevel.definition.settings.spawnTime, this.world);
+			if(this.clients[i].isDead()){
+				this.resetFlag(this.clients[i]);
+			}
 			if(this.clients[i] && this.clients[i].skt){
 				this.clients[i].skt.emit("update", updateData);
 				if(this.clients[i] && this.clients[i].skt){
@@ -303,9 +309,9 @@ class Round{
 			player.pressed = update.pressed;
 			player.mousePressed = update.mousePressed;
 			if(player.isDown(directions.LEFT) && player.physicsBody.position[0] > 0) player.physicsBody.velocity[0] = -player.speed;
-			if(player.isDown(directions.RIGHT) &&  player.physicsBody.position[0] < constants.SCREEN.WIDTH) player.physicsBody.velocity[0] = this.speed;
+			if(player.isDown(directions.RIGHT) &&  player.physicsBody.position[0] < constants.SCREEN.WIDTH) player.physicsBody.velocity[0] = player.speed;
 			if((player.isDown(directions.UP) || player.isDown(directions.SPACE))  && player.physicsBody.position[1] < constants.SCREEN.HEIGHT && !player.jumping){
-				player.physicsBody.velocity[1] = this.speed;
+				player.physicsBody.velocity[1] = player.speed;
 				player.jumping = true;
 			}
 			if(player.isDown(directions.DOWN) && player.physicsBody.position[1] > 0) player.physicsBody.velocity[1] = -500;
@@ -354,6 +360,30 @@ class Round{
 		};
 
 		return bulletPositions;
+	}
+
+	resetFlag(player){
+		if(player.hasFlag){
+			player.hasFlag = false;
+			if(player.Team == "Red"){
+				this.flags.blue.setHome(true);
+				this.notifyFlagCapture("Red");
+			}else{
+				this.flags.red.setHome(true);
+				this.notifyFlagCapture("Blue");
+			}
+		}
+	}
+
+	resetFlags(){
+		if(this.flags.red.getHeldBy() === null){
+			this.flags.red.setHome(true);
+			this.notifyFlagCapture("Blue");
+		}
+		if(this.flags.blue.getHeldBy() === null){
+			this.flags.blue.setHome(true);
+			this.notifyFlagCapture("Red");
+		}
 	}
 }
 module.exports = Round;

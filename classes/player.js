@@ -93,7 +93,9 @@ class Player{
 					this.effectList.push({
 						"interval": Math.min(e.interval, effect.interval),
 						"property": e.property,
-						"effect": computedEffect
+						"effect": computedEffect,
+						"originalValue": this[e.property],
+						"type": e.type
 					});
 				}
 			}

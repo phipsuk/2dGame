@@ -22,6 +22,15 @@ class Flag{
 		this.home = true;
 
 		this.Team = team;
+
+		this.heldBy = null;
+	}
+
+	getHeldBy(){
+		if(this.heldBy !== null && this.heldBy.hasFlag === false){
+			this.heldBy = null;
+		}
+		return this.heldBy;
 	}
 
 	getBody(){
