@@ -61,7 +61,7 @@ app.get('/js/constants.js', function(req,res){
 app.use('/images', express.static(__dirname + '/images'));
 app.use('/js/client', express.static(__dirname + '/js/client'));
 
-var server = app.listen(3000, function () {
+var server = app.listen(process.env.PORT || 3000, function () {
 	var host = server.address().address;
 	var port = server.address().port;
 	console.log('Space Sheep wars at http://%s:%s', host, port);
