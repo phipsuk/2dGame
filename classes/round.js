@@ -302,10 +302,10 @@ class Round{
 			player.applyEffects(this.currentLevel.getEffects(), []);
 			player.pressed = update.pressed;
 			player.mousePressed = update.mousePressed;
-			if(player.isDown(directions.LEFT) && player.physicsBody.position[0] > 0) player.physicsBody.velocity[0] = -100;
-			if(player.isDown(directions.RIGHT) &&  player.physicsBody.position[0] < constants.SCREEN.WIDTH) player.physicsBody.velocity[0] = 100;
+			if(player.isDown(directions.LEFT) && player.physicsBody.position[0] > 0) player.physicsBody.velocity[0] = -player.speed;
+			if(player.isDown(directions.RIGHT) &&  player.physicsBody.position[0] < constants.SCREEN.WIDTH) player.physicsBody.velocity[0] = this.speed;
 			if((player.isDown(directions.UP) || player.isDown(directions.SPACE))  && player.physicsBody.position[1] < constants.SCREEN.HEIGHT && !player.jumping){
-				player.physicsBody.velocity[1] = 100;
+				player.physicsBody.velocity[1] = this.speed;
 				player.jumping = true;
 			}
 			if(player.isDown(directions.DOWN) && player.physicsBody.position[1] > 0) player.physicsBody.velocity[1] = -500;

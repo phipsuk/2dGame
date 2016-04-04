@@ -24,6 +24,7 @@ class Player{
 		this.interval = 1000;
 		this.lastAppliedEffectTimes = {};
 		this.effectList = [];
+		this.speed = 100;
 	}
 
 	isDown(keyCode){
