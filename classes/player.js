@@ -111,6 +111,12 @@ class Player{
 			this.effectList.push(effect);
 		}else{
 			this.applyEffectDirectly(effect);
+			effect.effect = -effect.effect;
+			if(effect.duration){
+				setTimeout(() => {
+					this.applyEffectDirectly(effect);
+				}, effect.duration);
+			}
 		}
 	}
 
