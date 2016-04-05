@@ -24,6 +24,7 @@ class Player{
 		this.interval = 1000;
 		this.lastAppliedEffectTimes = {};
 		this.effectList = [];
+		this.activePowerUps = [];
 		this.speed = 100;
 	}
 
@@ -91,33 +92,48 @@ class Player{
 		}
 	}
 
-	addEffect(effect){
-		if(effect.interval){
-			for (var i = 0; i < this.effectList.length; i++) {
-				let e = this.effectList[i];
-				if(e.property === effect.property){
-					let computedEffect = e.effect + effect.effect;
-					if(computedEffect !== 0){
-						this.effectList.push({
-							"interval": Math.min(e.interval, effect.interval),
-							"property": e.property,
-							"effect": computedEffect,
-							"originalValue": this[e.property],
-							"type": e.type
-						});
-					}
-				}
-			}
-			this.effectList.push(effect);
-		}else{
+	addPowerUp(effect){
+		if(!this.hasPowerUp(effect)){
 			this.applyEffectDirectly(effect);
-			effect.effect = -effect.effect;
+			this.activePowerUps.push(effect);
 			if(effect.duration){
-				setTimeout(() => {
+				effect.timer = setTimeout(() => {
+					effect.effect = -effect.effect;
 					this.applyEffectDirectly(effect);
+					effect.effect = -effect.effect;
+					this.removePowerUp(effect);
 				}, effect.duration);
 			}
 		}
+	}
+
+	hasPowerUp(effect){
+		return this.activePowerUps.indexOf(effect) === -1 ? false : true;
+	}
+
+	removePowerUp(effect){
+		this.activePowerUps = this.activePowerUps.filter((object) => {
+			return object.type !== effect.type;
+		});
+	}
+
+	addEffect(effect){
+		for (var i = 0; i < this.effectList.length; i++) {
+			let e = this.effectList[i];
+			if(e.property === effect.property){
+				let computedEffect = e.effect + effect.effect;
+				if(computedEffect !== 0){
+					this.effectList.push({
+						"interval": Math.min(e.interval, effect.interval),
+						"property": e.property,
+						"effect": computedEffect,
+						"originalValue": this[e.property],
+						"type": e.type
+					});
+				}
+			}
+		}
+		this.effectList.push(effect);
 	}
 
 	removeEffect(effect){

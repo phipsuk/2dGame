@@ -54,7 +54,7 @@ class PowerUp{
 		if(this.effects){
 			for (var i = 0; i < this.effects.length; i++) {
 				let effect = this.effects[i];
-				player.addEffect(effect);
+				player.addPowerUp(effect);
 			}
 		}
 		this.die();
