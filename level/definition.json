@@ -89,6 +89,7 @@
 			}
 		},
 		{
+            "name": "middleBottom",
 			"type": "floor",
 			"mass": 0,
 			"shape": "Box",
@@ -102,6 +103,7 @@
 			}
 		},
 		{
+            "name": "middleTop",
 			"type": "floor",
 			"mass": 0,
 			"shape": "Box",
@@ -115,6 +117,7 @@
 			}
 		},
 		{
+            "name": "leftFlag",
 			"type": "floor",
 			"mass": 0,
 			"shape": "Box",
@@ -123,11 +126,12 @@
 					"width": 60
 				},
 			"position": {
-				"x": 525,
+				"x": 600,
 				"y": 370
 			}
 		},
 		{
+            "name": "leftFlagWall",
 			"type": "wall",
 			"mass": 0,
 			"shape": "Box",
@@ -136,7 +140,7 @@
 					"width": 5
 				},
 			"position": {
-				"x": 562,
+				"x": 650,
 				"y": 370
 			}
 		},
@@ -193,6 +197,7 @@
 			}
 		},
 		{
+            "name": "leftFlagRight",
 			"type": "floor",
 			"mass": 0,
 			"shape": "Box",
@@ -201,7 +206,7 @@
 					"width": 50
 				},
 			"position": {
-				"x": 593,
+				"x": 675,
 				"y": 350
 			}
 		},
@@ -219,32 +224,35 @@
 			}
 		},
 		{
+            "name": "cloudPlatformLeft",
 			"type": "floor",
 			"mass": 0,
 			"shape": "Box",
 			"shapeOptions":{
 					"height": 5,
-					"width": 50
+					"width": 66
 				},
 			"position": {
-				"x": 600,
-				"y": 820
+				"x": 705,
+				"y": 734
 			}
 		},
 		{
-			"type": "floor",
+			"name": "cloudPlatformRight",
+            "type": "floor",
 			"mass": 0,
 			"shape": "Box",
 			"shapeOptions":{
 					"height": 5,
-					"width": 50
+					"width": 54
 				},
 			"position": {
-				"x": 1200,
-				"y": 820
+				"x": 1238,
+				"y": 697
 			}
 		},
 		{
+            "name": "cloudPlatformSlider",
 			"type": "slider",
 			"mass": 0,
 			"shape": "Box",
@@ -253,22 +261,23 @@
 					"width": 60
 				},
 			"position": {
-				"x": 650,
-				"y": 820
+				"x": 750,
+				"y": 720
 			},
 			"startPosition": {
-				"x": 650,
+				"x": 750,
 				"y": 820
 			},
 			"endPosition":{
 				"x": 1150,
-				"y": 820
+				"y": 720
 			},
 			"repeat": true,
 			"speedX": 20,
 			"speedY": 0
 		},
 		{
+             "name": "cloudPlatformSliderLeft",
 			"type": "slider",
 			"mass": 0,
 			"shape": "Box",
@@ -277,22 +286,23 @@
 					"width": 3
 				},
 			"position": {
-				"x": 620,
-				"y": 828
+				"x": 720,
+				"y": 728
 			},
 			"startPosition": {
-				"x": 620,
-				"y": 828
+				"x": 720,
+				"y": 728
 			},
 			"endPosition":{
 				"x": 1120,
-				"y": 828
+				"y": 728
 			},
 			"repeat": true,
 			"speedX": 20,
 			"speedY": 0
 		},
 		{
+            "name": "cloudPlatformSliderRight",
 			"type": "slider",
 			"mass": 0,
 			"shape": "Box",
@@ -301,16 +311,16 @@
 					"width": 3
 				},
 			"position": {
-				"x": 680,
-				"y": 828
+				"x": 780,
+				"y": 728
 			},
 			"startPosition": {
-				"x": 680,
-				"y": 828
+				"x": 780,
+				"y": 728
 			},
 			"endPosition":{
 				"x": 1180,
-				"y": 828
+				"y": 728
 			},
 			"repeat": true,
 			"speedX": 20,
