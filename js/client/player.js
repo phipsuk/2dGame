@@ -145,7 +145,7 @@ function Player(stage, Team, id, name){
 						particle.emitter.cleanup();
 						particle.emitter.destroy();
 						setTimeout(function(){
-							self.powerupParticles[key] = null;
+							delete self.powerupParticles[key];
 						}, 100);
 					}
 					if(particle instanceof DustParticles){
