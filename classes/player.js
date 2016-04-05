@@ -71,6 +71,13 @@ class Player{
 		if(this.o2 > 100){
 			this.o2 = 100;
 		}
+
+		if(this.health < 0){
+			this.health = 0;
+		}
+		if(this.o2 < 0){
+			this.o2 = 0;
+		}
 		if(!this.isHit){
 			if(this.health <= 0){
 				this.die(spawnTime, world);
