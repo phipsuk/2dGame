@@ -219,6 +219,7 @@ class Round{
 	updateInfo(){
 		var clientInfo = [];
 		for (var i = this.clients.length - 1; i >= 0; i--) {
+			this.clients[i].update(this.currentLevel.definition.settings.spawnTime, this.world);
 			clientInfo.push({
 				ID: this.clients[i].ID,
 				Team: this.clients[i].Team,
