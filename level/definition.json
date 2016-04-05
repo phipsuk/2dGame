@@ -54,11 +54,11 @@
 			"chance": 0.2,
 			"image": "crate.png",
 			"mass": 100,
+			"duration": 10000,
 			"effects": [
 				{
 					"property": "speed",
-					"effect": 100,
-					"duration": 10000
+					"effect": 100
 				}
 			],
 			"nonTileable": true,

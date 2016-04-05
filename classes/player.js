@@ -24,6 +24,7 @@ class Player{
 		this.interval = 1000;
 		this.lastAppliedEffectTimes = {};
 		this.effectList = [];
+		this.activePowerUps = [];
 		this.speed = 100;
 	}
 
@@ -71,6 +72,13 @@ class Player{
 		if(this.o2 > 100){
 			this.o2 = 100;
 		}
+
+		if(this.health < 0){
+			this.health = 0;
+		}
+		if(this.o2 < 0){
+			this.o2 = 0;
+		}
 		if(!this.isHit){
 			if(this.health <= 0){
 				this.die(spawnTime, world);
@@ -84,27 +92,54 @@ class Player{
 		}
 	}
 
-	addEffect(effect){
-		if(effect.interval){
-			for (var i = 0; i < this.effectList.length; i++) {
-				let e = this.effectList[i];
-				if(e.property === effect.property){
-					let computedEffect = e.effect + effect.effect;
-					if(computedEffect !== 0){
-						this.effectList.push({
-							"interval": Math.min(e.interval, effect.interval),
-							"property": e.property,
-							"effect": computedEffect,
-							"originalValue": this[e.property],
-							"type": e.type
-						});
+	addPowerUp(powerup){
+		if(!this.hasPowerUp(powerup.type)){
+			this.activePowerUps.push(powerup.type);
+			
+			if(powerup.effects){
+				for (var i = 0; i < powerup.effects.length; i++) {
+					let effect = powerup.effects[i];
+					this.applyEffectDirectly(effect);
+					if(powerup.duration){
+						effect.timer = setTimeout(() => {
+							effect.effect = -effect.effect;
+							this.applyEffectDirectly(effect);
+							effect.effect = -effect.effect;
+							this.removePowerUp(powerup.type);
+						}, powerup.duration);
 					}
 				}
 			}
-			this.effectList.push(effect);
-		}else{
-			this.applyEffectDirectly(effect);
 		}
+	}
+
+	hasPowerUp(effect){
+		return this.activePowerUps.indexOf(effect) === -1 ? false : true;
+	}
+
+	removePowerUp(effect){
+		this.activePowerUps = this.activePowerUps.filter((object) => {
+			return object !== effect;
+		});
+	}
+
+	addEffect(effect){
+		for (var i = 0; i < this.effectList.length; i++) {
+			let e = this.effectList[i];
+			if(e.property === effect.property){
+				let computedEffect = e.effect + effect.effect;
+				if(computedEffect !== 0){
+					this.effectList.push({
+						"interval": Math.min(e.interval, effect.interval),
+						"property": e.property,
+						"effect": computedEffect,
+						"originalValue": this[e.property],
+						"type": e.type
+					});
+				}
+			}
+		}
+		this.effectList.push(effect);
 	}
 
 	removeEffect(effect){

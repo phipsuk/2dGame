@@ -51,12 +51,7 @@ class PowerUp{
 	}
 
 	activate(player){
-		if(this.effects){
-			for (var i = 0; i < this.effects.length; i++) {
-				let effect = this.effects[i];
-				player.addEffect(effect);
-			}
-		}
+		player.addPowerUp(this);
 		this.die();
 	}
 

@@ -231,7 +231,8 @@ class Round{
 					rotation:this.clients[i].physicsBody.angle,
 					avatar: this.currentLevel.definition.playerAvatars[this.clients[i].Team],
 					health: this.clients[i].health,
-					o2: this.clients[i].o2
+					o2: this.clients[i].o2,
+					powerups: this.clients[i].activePowerUps
 				},
 				Score: this.score,
 				Name: this.clients[i].name,
