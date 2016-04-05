@@ -92,17 +92,23 @@ class Player{
 		}
 	}
 
-	addPowerUp(effect){
-		if(!this.hasPowerUp(effect)){
-			this.applyEffectDirectly(effect);
-			this.activePowerUps.push(effect);
-			if(effect.duration){
-				effect.timer = setTimeout(() => {
-					effect.effect = -effect.effect;
+	addPowerUp(powerup){
+		if(!this.hasPowerUp(powerup.type)){
+			this.activePowerUps.push(powerup.type);
+			
+			if(powerup.effects){
+				for (var i = 0; i < powerup.effects.length; i++) {
+					let effect = powerup.effects[i];
 					this.applyEffectDirectly(effect);
-					effect.effect = -effect.effect;
-					this.removePowerUp(effect);
-				}, effect.duration);
+					if(powerup.duration){
+						effect.timer = setTimeout(() => {
+							effect.effect = -effect.effect;
+							this.applyEffectDirectly(effect);
+							effect.effect = -effect.effect;
+							this.removePowerUp(powerup.type);
+						}, powerup.duration);
+					}
+				}
 			}
 		}
 	}
@@ -113,7 +119,7 @@ class Player{
 
 	removePowerUp(effect){
 		this.activePowerUps = this.activePowerUps.filter((object) => {
-			return object.type !== effect.type;
+			return object !== effect;
 		});
 	}
 

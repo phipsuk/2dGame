@@ -54,6 +54,9 @@ function Player(stage, Team, id, name){
 			blood: null,
 			lowHealthBlood: null
 		},
+		powerupParticles: {
+
+		},
 		isDown: function(keyCode){
 			return this.pressed[keyCode];
 		},
@@ -72,11 +75,11 @@ function Player(stage, Team, id, name){
 		onKeyUp: function(event){
 			delete this.pressed[event.keyCode];
 		},
-		update: function(x, y, dead, name, o2, health){
-			self.name = name;
-			this.health = health;
-			this.o2 = o2;
-			if(dead){
+		update: function(player){
+			self.name = player.Name;
+			this.health = player.Data.health;
+			this.o2 = player.Data.o2;
+			if(player.Dead){
 				if(this.particles.gibs === null){
 					this.particles.gibs = new GibsParticles(stage);
 					stage.removeChild(this.graphics);
@@ -104,14 +107,14 @@ function Player(stage, Team, id, name){
 				this.graphics.scale.y = SCALE;
 				this.graphics.anchor.y = 0;
 			}
-			this.graphics.position.x = x - (this.graphics.width/2) + 4.8;
-			this.graphics.position.y = coordinateConverter(y, SCREEN.HEIGHT - (this.graphics.height/2) - 8.4);
+			this.graphics.position.x = player.Data.position.x - (this.graphics.width/2) + 4.8;
+			this.graphics.position.y = coordinateConverter(-player.Data.position.y, SCREEN.HEIGHT - (this.graphics.height/2) - 8.4);
 			if(this.graphics.position.x + nameText.width > SCREEN.WIDTH - 80){
-				nameText.position.x = x - nameText.width - 5;
+				nameText.position.x = player.Data.position.x - nameText.width - 5;
 			}else{
-				nameText.position.x = x + 5;
+				nameText.position.x = player.Data.position.x + 5;
 			}
-			nameText.position.y = y + SCREEN.HEIGHT - 35;
+			nameText.position.y = -player.Data.position.y + SCREEN.HEIGHT - 35;
 			if(this.particles.gibs){
 				this.particles.gibs.update(this.graphics.position.x + (this.graphics.width/2), this.graphics.position.y);
 			}
@@ -120,6 +123,35 @@ function Player(stage, Team, id, name){
 			}
 			if(this.lowHealth()){
 				this.particles.lowHealthBlood.update(this.graphics.position.x + (this.graphics.width/2), this.graphics.position.y + (this.graphics.height/2));
+			}
+
+			for (var i = 0; i < player.Data.powerups.length; i++) {
+				var powerup = player.Data.powerups[i];
+				if(powerup){
+					if(!this.powerupParticles[powerup]){
+						switch(powerup){
+							case "speed":
+								this.powerupParticles[powerup] = new DustParticles(stage, true);
+							break;
+						}
+					}
+				}
+			}
+
+			for (var key in this.powerupParticles) {
+				if(this.powerupParticles.hasOwnProperty(key)){
+					var particle = this.powerupParticles[key];
+					if(player.Data.powerups.indexOf(key) === -1){
+						particle.emitter.cleanup();
+						particle.emitter.destroy();
+						setTimeout(function(){
+							self.powerupParticles[key] = null;
+						}, 100);
+					}
+					if(particle instanceof DustParticles){
+						particle.update(this.graphics.position.x + (this.graphics.width/2), this.graphics.position.y + this.graphics.height, this.facing == this.FACELEFT ? 160 : 0);
+					}
+				}
 			}
 		},
 		onMouseDown: function(event){

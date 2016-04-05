@@ -71,7 +71,7 @@ function onConnected(){
 		for (var i = serverUpdate.length - 1; i >= 0; i--) {
 			updateBulletPositions(serverUpdate[i].Bullets);
 			if(serverUpdate[i].ID == ClientID){
-				player.update(serverUpdate[i].Data.position.x, -serverUpdate[i].Data.position.y, serverUpdate[i].Dead, serverUpdate[i].Name, serverUpdate[i].Data.o2, serverUpdate[i].Data.health);
+				player.update(serverUpdate[i]);
 				player.setAvatar(serverUpdate[i].Data.avatar, stage);
 				if(serverUpdate[i].Data.hasFlag){
 					if(player.team == "Blue"){
@@ -83,7 +83,7 @@ function onConnected(){
 				updateHealthBars(serverUpdate[i].Data.o2, serverUpdate[i].Data.health);
 			}else{
 				if(players[serverUpdate[i].ID]){
-					players[serverUpdate[i].ID].update(serverUpdate[i].Data.position.x, -serverUpdate[i].Data.position.y, serverUpdate[i].Dead, serverUpdate[i].Name, serverUpdate[i].Data.o2, serverUpdate[i].Data.health);
+					players[serverUpdate[i].ID].update(serverUpdate[i]);
 					players[serverUpdate[i].ID].setAvatar(serverUpdate[i].Data.avatar, stage);
 					if(serverUpdate[i].Data.hasFlag){
 						if(players[serverUpdate[i].ID].team == "Blue"){
