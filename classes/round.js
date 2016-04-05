@@ -109,17 +109,25 @@ class Round{
 			var zone = shapeA.body.owner ? shapeA.body.owner : shapeB.body.owner;
 			zone.activate(player);
 		}
+		if((shapeA.collisionGroup == constants.POWER || shapeB.collisionGroup == constants.POWER) && (shapeA.collisionGroup == constants.PLAYER || shapeB.collisionGroup == constants.PLAYER)){
+			var player = this.findPlayer(this.clients, shapeA.collisionGroup == constants.PLAYER ? shapeA.body :shapeB.body);
+			var powerup = shapeA.body.owner ? shapeA.body.owner : shapeB.body.owner;
+			powerup.activate(player);
+		}
 		if((shapeA.collisionGroup == constants.TRIGGER || shapeB.collisionGroup == constants.TRIGGER) && (shapeA.collisionGroup == constants.PLAYER || shapeB.collisionGroup == constants.PLAYER)){
 			var player = this.findPlayer(this.clients, shapeA.collisionGroup == constants.PLAYER ? shapeA.body :shapeB.body);
 			var trigger = shapeA.body.owner ? shapeA.body.owner : shapeB.body.owner;
 			trigger.trigger(player);
 		}
-		if((shapeA.collisionGroup == constants.BULLET || shapeB.collisionGroup == constants.BULLET) && (shapeA.body.health || shapeB.body.health)){
+		if((shapeA.collisionGroup == constants.BULLET || shapeB.collisionGroup == constants.BULLET) && ((shapeA.body.owner && shapeA.body.owner.health) || (shapeB.body.owner && shapeB.body.owner.health))){
 			var destructableShape = shapeA.body.health ? shapeA.body : shapeB.body;
 			var bullet = shapeA.collisionGroup == constants.BULLET ? shapeA.body :shapeB.body;
 			destructableShape.health -= bullet.damage;
-			if(destructableShape.health == 0){
+			if(destructableShape.health <= 0){
 				destructableShape.owner.die();
+				this.world.removeBody(bullet);
+				this.notifyBulletRemoved(bullet.ID);
+				bullet.active = false;
 			}
 		}
 		if((shapeA.collisionGroup == constants.BULLET || shapeB.collisionGroup == constants.BULLET) && (shapeA.collisionGroup == constants.PLAYER || shapeB.collisionGroup == constants.PLAYER)){

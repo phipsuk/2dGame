@@ -83,7 +83,7 @@ function onConnected(){
 				updateHealthBars(serverUpdate[i].Data.o2, serverUpdate[i].Data.health);
 			}else{
 				if(players[serverUpdate[i].ID]){
-					players[serverUpdate[i].ID].update(serverUpdate[i].Data.position.x, -serverUpdate[i].Data.position.y, serverUpdate[i].Dead, serverUpdate[i].Name);
+					players[serverUpdate[i].ID].update(serverUpdate[i].Data.position.x, -serverUpdate[i].Data.position.y, serverUpdate[i].Dead, serverUpdate[i].Name, serverUpdate[i].Data.o2, serverUpdate[i].Data.health);
 					players[serverUpdate[i].ID].setAvatar(serverUpdate[i].Data.avatar, stage);
 					if(serverUpdate[i].Data.hasFlag){
 						if(players[serverUpdate[i].ID].team == "Blue"){

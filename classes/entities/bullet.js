@@ -19,7 +19,7 @@ class Bullet{
 		var shape = new p2.Circle({ radius: 1 });
 
 		shape.collisionGroup = constants.BULLET;
-		shape.collisionMask = constants.PLAYER | constants.GROUND | constants.BULLET | constants.OTHER;
+		shape.collisionMask = constants.PLAYER | constants.GROUND | constants.BULLET | constants.OTHER | constants.POWER;
 
 		this.physicsBody.addShape(shape);
 	}
