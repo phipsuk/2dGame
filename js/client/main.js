@@ -64,6 +64,10 @@ function onConnected(){
 
 	var player = Player(stage, Team, ClientID, Name);
 
+	if(VirtualJoystick.touchScreenAvailable()){
+		var GPad = new GamePad();
+	}
+
 	socket.on("update", function(serverUpdate){
 		var score = serverUpdate[0].Score;
 		updateScores(score.blue, score.red);
@@ -179,6 +183,10 @@ function onConnected(){
 
 		requestAnimationFrame(animate);
 
+		if(GPad){
+			updatePlayerFromGamePad();
+		}
+
 		var update = {
 			pressed: player.pressed,
 			mousePressed: player.mousePressed,
@@ -190,6 +198,26 @@ function onConnected(){
 
 	    // render the root container
 	    renderer.render(stage);
+	}
+
+	function updatePlayerFromGamePad(){
+		var pressed = GPad.getPressed();
+		player.onKeyUp({keyCode: player.UP});
+		player.onKeyUp({keyCode: player.DOWN});
+		player.onKeyUp({keyCode: player.LEFT});
+		player.onKeyUp({keyCode: player.RIGHT});
+		if(pressed.up){
+			player.onKeyDown({keyCode: player.UP});
+		}
+		if(pressed.down){
+			player.onKeyDown({keyCode: player.DOWN});
+		}
+		if(pressed.left){
+			player.onKeyDown({keyCode: player.LEFT});
+		}
+		if(pressed.right){
+			player.onKeyDown({keyCode: player.RIGHT});
+		}
 	}
 
 	window.addEventListener('keydown', function(event) {
