@@ -144,8 +144,10 @@ function Player(stage, Team, id, name){
 					if(player.Data.powerups.indexOf(key) === -1){
 						particle.emitter.cleanup();
 						particle.emitter.destroy();
+						var self2 = this;
 						setTimeout(function(){
-							delete self.powerupParticles[key];
+							particle.cleanup();
+							delete self2.powerupParticles[key];
 						}, 100);
 					}
 					if(particle instanceof DustParticles){
