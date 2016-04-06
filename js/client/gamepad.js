@@ -10,7 +10,7 @@ function GamePad(){
 		};
 	};
 
-	this.fireButton = new GamePadButton(0, "", 0, 10, 50, 50, null);
+	this.fireButton = new GamePadButton(0, "", 0, 10, 50, 50, "/images/fire-button.png");
 }
 
 function GamePadButton( top, left, bottom, right, width, height, image){
@@ -23,8 +23,9 @@ function GamePadButton( top, left, bottom, right, width, height, image){
 	buttonEl.style.right = right + "pt";
 	buttonEl.style.width = width + "pt";
 	buttonEl.style.height = height + "pt";
-	buttonEl.style.background = "Red";
+	buttonEl.style.background = "url(" + image + ")";
 	buttonEl.style.margin = "auto";
+	buttonEl.style.backgroundSize = "contain";
 	document.body.appendChild(buttonEl);
 
 	;(function(destObj){
