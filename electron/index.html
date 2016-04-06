@@ -3,9 +3,16 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <title>Pew Pew Game</title>
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="mobile-web-app-capable" content="yes">
+        <link rel="apple-touch-icon" href="/images/icons/60.png">
+        <link rel="apple-touch-icon" sizes="76x76" href="/images/icons/76.png">
+        <link rel="apple-touch-icon" sizes="120x120" href="/images/icons/120.png">
+        <link rel="apple-touch-icon" sizes="180x180" href="/images/icons/180.png">
+        <link rel="icon" type="image/png" href="/images/icons/180.png" />
+        <title>Space Sheep Wars</title>
         <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 
         <link rel="apple-touch-icon" href="apple-touch-icon.png">
         <!-- Place favicon.ico in the root directory -->
@@ -14,51 +21,196 @@
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
         <link rel="stylesheet" href="css/main.css">
         <script src="js/pixi.js"></script>
+        <script src="js/pixiparticles.js"></script>
         <script src="socket.io/socket.io.js"></script>
 		<style type="text/css" media="screen">
+            body {
+                background-image: url("/images/space.png");
+                
+                cursor: none;
+                font-family: 'Exo', sans-serif;
+            }
+            
+            .floating{
+                -webkit-animation-name: Floatingx;
+                -webkit-animation-duration: 3s;
+                -webkit-animation-iteration-count: infinite;
+                -webkit-animation-timing-function: ease-in-out;
+                -moz-animation-name: Floating;
+                -moz-animation-duration: 3s;
+                -moz-animation-iteration-count: infinite;
+                -moz-animation-timing-function: ease-in-out;
+
+            }
+
+            @-webkit-keyframes Floatingx{
+                from {-webkit-transform:translate(0, 0px);}
+                65% {-webkit-transform:translate(0, 15px);}
+                to {-webkit-transform: translate(0, -0px);    }    
+            }
+
+            @-moz-keyframes Floating{
+                from {-moz-transform:translate(0, 0px);}
+                65% {-moz-transform:translate(0, 15px);}
+                to {-moz-transform: translate(0, -0px);}    
+            }
+
+            
 			#feed { 
-				position: absolute;
-				top: 10px;
-				right: 1px;
-				height: 590px;
+				height: 100px;
 				overflow-y: auto;
     			width: 300px;
+                color: #FFF9EE;
 			}
 			#feed::before { 
 				content: "Messages:";
 				font-weight: bold;
+                color: #FFF9EE;
 			}
 			.time {
 				color: lightgrey;
 				font-size: 8pt;
 				margin-right: 2px;
 			}
-            .game-bg { 
-                background-image: url("/images/land.png"); 
-                padding-bottom: 100px; 
-                width: 800px; 
-                height: 900px; 
-                background-position-y: 
-                110px;
+            .game-bg {
+                margin:0 auto;
+                background-image: url("/images/land.png");
+                max-width: 1920px;
+                max-height: 1080px;
+                background-position-y: 50%;
+                background-position-x: 50%;
+                background-repeat: no-repeat;
+                background-size: 50%;
+            }
+
+            #game{
+                max-width: 1920px;
+                max-height: 1080px;
+            }
+
+            #game > canvas{
+                max-width: 1920px;
+                max-height: 1080px;
+                width:100%;
+            }
+
+            .outer-container{
+                width:100%;
+                padding-bottom: 100px;
+            }
+
+            #playerStats{
+                color:#FFF9EE;
+                position: absolute;
+                top: 80px;
+                text-align: center;
+                width: 100%;
+            }
+
+            #timer{
+                color:#FFF9EE;
+                position: absolute;
+                top: 10px;
+                text-align: center;
+                width: 100%;
+                font-size: 30pt;
+            }
+
+            #redScore{
+                color: #FF654B;
+                position: absolute;
+                top: 10px;
+                left: 0;
+                right: 0;
+                margin: 0 auto;
+                font-size: 50pt;
+                width: 30px;
+                padding-right: 400px;
+            }
+
+            #blueScore{
+                color: #53B9FF;
+                position: absolute;
+                top: 10px;
+                left: 0;
+                right: 0;
+                margin: 0 auto;
+                font-size: 50pt;
+                width: 30px;
+                padding-left: 300px;
+            }
+
+            #playerStats label{
+                display: block;
+                font-size: 8pt;
+                margin: 0;
+            }
+
+            meter {
+                width: 100px;
+                height: 10px;
+                -webkit-appearance: none; /* Reset appearance */
+                border: 1px solid #ccc;
+                border-radius: 1px;
+            }
+
+            meter::-webkit-meter-bar {
+                background: none; /* Required to get rid of the default background property */
+                background-color: whiteSmoke;
+            }
+            
+            meter::-webkit-meter-optimum-value {
+                background: #28A605;
+            }
+
+            meter::-webkit-meter-suboptimum-value{
+                background: #F2A007;
+            }
+
+            meter::-webkit-meter-even-less-good-value{
+                background: #A60A0A;
             }
 		</style>
+        <link href='https://fonts.googleapis.com/css?family=Exo:200' rel='stylesheet' type='text/css'>
         <style type="text/css" id="levelcss"></style>
     </head>
     <body>
         <!--[if lt IE 8]>
             <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
-        <div class="game-bg">
-        <div id="game">
-        	</div>
+        <div class="outer-container">
+            <div class="game-bg floating">
+                <div id="game">
+            	</div>
+            </div>
+        </div>
+        <div id="timer">
+        </div>
+        <div id="redScore">
+        </div>
+        <div id="blueScore">
+        </div>
+        <div id="playerStats">
+            <label for="health">Health</label>
+            <meter id="health" min=0 max=100 low=25 high=50 optimum=75></meter>
+            <label for="o2">Oxygen</label>
+            <meter id="o2" min=0 max=100 low=25 high=50 optimum=75></meter>
         </div>
         <div id="feed">
         	
         </div>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="js/constants.js" onload="window.constants = this;" async defer ></script>
 		<script type="text/javascript" src="js/bootbox.js" async defer ></script>
 		<script type="text/javascript" src="js/moment.js" async defer ></script>
+        <script type="text/javascript" src="js/client/particles/explosion.js" async defer ></script>
+        <script type="text/javascript" src="js/client/particles/gibs.js" async defer ></script>
+        <script type="text/javascript" src="js/client/particles/blood.js" async defer ></script>
+        <script type="text/javascript" src="js/client/particles/bleeding.js" async defer ></script>
+        <script type="text/javascript" src="js/client/particles/dust.js" async defer ></script>
+        <script type="text/javascript" src="js/client/virtualJoystick.js" async defer ></script>
+        <script type="text/javascript" src="js/client/gamepad.js" async defer ></script>
 		<script type="text/javascript" src="js/client/feed.js" async defer ></script>
         <script type="text/javascript" src="js/client/level.js" async defer ></script>
         <script type="text/javascript" src="js/client/flag.js" async defer ></script>

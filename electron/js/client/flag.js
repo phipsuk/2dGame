@@ -1,5 +1,5 @@
 function Flag(colour, x, y){
-	var sprite = new PIXI.Sprite.fromImage("/images/flag_" + colour + ".png");
+	var sprite = new PIXI.Sprite.fromImage("/images/flag_" + colour.toLowerCase() + ".png");
 
 	sprite.position.x = x;
 	sprite.position.y = y;

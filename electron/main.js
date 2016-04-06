@@ -17,10 +17,10 @@ app.on('window-all-closed', function() {
 // initialization and is ready to create browser windows.
 app.on('ready', function() {
   // Create the browser window.
-  mainWindow = new BrowserWindow({width: 1024, height: 800, "node-integration": false});
+  mainWindow = new BrowserWindow({width: 1024, height: 800, "node-integration": false, "fullscreen": true, "title": "Space Sheep Wars"});
 
   // and load the index.html of the app.
-  mainWindow.loadURL('http://localhost:3000/');
+  mainWindow.loadURL('https://sheepwars.herokuapp.com/');
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function() {
