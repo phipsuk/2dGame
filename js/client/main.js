@@ -66,6 +66,9 @@ function onConnected(){
 
 	if(VirtualJoystick.touchScreenAvailable()){
 		var GPad = new GamePad();
+
+		GPad.fireButton.addEventListener("pressstart", function(){player.fireWeapon();});
+		GPad.fireButton.addEventListener("pressend", function(event){player.onMouseUp(event);});
 	}
 
 	socket.on("update", function(serverUpdate){
