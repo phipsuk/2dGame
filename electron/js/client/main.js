@@ -34,7 +34,7 @@ function onConnected(){
 	var BACKWARD = -FORWARD; 
 
 	var players = {};
-	var renderer = PIXI.autoDetectRenderer(800, 600,{transparent: true, antialias: true});
+	var renderer = PIXI.autoDetectRenderer(SCREEN.WIDTH, SCREEN.HEIGHT,{transparent: true, antialias: true});
 	document.getElementById("game").appendChild(renderer.view);
 
 	var feed = new Feed(socket, $("#feed"));
@@ -42,21 +42,9 @@ function onConnected(){
 	var blueTeamScoreCount = 0;
 	var redTeamScoreCount = 0;
 
-	var blueTeamScore = new PIXI.Text("0", {font:"50px Arial", fill:"blue"});
-	var redTeamScore = new PIXI.Text("0", {font:"50px Arial", fill:"red"});
-	blueTeamScore.position.x = 50;
-	redTeamScore.position.x = 700;
-
-	var roundTime = new PIXI.Text("-- : --", {font:"50px Arial", fill:"black"});
-	roundTime.position.x = 320;
-
 	// create the root of the scene graph
 	var stage = new PIXI.Container();
 	var level = new Level(stage);
-	
-	stage.addChild(blueTeamScore);
-	stage.addChild(redTeamScore);
-	stage.addChild(roundTime);
 
 	var RedFlag = Flag("Red", 10, 570);
 	var BlueFlag = Flag("Blue", 765, 570);
@@ -76,26 +64,30 @@ function onConnected(){
 
 	var player = Player(stage, Team, ClientID, Name);
 
+	if(VirtualJoystick.touchScreenAvailable()){
+		var GPad = new GamePad();
+	}
+
 	socket.on("update", function(serverUpdate){
 		var score = serverUpdate[0].Score;
-		blueTeamScore.text = score.blue;
-		redTeamScore.text = score.red;
-		roundTime.text = serverUpdate[0].TimeRemaining;
+		updateScores(score.blue, score.red);
+		updateTimeRemaining(serverUpdate[0].TimeRemaining);
 		for (var i = serverUpdate.length - 1; i >= 0; i--) {
 			updateBulletPositions(serverUpdate[i].Bullets);
 			if(serverUpdate[i].ID == ClientID){
-				player.update(serverUpdate[i].Data.position.x, -serverUpdate[i].Data.position.y, serverUpdate[i].Dead, serverUpdate[i].Name);
+				player.update(serverUpdate[i]);
 				player.setAvatar(serverUpdate[i].Data.avatar, stage);
 				if(serverUpdate[i].Data.hasFlag){
-						if(player.team == "Blue"){
-							RedFlag.setPosition(player.graphics.position.x, player.graphics.position.y - RedFlag.graphics.height/2);
-						}else{
-							BlueFlag.setPosition(player.graphics.position.x, player.graphics.position.y - BlueFlag.graphics.height/2);
-						}
+					if(player.team == "Blue"){
+						RedFlag.setPosition(player.graphics.position.x, player.graphics.position.y - RedFlag.graphics.height/2);
+					}else{
+						BlueFlag.setPosition(player.graphics.position.x, player.graphics.position.y - BlueFlag.graphics.height/2);
 					}
+				}
+				updateHealthBars(serverUpdate[i].Data.o2, serverUpdate[i].Data.health);
 			}else{
 				if(players[serverUpdate[i].ID]){
-					players[serverUpdate[i].ID].update(serverUpdate[i].Data.position.x, -serverUpdate[i].Data.position.y, serverUpdate[i].Dead, serverUpdate[i].Name);
+					players[serverUpdate[i].ID].update(serverUpdate[i]);
 					players[serverUpdate[i].ID].setAvatar(serverUpdate[i].Data.avatar, stage);
 					if(serverUpdate[i].Data.hasFlag){
 						if(players[serverUpdate[i].ID].team == "Blue"){
@@ -112,8 +104,8 @@ function onConnected(){
 	});
 
 	socket.on("roundComplete", function(data){
-		var winText = new PIXI.Text("", {font:"50px Arial", fill:"black"});
-		winText.position.x = 300;
+		var winText = new PIXI.Text("", {font:"50px " + FONT, fill:COLOURS.WHITE});
+		winText.position.x = (SCREEN.WIDTH/2) - 100;
 		winText.position.y = 200;
 		if(data == "Red"){
 			winText.text = "Red Team Wins!";
@@ -133,8 +125,8 @@ function onConnected(){
 		if(data && data.definition && data.definition.flags){
 			stage.removeChild(RedFlag.graphics);
 			stage.removeChild(BlueFlag.graphics);
-			RedFlag = Flag("Red", data.definition.flags.red.x, 570 - data.definition.flags.blue.y);
-			BlueFlag = Flag("Blue", data.definition.flags.blue.x, 570 - data.definition.flags.blue.y);
+			RedFlag = Flag("Red", data.definition.flags.red.x, SCREEN.HEIGHT - 30 - data.definition.flags.blue.y);
+			BlueFlag = Flag("Blue", data.definition.flags.blue.x, SCREEN.HEIGHT - 30 - data.definition.flags.blue.y);
 
 			stage.addChild(RedFlag.graphics);
 			stage.addChild(BlueFlag.graphics);
@@ -153,7 +145,7 @@ function onConnected(){
 					var bulletGraphics = new PIXI.Graphics();
 					bulletGraphics.lineStyle(2, 0x080808, 1);
 					bulletGraphics.beginFill(0x080808);
-					bulletGraphics.drawCircle(5, 595, 1);
+					bulletGraphics.drawCircle(5, SCREEN.HEIGHT - 5, 1);
 					bulletGraphics.endFill();
 					stage.addChild(bulletGraphics);
 					bulletList[bullets[i].id] = bulletGraphics;
@@ -191,6 +183,10 @@ function onConnected(){
 
 		requestAnimationFrame(animate);
 
+		if(GPad){
+			updatePlayerFromGamePad();
+		}
+
 		var update = {
 			pressed: player.pressed,
 			mousePressed: player.mousePressed,
@@ -202,6 +198,26 @@ function onConnected(){
 
 	    // render the root container
 	    renderer.render(stage);
+	}
+
+	function updatePlayerFromGamePad(){
+		var pressed = GPad.getPressed();
+		player.onKeyUp({keyCode: player.UP});
+		player.onKeyUp({keyCode: player.DOWN});
+		player.onKeyUp({keyCode: player.LEFT});
+		player.onKeyUp({keyCode: player.RIGHT});
+		if(pressed.up){
+			player.onKeyDown({keyCode: player.UP});
+		}
+		if(pressed.down){
+			player.onKeyDown({keyCode: player.DOWN});
+		}
+		if(pressed.left){
+			player.onKeyDown({keyCode: player.LEFT});
+		}
+		if(pressed.right){
+			player.onKeyDown({keyCode: player.RIGHT});
+		}
 	}
 
 	window.addEventListener('keydown', function(event) {
