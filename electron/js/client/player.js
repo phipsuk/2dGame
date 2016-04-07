@@ -156,6 +156,13 @@ function Player(stage, Team, id, name){
 				}
 			}
 		},
+		fireWeapon: function(event){
+			this.mousePressed[0] = {
+				x:this.graphics.position.x,
+				y:this.graphics.position.y,
+				angle: this.facing === this.FACELEFT ? -0.02102551443773825 : -3.1086918530174907
+			};
+		},
 		onMouseDown: function(event){
 			var angle = Math.atan2(this.graphics.position.y - event.layerY, this.graphics.position.x - event.layerX);
 			this.mousePressed[event.button] = {
