@@ -116,13 +116,13 @@ function Player(stage, Team, id, name){
 			}
 			nameText.position.y = -player.Data.position.y + SCREEN.HEIGHT - 35;
 			if(this.particles.gibs){
-				this.particles.gibs.update(this.graphics.position.x + ((this.graphics.width * SCALE)/2), this.graphics.position.y);
+				this.particles.gibs.update(this.graphics.position.x + (this.graphics.width/2), this.graphics.position.y);
 			}
 			if(this.particles.blood){
-				this.particles.blood.update(this.graphics.position.x + ((this.graphics.width * SCALE)/2), this.graphics.position.y + (this.graphics.height * SCALE));
+				this.particles.blood.update(this.graphics.position.x + (this.graphics.width/2), this.graphics.position.y + this.graphics.height);
 			}
 			if(this.lowHealth()){
-				this.particles.lowHealthBlood.update(this.graphics.position.x + ((this.graphics.width * SCALE)/2), this.graphics.position.y + ((this.graphics.height * SCALE)/2));
+				this.particles.lowHealthBlood.update(this.graphics.position.x + (this.graphics.width/2), this.graphics.position.y + (this.graphics.height/2));
 			}
 
 			for (var i = 0; i < player.Data.powerups.length; i++) {
@@ -143,6 +143,7 @@ function Player(stage, Team, id, name){
 					var particle = this.powerupParticles[key];
 					if(player.Data.powerups.indexOf(key) === -1){
 						particle.emitter.cleanup();
+						particle.emitter.destroy();
 						var self2 = this;
 						setTimeout(function(){
 							particle.cleanup();
@@ -150,7 +151,7 @@ function Player(stage, Team, id, name){
 						}, 100);
 					}
 					if(particle instanceof DustParticles){
-						particle.update(this.graphics.position.x + ((this.graphics.width * SCALE)/2), this.graphics.position.y + (this.graphics.height * SCALE), this.facing == this.FACELEFT ? 160 : 0);
+						particle.update(this.graphics.position.x + (this.graphics.width/2), this.graphics.position.y + this.graphics.height, this.facing == this.FACELEFT ? 160 : 0);
 					}
 				}
 			}
