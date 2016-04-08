@@ -107,8 +107,8 @@ function Player(stage, Team, id, name){
 				this.graphics.scale.y = SCALE;
 				this.graphics.anchor.y = 0;
 			}
-			this.graphics.position.x = (player.Data.position.x - (this.graphics.width/2)) + 4.8;
-			this.graphics.position.y = coordinateConverter(-player.Data.position.y, (SCREEN.HEIGHT - (this.graphics.height/2)) + 4.4);
+			this.graphics.position.x = player.Data.position.x - (this.graphics.width/2) + 4.8;
+			this.graphics.position.y = coordinateConverter(-player.Data.position.y, SCREEN.HEIGHT - (this.graphics.height/2) - 8.4);
 			if(this.graphics.position.x + nameText.width > SCREEN.WIDTH - 80){
 				nameText.position.x = player.Data.position.x - nameText.width - 5;
 			}else{

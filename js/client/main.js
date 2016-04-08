@@ -192,7 +192,9 @@ function onConnected(){
 
 		var update = {
 			pressed: player.pressed,
-			mousePressed: player.mousePressed
+			mousePressed: player.mousePressed,
+			position: player.graphics.position,
+			hasFlag: player.hasFlag
 		}
 
 		socket.emit("update", update);
