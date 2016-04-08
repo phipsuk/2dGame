@@ -23,7 +23,7 @@ function Level(stage){
 						stage.addChild(Entities[entity.ID]);
 					}
 					this.particles.explosion[entity.ID] = null
-					Entities[entity.ID].position.x = entity.position.x + 5;
+					Entities[entity.ID].position.x = entity.position.x - 10;
 					Entities[entity.ID].position.y = -entity.position.y + SCREEN.HEIGHT - 5;
 					Entities[entity.ID].rotation = -entity.rotation;
 				}
@@ -49,7 +49,7 @@ function Level(stage){
 						if(entity.nonTileable){
 							entitySprite.tileScale.set(0.04, 0.04);
 						}
-						entitySprite.position.x = entity.position.x + 5;
+						entitySprite.position.x = entity.position.x - 10;
 						entitySprite.position.y = -entity.position.y + (SCREEN.HEIGHT - 5);
 						entitySprite.pivot.set(entity.shapeOptions.width/2, entity.shapeOptions.height/2);
 						stage.addChild(entitySprite);
