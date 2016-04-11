@@ -136,6 +136,7 @@ class Player{
 						"originalValue": this[e.property],
 						"type": e.type
 					});
+					return;
 				}
 			}
 		}
