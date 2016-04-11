@@ -23,8 +23,8 @@ function Level(stage){
 						stage.addChild(Entities[entity.ID]);
 					}
 					this.particles.explosion[entity.ID] = null
-					Entities[entity.ID].position.x = entity.position.x - 10;
-					Entities[entity.ID].position.y = -entity.position.y + SCREEN.HEIGHT - 5;
+					Entities[entity.ID].position.x = entity.position.x ;
+					Entities[entity.ID].position.y = -entity.position.y + SCREEN.HEIGHT;
 					Entities[entity.ID].rotation = -entity.rotation;
 				}
 				if(this.particles.explosion[entity.ID]){
@@ -37,7 +37,7 @@ function Level(stage){
 						var entityGraphics = new PIXI.Graphics();
 						entityGraphics.lineStyle(2, 0x080808, 1);
 						entityGraphics.beginFill(0x080808);
-						entityGraphics.drawRect((-entity.shapeOptions.width/2) + 5, (-entity.shapeOptions.height/2) + SCREEN.HEIGHT - 5, entity.shapeOptions.width, entity.shapeOptions.height);
+						entityGraphics.drawRect(entity.position.x, -entity.position.y + SCREEN.HEIGHT, entity.shapeOptions.width, entity.shapeOptions.height);
 						entityGraphics.endFill();
 						stage.addChild(entityGraphics);
 						Entities[entity.ID] = entityGraphics;
@@ -49,8 +49,8 @@ function Level(stage){
 						if(entity.nonTileable){
 							entitySprite.tileScale.set(0.04, 0.04);
 						}
-						entitySprite.position.x = entity.position.x - 10;
-						entitySprite.position.y = -entity.position.y + (SCREEN.HEIGHT - 5);
+						entitySprite.position.x = entity.position.x;
+						entitySprite.position.y = -entity.position.y + SCREEN.HEIGHT;
 						entitySprite.pivot.set(entity.shapeOptions.width/2, entity.shapeOptions.height/2);
 						stage.addChild(entitySprite);
 						Entities[entity.ID] = entitySprite;
