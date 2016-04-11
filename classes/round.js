@@ -133,19 +133,19 @@ class Round{
 		if((shapeA.collisionGroup == constants.BULLET || shapeB.collisionGroup == constants.BULLET) && (shapeA.collisionGroup == constants.PLAYER || shapeB.collisionGroup == constants.PLAYER)){
 			var player = this.findPlayer(this.clients, shapeA.collisionGroup == constants.PLAYER ? shapeA.body :shapeB.body);
 			var bullet = shapeA.collisionGroup == constants.BULLET ? shapeA.body :shapeB.body;
-			if(player && !player.isHit){
-				if(player.hasFlag){
-					player.hasFlag = false;
-					if(player.Team == "Red"){
-						this.flags.blue.setHome(true);
-						this.notifyFlagCapture("Red");
-					}else{
-						this.flags.red.setHome(true);
-						this.notifyFlagCapture("Blue");
-					}
-				}
+			if(player && !player.idDead()){
 				player.health -= bullet.damage;
 				if(player.isDead()){
+					if(player.hasFlag){
+						player.hasFlag = false;
+						if(player.Team == "Red"){
+							this.flags.blue.setHome(true);
+							this.notifyFlagCapture("Red");
+						}else{
+							this.flags.red.setHome(true);
+							this.notifyFlagCapture("Blue");
+						}
+					}
 					this.feed.playerKilled(player, bullet);
 				}
 				this.world.removeBody(bullet);
