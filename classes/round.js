@@ -133,7 +133,7 @@ class Round{
 		if((shapeA.collisionGroup == constants.BULLET || shapeB.collisionGroup == constants.BULLET) && (shapeA.collisionGroup == constants.PLAYER || shapeB.collisionGroup == constants.PLAYER)){
 			var player = this.findPlayer(this.clients, shapeA.collisionGroup == constants.PLAYER ? shapeA.body :shapeB.body);
 			var bullet = shapeA.collisionGroup == constants.BULLET ? shapeA.body :shapeB.body;
-			if(player && !player.idDead()){
+			if(player && !player.isDead()){
 				player.health -= bullet.damage;
 				if(player.isDead()){
 					if(player.hasFlag){
