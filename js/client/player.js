@@ -85,7 +85,7 @@ function Player(stage, Team, id, name){
 			return inWidth * SCALE;
 		},
 		getHeight: function(inHeight){
-			return inHeight * SCALE;
+			return inHeight;
 		},
 		update: function(player){
 			self.name = player.Name;
