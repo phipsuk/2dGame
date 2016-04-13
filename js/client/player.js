@@ -76,10 +76,10 @@ function Player(stage, Team, id, name){
 			delete this.pressed[event.keyCode];
 		},
 		getXPos: function(inX){
-			return inX - (this.graphics.width * SCALE) + 15;
+			return inX - (this.graphics.width * SCALE) + 5;
 		},
 		getYPos: function(inY){
-			return (-inY - ((this.graphics.height * SCALE) - 10)) + SCREEN.HEIGHT;
+			return (-inY - ((this.graphics.height * SCALE) + 5)) + SCREEN.HEIGHT;
 		},
 		getWidth: function(inWidth){
 			return inWidth * SCALE;
