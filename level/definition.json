@@ -721,6 +721,31 @@
 					"effect": -200
 				}
 			]
+		},
+		{
+            "name": "cloudPlatformSlider",
+			"type": "slider",
+			"mass": 0,
+			"shape": "Box",
+			"shapeOptions":{
+					"height": 3,
+					"width": 60
+				},
+			"position": {
+				"x": 350,
+				"y": 120
+			},
+			"startPosition": {
+				"x": 350,
+				"y": 120
+			},
+			"endPosition":{
+				"x": 1550,
+				"y": 120
+			},
+			"repeat": true,
+			"speedX": 100,
+			"speedY": 0
 		}
 	]
 }
