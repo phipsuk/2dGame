@@ -56,6 +56,32 @@
             }
 
             
+              .floatingClouds{
+                -webkit-animation-name: FloatingCloudsx;
+                -webkit-animation-duration: 3s;
+                -webkit-animation-iteration-count: infinite;
+                -webkit-animation-timing-function: ease-in-out;
+                -moz-animation-name: FloatingClouds;
+                -moz-animation-duration: 3s;
+                -moz-animation-iteration-count: infinite;
+                -moz-animation-timing-function: ease-in-out;
+                    animation-delay: 1s;
+
+            }
+
+            @-webkit-keyframes FloatingCloudsx{
+                from {-webkit-transform:translate(0, 0px);}
+                65% {-webkit-transform:translate(0, 20px);}
+                to {-webkit-transform: translate(0, -0px);    }    
+            }
+
+            @-moz-keyframes FloatingClouds{
+                from {-moz-transform:translate(0, 0px);}
+                65% {-moz-transform:translate(0, 20px);}
+                to {-moz-transform: translate(0, -0px);}    
+            }
+
+            
 			#feed { 
 				height: 100px;
 				overflow-y: auto;
@@ -77,13 +103,23 @@
 			}
             .game-bg {
                 margin:0 auto;
-                background-image: url("/images/land.png");
+                background-image: url("/images/land.svg");
                 max-width: 1920px;
                 max-height: 1080px;
-                background-position-y: 50%;
+                background-position-y: 65%;
                 background-position-x: 50%;
                 background-repeat: no-repeat;
                 background-size: 50%;
+            }
+              .clouds-bg {
+                margin:0 auto;
+                background-image: url("/images/clouds.svg");
+                max-width: 1920px;
+                max-height: 1080px;
+                background-position-y: 33%;
+                background-position-x: 50%;
+                background-repeat: no-repeat;
+                background-size: 46%;
             }
 
             #game{
@@ -182,11 +218,16 @@
             <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
         <div class="outer-container">
-            <div class="game-bg floating">
-                <div id="game">
-            	</div>
-            </div>
-        </div>
+             <div class="clouds-bg floatingClouds">
+                <div class="game-bg floating">
+                  
+                    <div id="game">
+                    </div>
+                     
+                </div>
+           
+            </div></div>
+  
         <div id="timer">
         </div>
         <div id="redScore">
