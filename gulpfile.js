@@ -53,7 +53,7 @@ gulp.task('electron', ["electronhtml", "electronimages", "electronjs"], function
         packageJson: info,
         release: './dist',
         cache: './cache',
-        version: 'v0.37.3',
+        version: 'v0.37.5',
         packaging: true,
         platforms: ['win32-ia32', 'darwin-x64'],
         platformResources: {
