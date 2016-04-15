@@ -95,11 +95,11 @@
 		{
 			"type": "floor",
 			"mass": 0,
-			"hidden": true,
+            "hidden": true,
 			"shape": "Box",
 			"shapeOptions":{
 					"height": 30,
-					"width": 830
+					"width": 930
 				},
 			"position": {
 				"x": 955,
