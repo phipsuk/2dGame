@@ -70,8 +70,8 @@
 		}
 	],
 	"playerAvatars":{
-		"Red": "red.png",
-		"Blue": "blue.png"
+		"Red": "red.svg",
+		"Blue": "blue.svg"
 	},
 	"entities": [
 		{
