@@ -75,6 +75,18 @@ function Player(stage, Team, id, name){
 		onKeyUp: function(event){
 			delete this.pressed[event.keyCode];
 		},
+		getXPos: function(inX){
+			return inX - (this.graphics.width * SCALE) + 5;
+		},
+		getYPos: function(inY){
+			return (-inY - ((this.graphics.height * SCALE) + 5)) + SCREEN.HEIGHT;
+		},
+		getWidth: function(inWidth){
+			return inWidth * SCALE;
+		},
+		getHeight: function(inHeight){
+			return inHeight;
+		},
 		update: function(player){
 			self.name = player.Name;
 			this.health = player.Data.health;
@@ -107,8 +119,8 @@ function Player(stage, Team, id, name){
 				this.graphics.scale.y = SCALE;
 				this.graphics.anchor.y = 0;
 			}
-			this.graphics.position.x = player.Data.position.x - (this.graphics.width/2) + 4.8;
-			this.graphics.position.y = coordinateConverter(-player.Data.position.y, SCREEN.HEIGHT - (this.graphics.height/2) - 8.4);
+			this.graphics.position.x = this.getXPos(player.Data.position.x);
+			this.graphics.position.y = this.getYPos(player.Data.position.y);
 			if(this.graphics.position.x + nameText.width > SCREEN.WIDTH - 80){
 				nameText.position.x = player.Data.position.x - nameText.width - 5;
 			}else{
@@ -116,13 +128,13 @@ function Player(stage, Team, id, name){
 			}
 			nameText.position.y = -player.Data.position.y + SCREEN.HEIGHT - 35;
 			if(this.particles.gibs){
-				this.particles.gibs.update(this.graphics.position.x + (this.graphics.width/2), this.graphics.position.y);
+				this.particles.gibs.update(this.graphics.position.x + (this.getWidth(this.graphics.width)/2), this.graphics.position.y);
 			}
 			if(this.particles.blood){
-				this.particles.blood.update(this.graphics.position.x + (this.graphics.width/2), this.graphics.position.y + this.graphics.height);
+				this.particles.blood.update(this.graphics.position.x + (this.getWidth(this.graphics.width)/2), this.graphics.position.y + this.getHeight(this.graphics.height));
 			}
 			if(this.lowHealth()){
-				this.particles.lowHealthBlood.update(this.graphics.position.x + (this.graphics.width/2), this.graphics.position.y + (this.graphics.height/2));
+				this.particles.lowHealthBlood.update(this.graphics.position.x + (this.getWidth(this.graphics.width)/2), this.graphics.position.y + (this.getHeight(this.graphics.height)/2));
 			}
 
 			for (var i = 0; i < player.Data.powerups.length; i++) {
@@ -151,7 +163,7 @@ function Player(stage, Team, id, name){
 						}, 100);
 					}
 					if(particle instanceof DustParticles){
-						particle.update(this.graphics.position.x + (this.graphics.width/2), this.graphics.position.y + this.graphics.height, this.facing == this.FACELEFT ? 160 : 0);
+						particle.update(this.graphics.position.x + (this.getWidth(this.graphics.width)/2), this.graphics.position.y + this.getHeight(this.graphics.height), this.facing == this.FACELEFT ? 160 : 0);
 					}
 				}
 			}
@@ -177,7 +189,7 @@ function Player(stage, Team, id, name){
 		setAvatar: function(avatar, stage){
 			if(this.avatarLocation != avatar){
 				stage.removeChild(this.graphics)
-				this.graphics = new PIXI.Sprite.fromImage("/images/" + avatar);
+				this.graphics = PIXI.Sprite.fromImage("/images/" + avatar);
 
 				this.graphics.position.x = 0;
 				this.graphics.position.y = 0;

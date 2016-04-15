@@ -61,7 +61,8 @@ gulp.task('electron', ["electronhtml", "electronimages", "electronjs"], function
                 CFBundleDisplayName: info.name,
                 CFBundleIdentifier: info.bundle,
                 CFBundleName: info.name,
-                CFBundleVersion: info.version
+                CFBundleVersion: info.version,
+                icon: './images/icons/1024.icns'
             },
             win: {
                 "version-string": info.version,

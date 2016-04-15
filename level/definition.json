@@ -23,11 +23,11 @@
 	"flags":{
 		"red": {
 			"x": 570,
-			"y": 318
+			"y": 348
 		},
 		"blue": {
 			"x": 1322,
-			"y": 318
+			"y": 348
 		}
 	},
 	"powerups":[
@@ -483,12 +483,12 @@
 			"interval": 1000,
 			"shape": "Box",
 			"shapeOptions":{
-					"height": 880,
+					"height": 480,
 					"width": 750
 				},
 			"position": {
 				"x": 950,
-				"y": 300
+				"y": 500
 			},
 			"effects":[
 				{
@@ -505,13 +505,34 @@
 			"shape": "Plane",
 			"position": {
 				"x": 0,
-				"y": 0
+				"y": 10
 			},
 			"effects":[
 				{
 					"interval":1,
 					"property": "health",
 					"effect": -100
+				}
+			]
+		},
+		{
+			"type": "zone",
+			"mass": 0,
+			"interval": 1000,
+			"shape": "Box",
+			"shapeOptions":{
+					"height": 100,
+					"width": 3000
+				},
+			"position": {
+				"x": -500,
+				"y": 0
+			},
+			"effects":[
+				{
+					"interval":100,
+					"property": "health",
+					"effect": -200
 				}
 			]
 		}

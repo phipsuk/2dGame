@@ -8,8 +8,8 @@ class Flag{
 						position: [x,y]
 					});
 		var bodyShape = new p2.Box({
-						width:15,
-						height:40,
+						width:30,
+						height:50,
 						sensor:true
 					});
 

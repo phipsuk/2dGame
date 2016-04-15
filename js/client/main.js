@@ -82,9 +82,9 @@ function onConnected(){
 				player.setAvatar(serverUpdate[i].Data.avatar, stage);
 				if(serverUpdate[i].Data.hasFlag){
 					if(player.team == "Blue"){
-						RedFlag.setPosition(player.graphics.position.x, player.graphics.position.y - RedFlag.graphics.height/2);
+						RedFlag.setPosition(player.graphics.position.x, player.graphics.position.y - RedFlag.getHeight()/2);
 					}else{
-						BlueFlag.setPosition(player.graphics.position.x, player.graphics.position.y - BlueFlag.graphics.height/2);
+						BlueFlag.setPosition(player.graphics.position.x, player.graphics.position.y - BlueFlag.getHeight()/2);
 					}
 				}
 				updateHealthBars(serverUpdate[i].Data.o2, serverUpdate[i].Data.health);
@@ -94,9 +94,9 @@ function onConnected(){
 					players[serverUpdate[i].ID].setAvatar(serverUpdate[i].Data.avatar, stage);
 					if(serverUpdate[i].Data.hasFlag){
 						if(players[serverUpdate[i].ID].team == "Blue"){
-							RedFlag.setPosition(players[serverUpdate[i].ID].graphics.position.x, players[serverUpdate[i].ID].graphics.position.y - RedFlag.graphics.height/2);
+							RedFlag.setPosition(players[serverUpdate[i].ID].graphics.position.x, players[serverUpdate[i].ID].graphics.position.y - RedFlag.getHeight()/2);
 						}else{
-							BlueFlag.setPosition(players[serverUpdate[i].ID].graphics.position.x, players[serverUpdate[i].ID].graphics.position.y - BlueFlag.graphics.height/2);
+							BlueFlag.setPosition(players[serverUpdate[i].ID].graphics.position.x, players[serverUpdate[i].ID].graphics.position.y - BlueFlag.getHeight()/2);
 						}
 					}
 				}else{
@@ -128,8 +128,8 @@ function onConnected(){
 		if(data && data.definition && data.definition.flags){
 			stage.removeChild(RedFlag.graphics);
 			stage.removeChild(BlueFlag.graphics);
-			RedFlag = Flag("Red", data.definition.flags.red.x, SCREEN.HEIGHT - 30 - data.definition.flags.blue.y);
-			BlueFlag = Flag("Blue", data.definition.flags.blue.x, SCREEN.HEIGHT - 30 - data.definition.flags.blue.y);
+			RedFlag = Flag("Red", data.definition.flags.red.x, SCREEN.HEIGHT - data.definition.flags.red.y);
+			BlueFlag = Flag("Blue", data.definition.flags.blue.x, SCREEN.HEIGHT - data.definition.flags.blue.y);
 
 			stage.addChild(RedFlag.graphics);
 			stage.addChild(BlueFlag.graphics);
