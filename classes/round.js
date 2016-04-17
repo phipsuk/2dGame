@@ -98,7 +98,7 @@ class Round{
 	doCollisions(evt){
 		var shapeA = evt.shapeA;
 		var shapeB = evt.shapeB;
-		if((shapeA.collisionGroup == constants.GROUND || shapeB.collisionGroup == constants.GROUND) && (shapeA.collisionGroup == constants.PLAYER || shapeB.collisionGroup == constants.PLAYER)){
+		if((shapeA.collisionGroup == constants.GROUND || shapeB.collisionGroup == constants.GROUND || shapeA.collisionGroup == constants.OTHER || shapeB.collisionGroup == constants.OTHER) && (shapeA.collisionGroup == constants.PLAYER || shapeB.collisionGroup == constants.PLAYER)){
 			var player = this.findPlayer(this.clients, shapeA.collisionGroup == constants.PLAYER ? shapeA.body :shapeB.body);
 			if(player){
 				player.jumping = false;

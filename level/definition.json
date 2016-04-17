@@ -50,6 +50,42 @@
 				}
 		},
 		{
+			"type": "health",
+			"chance": 0.5,
+			"image": "crate.png",
+			"mass": 100,
+			"effects": [
+				{
+					"property": "health",
+					"effect": 100
+				}
+			],
+			"nonTileable": true,
+			"shape": "Box",
+			"shapeOptions":{
+					"height": 20,
+					"width": 20
+				}
+		},
+		{
+			"type": "health",
+			"chance": 0.5,
+			"image": "crate.png",
+			"mass": 100,
+			"effects": [
+				{
+					"property": "health",
+					"effect": 100
+				}
+			],
+			"nonTileable": true,
+			"shape": "Box",
+			"shapeOptions":{
+					"height": 20,
+					"width": 20
+				}
+		},
+		{
 			"type": "speed",
 			"chance": 0.2,
 			"image": "crate.png",
@@ -198,57 +234,87 @@
 		},
         
 		{
-            "name": "leftFlag",
+            "name": "castleRoof",
 			"type": "floor",
 			"mass": 0,
 			"shape": "Box",
 			"shapeOptions":{
 					"height": 5,
-					"width": 60
+					"width": 70
 				},
 			"position": {
-				"x": 600,
-				"y": 370
+				"x": 595,
+				"y": 440
 			}
 		},
 		{
-            "name": "leftFlagWall",
-			"type": "wall",
+            "name": "castleRoofleft",
+			"type": "floor",
 			"mass": 0,
 			"shape": "Box",
 			"shapeOptions":{
-					"height": 30,
+					"height": 20,
 					"width": 5
 				},
 			"position": {
-				"x": 650,
-				"y": 370
+				"x": 560,
+				"y": 445
 			}
 		},
 		{
+            "name": "castleRoofright",
+			"type": "floor",
+			"mass": 0,
+			"shape": "Box",
+			"shapeOptions":{
+					"height": 20,
+					"width": 5
+				},
+			"position": {
+				"x": 630,
+				"y": 445
+			}
+		},
+		{
+            "name": "bluecastleRoof",
 			"type": "floor",
 			"mass": 0,
 			"shape": "Box",
 			"shapeOptions":{
 					"height": 5,
-					"width": 60
+					"width": 70
 				},
 			"position": {
-				"x": 1270,
-				"y": 370
+				"x": 1315,
+				"y": 440
 			}
 		},
 		{
-			"type": "wall",
+            "name": "bluecastleRoofleft",
+			"type": "floor",
 			"mass": 0,
 			"shape": "Box",
 			"shapeOptions":{
-					"height": 30,
+					"height": 20,
 					"width": 5
 				},
 			"position": {
-				"x": 1232,
-				"y": 370
+				"x": 1280,
+				"y": 445
+			}
+		},
+		{
+            "name": "bluecastleRoofright",
+			"type": "floor",
+			"mass": 0,
+			"shape": "Box",
+			"shapeOptions":{
+					"height": 20,
+					"width": 5
+				},
+			"position": {
+				"x": 1350,
+				"y": 445
 			}
 		},
 		{
@@ -343,7 +409,7 @@
 				},
 			"position": {
 				"x": 750,
-				"y": 720
+				"y": 445
 			},
 			"startPosition": {
 				"x": 750,
@@ -351,7 +417,7 @@
 			},
 			"endPosition":{
 				"x": 1150,
-				"y": 720
+				"y": 445
 			},
 			"repeat": true,
 			"speedX": 20,
@@ -368,15 +434,15 @@
 				},
 			"position": {
 				"x": 720,
-				"y": 728
+				"y": 453
 			},
 			"startPosition": {
 				"x": 720,
-				"y": 728
+				"y": 453
 			},
 			"endPosition":{
 				"x": 1120,
-				"y": 728
+				"y": 453
 			},
 			"repeat": true,
 			"speedX": 20,
@@ -393,15 +459,15 @@
 				},
 			"position": {
 				"x": 780,
-				"y": 728
+				"y": 453
 			},
 			"startPosition": {
 				"x": 780,
-				"y": 728
+				"y": 453
 			},
 			"endPosition":{
 				"x": 1180,
-				"y": 728
+				"y": 453
 			},
 			"repeat": true,
 			"speedX": 20,
@@ -418,7 +484,7 @@
 					"width": 20
 				},
 			"position": {
-				"x": 820,
+				"x": 810,
 				"y": 500
 			}
 		},
@@ -433,7 +499,127 @@
 					"width": 20
 				},
 			"position": {
-				"x": 980,
+				"x": 970,
+				"y": 500
+			}
+		},
+		{
+			"type": "crate",
+			"mass": 100,
+			"health": 30,
+			"nonTileable": true,
+			"shape": "Box",
+			"shapeOptions":{
+					"height": 20,
+					"width": 20
+				},
+			"position": {
+				"x": 810,
+				"y": 500
+			}
+		},
+		{
+			"type": "crate",
+			"mass": 100,
+			"health": 30,
+			"nonTileable": true,
+			"shape": "Box",
+			"shapeOptions":{
+					"height": 20,
+					"width": 20
+				},
+			"position": {
+				"x": 970,
+				"y": 500
+			}
+		},
+		{
+			"type": "crate",
+			"mass": 100,
+			"health": 30,
+			"nonTileable": true,
+			"shape": "Box",
+			"shapeOptions":{
+					"height": 20,
+					"width": 20
+				},
+			"position": {
+				"x": 830,
+				"y": 500
+			}
+		},
+		{
+			"type": "crate",
+			"mass": 100,
+			"health": 30,
+			"nonTileable": true,
+			"shape": "Box",
+			"shapeOptions":{
+					"height": 20,
+					"width": 20
+				},
+			"position": {
+				"x": 990,
+				"y": 500
+			}
+		},
+		{
+			"type": "crate",
+			"mass": 100,
+			"health": 300,
+			"nonTileable": true,
+			"shape": "Box",
+			"shapeOptions":{
+					"height": 20,
+					"width": 20
+				},
+			"position": {
+				"x": 830,
+				"y": 500
+			}
+		},
+		{
+			"type": "crate",
+			"mass": 100,
+			"health": 300,
+			"nonTileable": true,
+			"shape": "Box",
+			"shapeOptions":{
+					"height": 20,
+					"width": 20
+				},
+			"position": {
+				"x": 990,
+				"y": 500
+			}
+		},
+		{
+			"type": "crate",
+			"mass": 100,
+			"health": 300,
+			"nonTileable": true,
+			"shape": "Box",
+			"shapeOptions":{
+					"height": 20,
+					"width": 20
+				},
+			"position": {
+				"x": 830,
+				"y": 500
+			}
+		},
+		{
+			"type": "crate",
+			"mass": 100,
+			"health": 300,
+			"nonTileable": true,
+			"shape": "Box",
+			"shapeOptions":{
+					"height": 20,
+					"width": 20
+				},
+			"position": {
+				"x": 990,
 				"y": 500
 			}
 		},
@@ -535,6 +721,31 @@
 					"effect": -200
 				}
 			]
+		},
+		{
+            "name": "cloudPlatformSlider",
+			"type": "slider",
+			"mass": 0,
+			"shape": "Box",
+			"shapeOptions":{
+					"height": 3,
+					"width": 60
+				},
+			"position": {
+				"x": 350,
+				"y": 120
+			},
+			"startPosition": {
+				"x": 350,
+				"y": 120
+			},
+			"endPosition":{
+				"x": 1550,
+				"y": 120
+			},
+			"repeat": true,
+			"speedX": 100,
+			"speedY": 0
 		}
 	]
 }

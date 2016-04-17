@@ -17,9 +17,8 @@
         <link rel="apple-touch-icon" href="apple-touch-icon.png">
         <!-- Place favicon.ico in the root directory -->
 
-        <link rel="stylesheet" href="css/normalize.css">
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-        <link rel="stylesheet" href="css/main.css">
+        <link rel="stylesheet" href="js/client/meter-polyfill.css">
         <script src="js/pixi.js"></script>
         <script src="js/pixiparticles.js"></script>
         <script src="socket.io/socket.io.js"></script>
@@ -103,13 +102,13 @@
 			}
             .game-bg {
                 margin:0 auto;
-                background-image: url("/images/landscape.svg");
+                background-image: url("/images/landscape.svg"), url("/images/castle.svg"), url("/images/castle.svg");
                 max-width: 1920px;
                 max-height: 1080px;
-                background-position-y: 65%;
-                background-position-x: 50%;
+                background-position-y: 65%, 66%, 66%;
+                background-position-x: 50%, 30%, 69.5%;
                 background-repeat: no-repeat;
-                background-size: 50%;
+                background-size: 50%, 5%, 5%;
             }
               .clouds-bg {
                 margin:0 auto;
@@ -247,8 +246,9 @@
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
         <script type="text/javascript" src="js/constants.js" onload="window.constants = this;" async defer ></script>
 		<script type="text/javascript" src="js/bootbox.js" async defer ></script>
-		<script type="text/javascript" src="js/moment.js" async defer ></script>
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.12.0/moment.min.js" async defer ></script>
         <script type="text/javascript" src="js/client/particles/explosion.js" async defer ></script>
+        <script type="text/javascript" src="js/client/meter-polyfill.js" async defer ></script>
         <script type="text/javascript" src="js/client/particles/gibs.js" async defer ></script>
         <script type="text/javascript" src="js/client/particles/blood.js" async defer ></script>
         <script type="text/javascript" src="js/client/particles/bleeding.js" async defer ></script>
