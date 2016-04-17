@@ -22,39 +22,45 @@ class Level{
 			var entity = this.entities.dynamic[i];
 			entity.update();
 			if(!entity.hidden){
-				updateInfo.entities.push({
-					ID:entity.ID,
-					position:{
-						x:entity.physicsBody.position[0],
-						y:entity.physicsBody.position[1]
-					},
-					rotation: entity.physicsBody.angle,
-					type:entity.type,
-					nonTileable: entity.nonTileable,
-					health: entity.health,
-					shape: entity.shape,
-					shapeOptions: entity.shapeOptions
-				});
+				if(entity.lastSentPosition !== entity.physicsBody.position[0] + "," + entity.physicsBody.position[1]){
+					updateInfo.entities.push({
+						ID:entity.ID,
+						position:{
+							x:entity.physicsBody.position[0],
+							y:entity.physicsBody.position[1]
+						},
+						rotation: entity.physicsBody.angle,
+						type:entity.type,
+						nonTileable: entity.nonTileable,
+						health: entity.health,
+						shape: entity.shape,
+						shapeOptions: entity.shapeOptions
+					});
+					entity.lastSentPosition = entity.physicsBody.position[0] + "," + entity.physicsBody.position[1];
+				}
 			}
 		};
 		for (var i = this.entities.powerups.length - 1; i >= 0; i--) {
 			var entity = this.entities.powerups[i];
 			entity.update();
 			if(!entity.hidden){
-				updateInfo.entities.push({
-					ID:entity.ID,
-					position:{
-						x:entity.physicsBody.position[0],
-						y:entity.physicsBody.position[1]
-					},
-					image: entity.image,
-					rotation: entity.physicsBody.angle,
-					type:entity.type,
-					nonTileable: entity.nonTileable,
-					health: entity.health,
-					shape: entity.shape,
-					shapeOptions: entity.shapeOptions
-				});
+				if(entity.lastSentPosition !== entity.physicsBody.position[0] + "," + entity.physicsBody.position[1]){
+					updateInfo.entities.push({
+						ID:entity.ID,
+						position:{
+							x:entity.physicsBody.position[0],
+							y:entity.physicsBody.position[1]
+						},
+						image: entity.image,
+						rotation: entity.physicsBody.angle,
+						type:entity.type,
+						nonTileable: entity.nonTileable,
+						health: entity.health,
+						shape: entity.shape,
+						shapeOptions: entity.shapeOptions
+					});
+					entity.lastSentPosition = entity.physicsBody.position[0] + "," + entity.physicsBody.position[1];
+				}
 			}
 		};
 		return updateInfo;
