@@ -12,6 +12,8 @@ function Player(stage, Team, id, name){
 
 	var nameText = new PIXI.Text(name, {font:"10px " + FONT, fill:playerColour});
 
+	var $healthOverlay = $(".lowHealthOverlay");
+
 	var player = {
 		ID:ClientID,
 		graphics:graphics,
@@ -135,6 +137,9 @@ function Player(stage, Team, id, name){
 			}
 			if(this.lowHealth()){
 				this.particles.lowHealthBlood.update(this.graphics.position.x + (this.getWidth(this.graphics.width)/2), this.graphics.position.y + (this.getHeight(this.graphics.height)/2));
+				$healthOverlay.show();
+			}else{
+				$healthOverlay.hide();
 			}
 
 			for (var i = 0; i < player.Data.powerups.length; i++) {

@@ -208,6 +208,55 @@
             meter::-webkit-meter-even-less-good-value{
                 background: #A60A0A;
             }
+
+            .lowHealthOverlay h1{
+                color: rgba(204,0,0, 0.8);
+                text-align: center;
+                font-weight: bolder;
+                margin-top: 150pt;
+                text-shadow:
+                    -1px -1px 0 #FFF,
+                    1px -1px 0 #FFF,
+                    -1px 1px 0 #FFF,
+                    1px 1px 0 #FFF; 
+            }
+
+            .lowHealthOverlay{
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                box-shadow: inset 0 50pt 100pt rgba(204,0,0, 0.8);
+                /*animation: pulse 2s infinite;*/
+                top: 0;
+                left: 0;
+                display: none;
+            }
+
+            @-webkit-keyframes pulse {
+              0% {
+                -webkit-box-shadow: inset 0 0 50pt 10pt rgba(204,0,0, 0.8);
+              }
+              70% {
+                  -webkit-box-shadow: inset 0 0 50pt 100pt rgba(204,0,0, 0.4);
+              }
+              100% {
+                  -webkit-box-shadow: inset 0 0 50pt 10pt rgba(204,0,0, 0.4);
+              }
+            }
+            @keyframes pulse {
+              0% {
+                -moz-box-shadow: inset 0 0 50pt 10pt rgba(204,0,0, 0.8);
+                box-shadow: inset 0 0 50pt 10pt rgba(204,0,0, 0.4);
+              }
+              70% {
+                  -moz-box-shadow: inset 0 0 50pt 100pt rgba(204,0,0, 0.4);
+                  box-shadow: inset 0 0 50pt 100pt rgba(204,0,0, 0.4);
+              }
+              100% {
+                  -moz-box-shadow: inset 0 0 50pt 10pt rgba(204,0,0, 0.4);
+                  box-shadow: inset 0 0 50pt 10pt rgba(204,0,0, 0.4);
+              }
+            }
 		</style>
         <link href='https://fonts.googleapis.com/css?family=Exo:200' rel='stylesheet' type='text/css'>
         <style type="text/css" id="levelcss"></style>
@@ -241,6 +290,9 @@
         </div>
         <div id="feed">
         	
+        </div>
+        <div class="lowHealthOverlay">
+            <h1>WARNING: Low Health</h1>
         </div>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
