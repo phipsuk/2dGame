@@ -27,10 +27,6 @@ function Level(stage){
 					Entities[entity.ID].position.y = -entity.position.y + SCREEN.HEIGHT;
 					Entities[entity.ID].rotation = -entity.rotation;
 				}
-				if(this.particles.explosion[entity.ID]){
-					this.particles.explosion[entity.ID].update(Entities[entity.ID].position.x, Entities[entity.ID].position.y);
-				}
-
 			}else{
 				if(entity.shape == "Box"){
 					if(!entity.type){
@@ -58,5 +54,14 @@ function Level(stage){
 				}
 			}
 		};
+
+		for (var key in this.particles.explosion) {
+			if(this.particles.explosion.hasOwnProperty(key)){
+				var particle = this.particles.explosion[key];
+				if(particle !== null){
+					particle.update(Entities[key].position.x, Entities[key].position.y);
+				}
+			}
+		}
 	}
 }
