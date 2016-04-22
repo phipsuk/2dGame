@@ -1,6 +1,13 @@
-# 2dGame - Space Sheep Wars
-A multiplayer 2d Game based on node.js
+# Space Sheep Wars
+A multiplayer 2d Game Sheep War based on node.js
 
-## Adding features
-1. Code Feature
-2. Submit pull request
+## Running
+
+- Clone the repo
+- run `npm install`
+- run `gulp`
+- Navigate to `http://localhost:3000`
+
+## Testing
+
+- run `gulp test`
